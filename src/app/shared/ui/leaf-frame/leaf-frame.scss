@@ -1,0 +1,46 @@
+.leaf-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  min-height: 300px; /* Altura mínima base */
+  overflow: hidden; /* Esto hace la magia del recorte */
+  background-color: var(--qrl-surface);
+  transition: transform 0.3s ease;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.05); // Sombra suave "Apple"
+
+  &.has-image {
+    background-color: var(--qrl-background);
+  }
+
+  &:hover {
+    transform: translateY(-5px); // Pequeña elevación al pasar el mouse
+    box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+  }
+}
+
+.leaf-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; // La imagen se adapta sin deformarse
+  display: block;
+}
+
+.leaf-content {
+  padding: 40px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  background: white;
+}
+
+/* El borde verde característico, pero más elegante (inset) */
+.leaf-border-overlay {
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  border: 2px solid var(--qrl-green); /* Más fino que el boceto */
+  border-radius: inherit; /* Hereda la forma de la hoja */
+  pointer-events: none;
+  opacity: 0.5; /* Sutil */
+}

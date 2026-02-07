@@ -1,0 +1,16 @@
+<div class="split-layout" [class.reversed]="imagePosition === 'right'">
+      <div class="text-column">
+        <h2 class="section-title">{{ title }}</h2>
+        <div class="section-body">
+          <p *ngFor="let para of description">{{ para }}</p>
+        </div>
+        <button *ngIf="ctaText" class="qrl-btn-link">{{ ctaText }} &rarr;</button>
+      </div>
+
+      <div class="image-column">
+        <app-leaf-frame 
+          [imageSrc]="imageSrc" 
+          [inverted]="leafInverted">
+        </app-leaf-frame>
+      </div>
+    </div>

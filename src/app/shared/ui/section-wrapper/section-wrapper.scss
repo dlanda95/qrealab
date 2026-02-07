@@ -1,0 +1,18 @@
+.qrl-section {
+  padding: 80px 0; /* Espaciado generoso vertical */
+  width: 100%;
+  
+  &.white { background-color: var(--qrl-surface); }
+  &.gray  { background-color: var(--qrl-background); }
+  &.dark  { background-color: var(--qrl-blue); color: white; }
+
+  @media (max-width: 768px) {
+    padding: 40px 0;
+  }
+}
+
+.qrl-container {
+  max-width: 1200px; /* Ancho máximo estándar */
+  margin: 0 auto;
+  padding: 0 24px;   /* Márgenes laterales en móviles */
+}

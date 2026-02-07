@@ -1,0 +1,39 @@
+<app-hero
+  [title]="content.hero.title"
+  [subtitle]="content.hero.subtitle"
+  [imageSrc]="content.hero.image"
+  [ctaText]="content.hero.ctaText">
+</app-hero>
+
+<app-section-wrapper backgroundColor="white">
+  <app-split-section
+    [title]="content.story.title"
+    [description]="content.story.description"
+    [imageSrc]="content.story.image"
+    [ctaText]="content.story.ctaText"
+    imagePosition="right"
+    [leafInverted]="false">
+  </app-split-section>
+</app-section-wrapper>
+
+<app-section-wrapper backgroundColor="gray">
+  <app-split-section
+    [title]="content.mission.title"
+    [description]="content.mission.description"
+    [imageSrc]="content.mission.image"
+    imagePosition="left"
+    [leafInverted]="true">
+  </app-split-section>
+</app-section-wrapper>
+
+<app-section-wrapper backgroundColor="white">
+  <div class="values-grid">
+    <div class="value-card" *ngFor="let val of content.values">
+      <div class="icon-box">
+        <span class="material-icons">{{ val.icon }}</span>
+      </div>
+      <h3>{{ val.title }}</h3>
+      <p>{{ val.text }}</p>
+    </div>
+  </div>
+</app-section-wrapper>

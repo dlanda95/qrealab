@@ -1,0 +1,28 @@
+:root {
+  /* Paleta Extraída y Refinada */
+  --qrl-green: #32D74B;       /* Verde vibrante, más luminoso (estilo iOS) */
+  --qrl-green-dark: #009933;  /* Para textos o contrastes */
+  --qrl-blue: #1A237E;        /* Azul profundo del footer/header */
+  --qrl-blue-gradient: linear-gradient(135deg, #1A237E 0%, #283593 100%);
+  
+  /* Neutros Apple */
+  --qrl-surface: #FFFFFF;
+  --qrl-background: #F5F5F7;  /* Gris muy suave para fondos de sección */
+  --qrl-text-main: #1D1D1F;
+  --qrl-text-body: #86868B;
+
+  /* Geometría */
+  --leaf-radius-lg: 0px 80px 0px 80px; /* La forma característica */
+  --leaf-radius-sm: 0px 24px 0px 24px;
+
+
+  /* Espaciado (Sistema de 8px) */
+  --space-sm: 8px;
+  --space-md: 16px;
+  --space-lg: 32px;
+  --space-xl: 64px; /* Mucho aire para la sensación premium */
+  
+  /* Tipografía */
+--font-heading: 'SF Pro Display', 'Inter', -apple-system, sans-serif;
+  --radius-card: 20px;
+}

@@ -1,1 +1,45 @@
-/* You can add global styles to this file, and also import other style files */
+/* 1. CONEXIÓN DE VARIABLES */
+/* Esto hace que --qrl-green y las demás estén disponibles en todo el proyecto */
+@use 'styles/variables' as *;
+
+
+/* 2. RESET GLOBAL (Obligatorio para diseño profesional) */
+* {
+  box-sizing: border-box; /* Para que el padding no deforme las cajas */
+  margin: 0;
+  padding: 0;
+}
+
+/* 3. ESTILOS BASE (Look & Feel Apple) */
+html, body {
+  height: 100%; /* Asegura que la app ocupe toda la pantalla */
+  width: 100%;
+}
+
+body {
+  /* Usamos tus variables aquí */
+  background-color: var(--qrl-surface); 
+  color: var(--qrl-text-main);
+  
+  /* Tipografía base */
+  font-family: var(--font-heading);
+  font-size: 16px;
+  line-height: 1.5;
+
+  /* Suavizado de fuentes (Clave para que el texto se vea nítido como en Mac) */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* 4. CLASES DE UTILIDAD RÁPIDA (Opcional pero útil) */
+.text-gradient {
+  background: var(--qrl-blue-gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  display: inline-block;
+}
+
+.text-green {
+  color: var(--qrl-green);
+}
