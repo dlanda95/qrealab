@@ -17,8 +17,9 @@ export class HeroService {
         // Transformamos lo que manda Payload a lo que necesita tu carrusel
         return response.docs.map((doc: any, index: number) => ({
           id: doc.id,
-          image: 'http://localhost:3000' + doc.image.url, // URL completa de la foto
-          tag: doc.tag,
+          image: doc.image.url.startsWith('http') 
+  ? doc.image.url 
+  : `http://localhost:3000${doc.image.url}`, tag: doc.tag,
           title: doc.title,
           subtitle: doc.subtitle,
           cta: doc.ctaText && doc.ctaLink ? { text: doc.ctaText, link: doc.ctaLink } : undefined
