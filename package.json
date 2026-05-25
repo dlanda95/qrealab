@@ -31,14 +31,18 @@
     "@angular/platform-server": "^20.2.0",
     "@angular/router": "^20.2.0",
     "@angular/ssr": "^20.2.0",
+    "aos": "^2.3.4",
     "express": "^5.1.0",
+    "lucide-angular": "^0.563.0",
     "rxjs": "~7.8.0",
+    "swiper": "^12.1.0",
     "tslib": "^2.3.0"
   },
   "devDependencies": {
     "@angular/build": "^20.2.0",
     "@angular/cli": "^20.2.0",
     "@angular/compiler-cli": "^20.2.0",
+    "@types/aos": "^3.0.7",
     "@types/express": "^5.0.1",
     "@types/jasmine": "~5.1.0",
     "@types/node": "^20.17.19",

@@ -1,12 +1,18 @@
-<div class="leaf-container" 
-         [ngClass]="{'has-image': !!imageSrc, 'inverted': inverted}"
-         [style.border-radius]="borderRadius">
-      
-      <img *ngIf="imageSrc" [src]="imageSrc" [alt]="altText" class="leaf-image" />
+<div class="leaf-wrapper" [ngClass]="{'inverted': inverted}">
+  
+  <div class="leaf-glow-border"></div>
 
-      <div class="leaf-content" *ngIf="!imageSrc">
-        <ng-content></ng-content>
-      </div>
-
-      <div class="leaf-border-overlay"></div>
+  <div class="leaf-mask">
+    
+    <div *ngIf="imageSrc" 
+         class="leaf-media" 
+         [style.background-image]="'url(' + imageSrc + ')'">
     </div>
+
+    <div *ngIf="!imageSrc" class="leaf-content">
+      <ng-content></ng-content>
+    </div>
+    
+  </div>
+
+</div>

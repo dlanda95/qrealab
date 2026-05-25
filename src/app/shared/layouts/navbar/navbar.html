@@ -1,0 +1,44 @@
+<nav class="navbar" [ngClass]="{'scrolled': isScrolled}">
+  <div class="navbar-container">
+    
+    <a routerLink="/" class="navbar-logo">
+      <span class="logo-leaf">Q</span>REALAB
+    </a>
+
+    <div class="navbar-links desktop-menu">
+      <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Home</a>
+      <a routerLink="/about" routerLinkActive="active">Nosotros</a>
+      <a routerLink="/products" routerLinkActive="active">Productos</a>
+      <a routerLink="/vigilance" routerLinkActive="active">Farmacovigilancia</a>
+      
+      <div class="navbar-actions">
+        <button class="lang-switch">ES</button>
+        <a routerLink="/contact" class="btn-contact">Contáctenos</a>
+      </div>
+    </div>
+
+    <button class="mobile-toggle" (click)="toggleMobileMenu()" aria-label="Abrir menú">
+     <lucide-icon name="menu" class="icon-stroke"></lucide-icon>
+    </button>
+  </div>
+</nav>
+
+<div class="mobile-menu-overlay" [class.open]="isMobileMenuOpen">
+  
+  <button class="close-btn" (click)="toggleMobileMenu()" aria-label="Cerrar menú">
+    <lucide-icon name="x" class="icon-stroke"></lucide-icon>
+  </button>
+
+  <div class="mobile-menu-content">
+    <a routerLink="/" (click)="toggleMobileMenu()">Home</a>
+    <a routerLink="/about" (click)="toggleMobileMenu()">Nosotros</a>
+    <a routerLink="/products" (click)="toggleMobileMenu()">Productos</a>
+    <a routerLink="/vigilance" (click)="toggleMobileMenu()">Farmacovigilancia</a>
+    <a routerLink="/contact" (click)="toggleMobileMenu()" class="highlight">Contáctenos</a>
+    
+    <div class="mobile-lang">
+      <span class="active">ES</span>
+      <span>EN</span>
+    </div>
+  </div>
+</div>

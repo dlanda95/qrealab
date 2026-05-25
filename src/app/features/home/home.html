@@ -1,9 +1,8 @@
-<app-hero
-  [title]="content.hero.title"
-  [subtitle]="content.hero.subtitle"
-  [imageSrc]="content.hero.image"
-  [ctaText]="content.hero.ctaText">
-</app-hero>
+
+
+<qrl-hero-carousel [slides]="heroSlides"></qrl-hero-carousel>
+
+
 
 <app-section-wrapper backgroundColor="white">
   <app-split-section
@@ -26,14 +25,3 @@
   </app-split-section>
 </app-section-wrapper>
 
-<app-section-wrapper backgroundColor="white">
-  <div class="values-grid">
-    <div class="value-card" *ngFor="let val of content.values">
-      <div class="icon-box">
-        <span class="material-icons">{{ val.icon }}</span>
-      </div>
-      <h3>{{ val.title }}</h3>
-      <p>{{ val.text }}</p>
-    </div>
-  </div>
-</app-section-wrapper>

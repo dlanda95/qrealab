@@ -1,46 +1,137 @@
-.leaf-container {
+@use '../../../../styles/variables' as *;
+
+
+
+:host {
+  display: block;
+  width: 100%;
+  /* Centrado por defecto para evitar alineaciones raras en móvil */
+  display: flex;
+  justify-content: center; 
+}
+
+/* --- VARIABLES LOCALES PARA FÁCIL AJUSTE --- */
+$leaf-curve: 0px 100px 0px 100px; /* La forma base */
+$leaf-curve-inv: 100px 0px 100px 0px; /* La forma invertida */
+
+.leaf-wrapper {
   position: relative;
   width: 100%;
-  height: 100%;
-  min-height: 300px; /* Altura mínima base */
-  overflow: hidden; /* Esto hace la magia del recorte */
-  background-color: var(--qrl-surface);
-  transition: transform 0.3s ease;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.05); // Sombra suave "Apple"
-
-  &.has-image {
-    background-color: var(--qrl-background);
-  }
-
-  &:hover {
-    transform: translateY(-5px); // Pequeña elevación al pasar el mouse
-    box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+  
+  /* 1. ANTI-DEFORMACIÓN (La clave) */
+  /* Mantiene la hoja siempre proporcional (casi cuadrada) */
+  aspect-ratio: 1 / 0.95; 
+  
+  /* 2. LÍMITES DE TAMAÑO (Control de impacto) */
+  max-width: 450px; /* Nunca será monstruosamente grande */
+  min-width: 280px; /* Nunca será demasiado pequeña */
+  
+  border-radius: $leaf-curve;
+  transition: all 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+  
+  /* Centrado en su propio contenedor */
+  margin: 0 auto; 
+  
+  /* Variante Invertida */
+  &.inverted {
+    border-radius: $leaf-curve-inv;
+    
+    .leaf-glow-border {
+      border-radius: $leaf-curve-inv;
+      /* Invertimos el gradiente del borde para variar */
+      background: linear-gradient(45deg, transparent 30%, var(--qrl-green) 100%);
+    }
+    .leaf-mask { border-radius: $leaf-curve-inv; }
   }
 }
 
-.leaf-image {
-  width: 100%;
-  height: 100%;
-  object-fit: cover; // La imagen se adapta sin deformarse
-  display: block;
+/* --- CAPA 1: BORDE DIFUMINADO VARIABLE --- */
+.leaf-glow-border {
+  position: absolute;
+  inset: 0; /* Ocupa todo el espacio */
+  border-radius: inherit;
+  z-index: 0;
+
+  /* TRUCO VISUAL: Gradiente diagonal */
+  /* Esto crea el efecto de "Grosor variable": 
+     - Arriba derecha: Verde intenso (Glow)
+     - Abajo izquierda: Transparente (Adelgazamiento) 
+  */
+  background: linear-gradient(
+    225deg, 
+    var(--qrl-green) 0%, 
+    rgba(46, 198, 67, 0.5) 40%, 
+    rgba(255,255,255,0) 80%
+  );
+
+  /* DIFUMINADO DEL BORDE (Blur) */
+  filter: blur(8px); /* Hace que el verde parezca luz, no una línea sólida */
+  opacity: 0.8;
+  
+  /* Sombra de profundidad para levantar la hoja */
+  box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.15);
+  
+  transition: all 0.5s ease;
+}
+
+/* --- CAPA 2: MÁSCARA DEL CONTENIDO --- */
+.leaf-mask {
+  position: absolute;
+  /* El inset define el grosor del borde visual.
+     Al ser blur atrás, parece que se funde. */
+  inset: 4px; 
+  background: white;
+  border-radius: inherit;
+  overflow: hidden;
+  z-index: 1;
+  
+  /* Sombra interna muy sutil (Volumen) */
+  box-shadow: inset 0 0 20px rgba(0,0,0,0.03);
+}
+
+/* --- CONTENIDOS --- */
+.leaf-media {
+  width: 100%; height: 100%;
+  background-size: cover;
+  background-position: center;
+  transition: transform 0.7s ease;
 }
 
 .leaf-content {
-  padding: 40px;
   height: 100%;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  align-items: flex-start;
-  background: white;
+  padding: 40px; /* Espacio interno seguro */
+  
+  /* Fondo interior sutilísimo */
+  background: radial-gradient(circle at top right, rgba(46, 198, 67, 0.05), transparent 70%);
 }
 
-/* El borde verde característico, pero más elegante (inset) */
-.leaf-border-overlay {
-  position: absolute;
-  top: 0; left: 0; right: 0; bottom: 0;
-  border: 2px solid var(--qrl-green); /* Más fino que el boceto */
-  border-radius: inherit; /* Hereda la forma de la hoja */
-  pointer-events: none;
-  opacity: 0.5; /* Sutil */
+/* --- HOVER EFFECTS (PREMIUM) --- */
+.leaf-wrapper:hover {
+  transform: translateY(-5px); /* Levitación suave */
+
+  .leaf-glow-border {
+    filter: blur(12px); /* El borde brilla más */
+    opacity: 1;
+    /* Movemos un poco el fondo para simular luz viva */
+    transform: scale(1.02); 
+  }
+
+  .leaf-media {
+    transform: scale(1.08); /* Zoom lento foto */
+  }
+}
+
+/* --- RESPONSIVE INTELIGENTE --- */
+/* En móviles muy estrechos, ajustamos ligeramente la proporción */
+@media (max-width: 480px) {
+  .leaf-wrapper {
+    /* Permitimos que sea un poco más alta si es necesario, pero sin deformarse */
+    aspect-ratio: 1 / 1.1; 
+    border-radius: 0px 60px 0px 60px; /* Curvas más suaves para pantalla chica */
+    
+    &.inverted { border-radius: 60px 0px 60px 0px; }
+  }
 }

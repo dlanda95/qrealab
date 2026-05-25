@@ -1,45 +1,43 @@
-/* 1. CONEXIÓN DE VARIABLES */
-/* Esto hace que --qrl-green y las demás estén disponibles en todo el proyecto */
+/* 1. Importamos las variables (Sass moderno) */
 @use 'styles/variables' as *;
 
-
-/* 2. RESET GLOBAL (Obligatorio para diseño profesional) */
+/* 2. Reset básico */
 * {
-  box-sizing: border-box; /* Para que el padding no deforme las cajas */
+  box-sizing: border-box;
   margin: 0;
   padding: 0;
 }
 
-/* 3. ESTILOS BASE (Look & Feel Apple) */
+/* 3. APLICACIÓN DE LA FUENTE (Aquí arreglamos el problema) */
 html, body {
-  height: 100%; /* Asegura que la app ocupe toda la pantalla */
+  height: 100%;
   width: 100%;
-}
-
-body {
-  /* Usamos tus variables aquí */
-  background-color: var(--qrl-surface); 
-  color: var(--qrl-text-main);
   
-  /* Tipografía base */
-  font-family: var(--font-heading);
-  font-size: 16px;
-  line-height: 1.5;
-
-  /* Suavizado de fuentes (Clave para que el texto se vea nítido como en Mac) */
+  /* Forzamos la fuente en todo el documento */
+  font-family: var(--font-main); 
+  color: var(--color-text-main);
+  background-color: var(--color-bg);
+  
+  /* Suavizado de fuente para que se vea premium (Apple style) */
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* 4. CLASES DE UTILIDAD RÁPIDA (Opcional pero útil) */
+/* 4. Aseguramos que los títulos también usen la fuente */
+h1, h2, h3, h4, h5, h6, button, input, textarea {
+  font-family: var(--font-main);
+}
+
+/* Clases utilitarias */
 .text-gradient {
-  background: var(--qrl-blue-gradient);
+  background: linear-gradient(90deg, var(--qrl-blue) 0%, var(--qrl-green) 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
   display: inline-block;
 }
 
-.text-green {
-  color: var(--qrl-green);
-}
+
+/* Estilos base de Swiper */
+
+@import 'aos/dist/aos.css';

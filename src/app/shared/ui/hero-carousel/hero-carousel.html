@@ -1,0 +1,44 @@
+<section class="hero-carousel-wrapper">
+  
+  <swiper-container init="false" #swiper class="hero-swiper">
+    
+    <swiper-slide *ngFor="let slide of slides; let i = index">
+      
+      <div class="slide-bg">
+        <img 
+          [src]="slide.image" 
+          [alt]="slide.title"
+          [attr.loading]="i === 0 ? 'eager' : 'lazy'"
+          [attr.fetchpriority]="i === 0 ? 'high' : 'auto'"
+        >
+      </div>
+
+      <div class="slide-overlay"></div>
+
+      <div class="slide-content container">
+        <div class="content-box">
+          <span *ngIf="slide.tag" class="hero-tag">{{ slide.tag }}</span>
+          
+          <h1 class="hero-title" [innerHTML]="slide.title"></h1>
+          
+          <p *ngIf="slide.subtitle" class="hero-subtitle">{{ slide.subtitle }}</p>
+          
+          <div *ngIf="slide.cta" class="hero-actions">
+            <a [routerLink]="slide.cta.link" class="btn-primary-apple">
+              {{ slide.cta.text }}
+            </a>
+          </div>
+        </div>
+      </div>
+
+    </swiper-slide>
+    
+  </swiper-container>
+
+  <div class="hero-curve">
+    <svg viewBox="0 0 1440 120" preserveAspectRatio="none">
+      <path d="M0,0 C480,100 960,100 1440,0 L1440,120 L0,120 Z" fill="#ffffff"></path>
+    </svg>
+  </div>
+
+</section>

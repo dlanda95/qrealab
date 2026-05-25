@@ -1,0 +1,140 @@
+/* SI NO ARREGLASTE LO DEL ANGULAR.JSON, USA ESTA RUTA RELATIVA: */
+@use '../../../../styles/variables' as *;
+/* --- 1. ESTILOS BASE (DESKTOP FIRST) --- */
+
+
+/* --- BARRA GENERAL --- */
+.navbar {
+  position: fixed;
+  top: 0; left: 0; width: 100%;
+  z-index: 1000;
+  padding: 20px 0;
+  transition: all 0.4s ease;
+  background: transparent;
+  color: white; 
+
+  &.scrolled {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(12px);
+    padding: 12px 0;
+    box-shadow: 0 4px 30px rgba(0,0,0,0.05);
+    color: var(--color-text-main); 
+
+    .navbar-logo .logo-leaf { color: var(--qrl-green); }
+  }
+}
+
+.navbar-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 24px;
+}
+
+/* LOGO */
+.navbar-logo {
+  font-weight: 700; font-size: 1.5rem; text-decoration: none; color: inherit;
+  z-index: 1001;
+  .logo-leaf { color: var(--qrl-green); }
+}
+
+/* =========================================
+   REGLAS DE VISIBILIDAD (CRÍTICO)
+   ========================================= */
+
+/* 1. ESTADO ESCRITORIO (Default: > 900px) */
+
+/* El menú de enlaces SE VE */
+.desktop-menu {
+  display: flex; 
+  align-items: center;
+  gap: 32px;
+
+  a {
+    text-decoration: none; color: inherit; font-weight: 500; font-size: 0.95rem;
+    transition: 0.3s;
+    &:hover { color: var(--qrl-green); }
+  }
+
+  .navbar-actions { display: flex; align-items: center; gap: 16px; }
+  
+  .btn-contact {
+    background: var(--qrl-blue); color: white; padding: 10px 24px; border-radius: 30px;
+    &:hover { background: #151e60; }
+  }
+}
+
+/* El botón hamburguesa NO SE VE */
+.mobile-toggle {
+  display: none; /* <--- ESTO ES LO QUE FALTABA */
+  background: none; border: none; cursor: pointer; color: inherit;
+  
+  span { font-size: 32px; } /* Tamaño del icono hamburguesa */
+}
+
+
+/* 2. ESTADO MÓVIL (Pantallas < 900px) */
+@media (max-width: 900px) {
+  
+  /* Ocultamos el menú de escritorio completo */
+  .desktop-menu {
+    display: none; 
+  }
+
+  /* Mostramos el botón hamburguesa */
+  .mobile-toggle {
+    display: block; 
+  }
+}
+
+
+/* =========================================
+   ESTILOS DEL OVERLAY (MENÚ DESPLEGABLE)
+   ========================================= */
+.mobile-menu-overlay {
+  position: fixed; top: 0; left: 0; width: 100%; height: 100vh;
+  background: linear-gradient(135deg, var(--qrl-blue) 0%, #000000 100%);
+  z-index: 2000;
+  display: flex; flex-direction: column; justify-content: center; align-items: center;
+  
+  /* Animación de entrada */
+  opacity: 0; visibility: hidden; pointer-events: none;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  transform: scale(1.1);
+
+  &.open {
+    opacity: 1; visibility: visible; pointer-events: auto;
+    transform: scale(1);
+  }
+}
+
+/* Botón Cerrar (X) */
+.close-btn {
+  position: absolute; top: 24px; right: 24px;
+  background: rgba(255,255,255,0.1);
+  border: none; border-radius: 50%;
+  width: 48px; height: 48px;
+  color: white; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: 0.3s;
+
+  &:hover { background: rgba(255,255,255,0.3); transform: rotate(90deg); }
+  span { font-size: 28px; }
+}
+
+.mobile-menu-content {
+  display: flex; flex-direction: column; gap: 30px; text-align: center;
+  
+  a {
+    font-size: 1.8rem; color: rgba(255,255,255,0.7); text-decoration: none; font-weight: 600;
+    &:hover, &.highlight { color: white; transform: scale(1.05); }
+    &.highlight { color: var(--qrl-green); }
+  }
+  
+  .mobile-lang {
+    margin-top: 20px; display: flex; gap: 20px; justify-content: center; color: rgba(255,255,255,0.5);
+    .active { color: white; border-bottom: 2px solid var(--qrl-green); }
+  }
+}

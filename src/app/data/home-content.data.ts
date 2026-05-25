@@ -1,3 +1,5 @@
+import { HeroSlide } from "../core/hero-slide.interface";
+
 export interface SectionContent {
   title: string;
   subtitle?: string;
@@ -10,9 +12,9 @@ export interface SectionContent {
 export const HOME_CONTENT = {
   hero: {
     title: 'Welcome to QREALAB',
-    subtitle: 'Innovación Farmacéutica',
+    subtitle: 'Ciencia que transforma vidas.',
     description: ['Calidad, confianza y tecnología al servicio de la vida.'],
-    image: 'assets/images/hero-bg.jpg', // Tu imagen principal
+    image: 'assets/images/img-001.jpg', // Tu imagen principal
     ctaText: 'Discover More'
   },
   story: {
@@ -21,7 +23,7 @@ export const HOME_CONTENT = {
       'QREALAB is a Peruvian company founded in 2024. Its shareholders have more than 25 years of executive experience...',
       'We focus on high quality probiotics and pharmaceutical products.'
     ],
-    image: 'assets/images/team-hands.jpg',
+    image: 'assets/images/img-001.jpg',
     ctaText: 'Read Full Story'
   },
   mission: {
@@ -38,3 +40,24 @@ export const HOME_CONTENT = {
     { title: 'Growth', icon: 'trending_up', text: 'Conscious and energetic activity.' }
   ]
 };
+
+
+
+export const HERO_SLIDES: HeroSlide[] = [
+  {
+    id: 1,
+    image: 'assets/images/img-001.jpg', // Tu foto de laboratorio
+    tag: 'INNOVACIÓN FARMACÉUTICA',
+    title: 'Welcome to <span class="text-gradient">QREALAB</span>',
+    subtitle: 'Desarrollamos soluciones de vida con los más altos estándares de calidad y tecnología.',
+    cta: { text: 'Conoce más', link: '/about' }
+  },
+  {
+    id: 2,
+    image: 'assets/images/img-001.jpg', // Otra foto
+    tag: 'NUESTRA MISIÓN',
+    title: 'Compromiso con la <span class="text-green">Salud</span>',
+    subtitle: 'Llevando bienestar a cada rincón del Perú a través de la ciencia.',
+    cta: { text: 'Ver Productos', link: '/products' }
+  }
+];

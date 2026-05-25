@@ -1,0 +1,129 @@
+.footer {
+  background-color: var(--qrl-blue);
+  color: white;
+  position: relative;
+  padding-top: 100px; /* Espacio para la onda SVG */
+  margin-top: 80px;
+}
+
+/* La onda decorativa arriba del footer */
+.footer-wave {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  overflow: hidden;
+  line-height: 0;
+  transform: translateY(-99%); /* Sube la onda para que "muerda" la sección blanca anterior */
+  
+  svg {
+    position: relative;
+    display: block;
+    width: calc(100% + 1.3px);
+    height: 100px; /* Altura de la curva */
+    
+    path {
+      fill: var(--qrl-blue); /* Debe coincidir con el background del footer */
+    }
+  }
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px 40px;
+}
+
+.footer-grid {
+  display: grid;
+  grid-template-columns: 1.5fr 1fr 1fr 1fr; /* La primera columna es más ancha */
+  gap: 40px;
+  margin-bottom: 60px;
+
+  @media (max-width: 900px) {
+    grid-template-columns: 1fr 1fr; /* 2 columnas en tablet */
+  }
+
+  @media (max-width: 600px) {
+    grid-template-columns: 1fr; /* 1 columna en móvil */
+    text-align: center;
+  }
+}
+
+/* Títulos y Texto */
+.brand-logo {
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin-bottom: 16px;
+  letter-spacing: 1px;
+}
+
+.brand-desc {
+  color: rgba(255,255,255,0.7);
+  line-height: 1.6;
+  margin-bottom: 24px;
+  max-width: 300px;
+}
+
+h3 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: 20px;
+  color: var(--qrl-green); /* Títulos en verde corporativo */
+}
+
+/* Listas de enlaces */
+ul {
+  list-style: none;
+  padding: 0;
+  
+  li {
+    margin-bottom: 12px;
+    
+    a {
+      color: rgba(255,255,255,0.8);
+      text-decoration: none;
+      transition: color 0.3s;
+      
+      &:hover {
+        color: white;
+        text-decoration: underline;
+      }
+    }
+  }
+}
+
+/* Redes sociales */
+.social-links {
+  display: flex;
+  gap: 16px;
+  
+  @media (max-width: 600px) { justify-content: center; }
+
+  .social-icon {
+    color: white;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    text-decoration: none;
+    border: 1px solid rgba(255,255,255,0.3);
+    padding: 8px 16px;
+    border-radius: 20px;
+    transition: all 0.3s;
+
+    &:hover {
+      background: var(--qrl-green);
+      border-color: var(--qrl-green);
+      color: var(--qrl-blue); /* Texto oscuro sobre verde */
+    }
+  }
+}
+
+/* Copyright */
+.footer-bottom {
+  border-top: 1px solid rgba(255,255,255,0.1);
+  padding-top: 24px;
+  text-align: center;
+  font-size: 0.9rem;
+  color: rgba(255,255,255,0.5);
+}
