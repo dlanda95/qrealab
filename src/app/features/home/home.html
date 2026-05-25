@@ -1,8 +1,6 @@
 
 
-<qrl-hero-carousel [slides]="heroSlides"></qrl-hero-carousel>
-
-
+<qrl-hero-carousel *ngIf="heroSlides.length > 0" [slides]="heroSlides"></qrl-hero-carousel>
 
 <app-section-wrapper backgroundColor="white">
   <app-split-section

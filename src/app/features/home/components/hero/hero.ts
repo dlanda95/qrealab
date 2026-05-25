@@ -1,12 +1,16 @@
+
 import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
+
+
 @Component({
   selector: 'app-hero',
   imports: [CommonModule],
   templateUrl: './hero.html',
   styleUrl: './hero.scss',
 })
-export class Hero {
+export class Hero{
+
 
 
   @Input() title: string = '';
