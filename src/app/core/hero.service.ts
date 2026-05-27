@@ -8,21 +8,24 @@ import { HeroSlide } from './hero-slide.interface';
 })
 export class HeroService {
   private http = inject(HttpClient);
-  // Esta es la ruta automática que Payload creó para tu colección
-  private apiUrl = 'http://localhost:3000/api/hero-slides';
+
+  private baseUrl = 'http://localhost:3000';
+  private apiUrl = `${this.baseUrl}/api/hero-slides?sort=_order`;
 
   getHeroSlides(): Observable<HeroSlide[]> {
     return this.http.get<any>(this.apiUrl).pipe(
       map(response => {
-        // Transformamos lo que manda Payload a lo que necesita tu carrusel
-        return response.docs.map((doc: any, index: number) => ({
+        return response.docs.map((doc: any) => ({
           id: doc.id,
-          image: doc.image.url.startsWith('http') 
-  ? doc.image.url 
-  : `http://localhost:3000${doc.image.url}`, tag: doc.tag,
+          image: doc.image?.url?.startsWith('http')
+            ? doc.image.url
+            : `${this.baseUrl}${doc.image?.url}`,
+          tag: doc.tag,
           title: doc.title,
           subtitle: doc.subtitle,
-          cta: doc.ctaText && doc.ctaLink ? { text: doc.ctaText, link: doc.ctaLink } : undefined
+          cta: doc.ctaText && doc.ctaLink
+            ? { text: doc.ctaText, link: doc.ctaLink }
+            : undefined
         }));
       })
     );

@@ -3,8 +3,6 @@ import { CommonModule } from '@angular/common';
 import { SectionWrapper } from '../../shared/ui/section-wrapper/section-wrapper';
 import { SplitSection } from '../../shared/ui/split-section/split-section';
 
-import { HOME_CONTENT } from '../../data/home-content.data'; // Importamos los datos
-import { HERO_SLIDES } from '../../data/home-content.data';
 
 import { HeroCarouselComponent} from '../../shared/ui/hero-carousel/hero-carousel';
 
@@ -14,7 +12,8 @@ import { HeroCarouselComponent} from '../../shared/ui/hero-carousel/hero-carouse
 // 1. Importamos el servicio y la interfaz
 import { HeroService } from '../../core/hero.service';
 import { HeroSlide } from '../../core/hero-slide.interface';
-
+import { HistoryService } from '../../core/history.service'; // Importa tu servicio
+import {WhoweareService } from '../../core/whoweare.service'
 
 @Component({
   selector: 'app-home',
@@ -23,18 +22,22 @@ import { HeroSlide } from '../../core/hero-slide.interface';
   styleUrl: './home.scss',
 })
 export class Home implements OnInit {
-content = HOME_CONTENT;
-  
+  storyData: any;
+whoweareData: any;
   // 2. Empezamos con un arreglo vacío en lugar de los datos duros
   heroSlides: HeroSlide[] = []; 
 
   // 3. Inyectamos tu "puente" a Payload
   private heroService = inject(HeroService);
 
+  private historyService = inject(HistoryService);
+private WhoweareService = inject(WhoweareService);
 
 
 
   ngOnInit(): void {
+    
+
 
 
     // 4. Pedimos los datos al cargar la página
@@ -48,6 +51,31 @@ content = HOME_CONTENT;
         console.error('❌ Error conectando con Payload:', err);
       }
     });
+
+
+
+
+    this.historyService.getHistory().subscribe({
+     
+      
+      next: (data) => {
+        this.storyData = data;
+        console.log(data)
+      }
+    });
+
+
+
+
+    this.WhoweareService.getWhoweare().subscribe(data => this.whoweareData = data);
+
+
+
+
+
+
+
+  
     
   }
 }

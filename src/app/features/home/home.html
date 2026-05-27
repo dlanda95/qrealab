@@ -2,22 +2,21 @@
 
 <qrl-hero-carousel *ngIf="heroSlides.length > 0" [slides]="heroSlides"></qrl-hero-carousel>
 
-<app-section-wrapper backgroundColor="white">
+<app-section-wrapper *ngIf="storyData" backgroundColor="white">
   <app-split-section
-    [title]="content.story.title"
-    [description]="content.story.description"
-    [imageSrc]="content.story.image"
-    [ctaText]="content.story.ctaText"
+    [title]="storyData.title"
+    [description]="storyData.description"
+    [imageSrc]="storyData.image"
     imagePosition="right"
     [leafInverted]="false">
   </app-split-section>
 </app-section-wrapper>
 
-<app-section-wrapper backgroundColor="gray">
+<app-section-wrapper *ngIf="whoweareData" backgroundColor="gray">
   <app-split-section
-    [title]="content.mission.title"
-    [description]="content.mission.description"
-    [imageSrc]="content.mission.image"
+    [title]="whoweareData.title"
+    [description]="whoweareData.description"
+    [imageSrc]="whoweareData.image"
     imagePosition="left"
     [leafInverted]="true">
   </app-split-section>
