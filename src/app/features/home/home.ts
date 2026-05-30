@@ -1,81 +1,55 @@
-import { Component,OnInit,inject } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, OnInit, inject } from '@angular/core';
 import { SectionWrapper } from '../../shared/ui/section-wrapper/section-wrapper';
 import { SplitSection } from '../../shared/ui/split-section/split-section';
+import { HeroCarouselComponent } from '../../shared/ui/hero-carousel/hero-carousel';
+import { OurValues } from './components/our-values/our-values';
 
-
-import { HeroCarouselComponent} from '../../shared/ui/hero-carousel/hero-carousel';
-
-
-
-
-// 1. Importamos el servicio y la interfaz
 import { HeroService } from '../../core/hero.service';
 import { HeroSlide } from '../../core/hero-slide.interface';
-import { HistoryService } from '../../core/history.service'; // Importa tu servicio
-import {WhoweareService } from '../../core/whoweare.service'
+import { HistoryService } from '../../core/history.service';
+import { WhoweareService } from '../../core/whoweare.service';
+import { OurValuesService } from '../../core/our-values.service';
+import { OurValuesSection } from '../../core/our-values.interface';
 
 @Component({
   selector: 'app-home',
-  imports: [CommonModule, SectionWrapper, SplitSection,HeroCarouselComponent],
+  imports: [SectionWrapper, SplitSection, HeroCarouselComponent, OurValues],
   templateUrl: './home.html',
   styleUrl: './home.scss',
 })
 export class Home implements OnInit {
-  storyData: any;
-whoweareData: any;
-  // 2. Empezamos con un arreglo vacío en lugar de los datos duros
-  heroSlides: HeroSlide[] = []; 
 
-  // 3. Inyectamos tu "puente" a Payload
-  private heroService = inject(HeroService);
+  heroSlides: HeroSlide[]      = [];
+  storyData:  any;
+  whoweareData: any;
+  ourValuesData?: OurValuesSection;
 
-  private historyService = inject(HistoryService);
-private WhoweareService = inject(WhoweareService);
-
-
+  private heroService      = inject(HeroService);
+  private historyService   = inject(HistoryService);
+  private whoweareService  = inject(WhoweareService);
+  private ourValuesService = inject(OurValuesService);
 
   ngOnInit(): void {
-    
 
-
-
-    // 4. Pedimos los datos al cargar la página
     this.heroService.getHeroSlides().subscribe({
-      next: (data) => {
-        console.log('🚀 ¡DATOS RECIBIDOS DESDE PAYLOAD CMS!', data);
-        // 5. ¡Llenamos el carrusel con los datos de tu CMS!
-        this.heroSlides = data; 
-      },
-      error: (err) => {
-        console.error('❌ Error conectando con Payload:', err);
-      }
+      next:  (data) => { this.heroSlides = data; },
+      error: (err)  => { console.error('❌ Error cargando hero slides:', err); }
     });
-
-
-
 
     this.historyService.getHistory().subscribe({
-     
-      
-      next: (data) => {
-        this.storyData = data;
-        console.log(data)
-      }
+      next:  (data) => { this.storyData = data; },
+      error: (err)  => { console.error('❌ Error cargando historia:', err); }
     });
 
+    this.whoweareService.getWhoweare().subscribe({
+      next:  (data) => { this.whoweareData = data; },
+      error: (err)  => { console.error('❌ Error cargando quiénes somos:', err); }
+    });
 
+    this.ourValuesService.getOurValues().subscribe({
+      next:  (data) => { this.ourValuesData = data; },
+      error: (err)  => { console.error('❌ Error cargando nuestros valores:', err); }
+    });
 
-
-    this.WhoweareService.getWhoweare().subscribe(data => this.whoweareData = data);
-
-
-
-
-
-
-
-  
-    
   }
 }

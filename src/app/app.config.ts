@@ -5,18 +5,36 @@ import { provideHttpClient, withFetch } from '@angular/common/http';
 
 import { routes } from './app.routes';
 import { provideClientHydration, withEventReplay } from '@angular/platform-browser';
-import { LucideAngularModule, Menu, X, ChevronDown, Globe } from 'lucide-angular'; 
+import {
+  LucideAngularModule,
+  // Layout / nav
+  Menu, X, ChevronDown, Globe,
+  // Valores — íconos disponibles para Payload CMS
+  Heart, Lightbulb, TrendingUp,
+  Shield, Star, Users, Award,
+  Target, Leaf, HandHeart, Brain,
+  BookOpen, Rocket, CircleCheck,
+} from 'lucide-angular';
 
 import { importProvidersFrom } from '@angular/core';
-// Importa los iconos que necesites
+
 export const appConfig: ApplicationConfig = {
   providers: [
     provideBrowserGlobalErrorListeners(),
     provideZonelessChangeDetection(),
-    provideRouter(routes), 
+    provideRouter(routes),
     provideClientHydration(withEventReplay()),
-    importProvidersFrom(LucideAngularModule.pick({ Menu, X, ChevronDown, Globe })),
-    provideHttpClient(withFetch())
-    
+    importProvidersFrom(
+      LucideAngularModule.pick({
+        // Nav
+        Menu, X, ChevronDown, Globe,
+        // Our Values — íconos semánticos para valores corporativos
+        Heart, Lightbulb, TrendingUp,
+        Shield, Star, Users, Award,
+        Target, Leaf, HandHeart, Brain,
+        BookOpen, Rocket, CircleCheck,
+      })
+    ),
+    provideHttpClient(withFetch()),
   ]
 };

@@ -1,67 +1,135 @@
+@use '../../../../styles/variables' as *;
+@use '../../../../styles/mixins'    as *;
+
+// ============================================================
+//  SPLIT SECTION
+//  Layout de dos columnas: texto + imagen de hoja
+//  Configurable via @Input: imagePosition ('left' | 'right'), leafInverted
+// ============================================================
+
 .split-layout {
   display: grid;
-  grid-template-columns: 1fr 1fr; /* 50% - 50% */
-  gap: 60px;
+  grid-template-columns: 1fr 1fr;
+  grid-template-areas: 'text image';   // Default: texto izq, imagen der
+  gap: clamp(2.5rem, 6vw, 5rem);
   align-items: center;
 
-  /* Si la imagen va a la derecha (default), no hacemos nada extra.
-     Si va a la izquierda, invertimos el orden visualmente */
+  // --- Imagen va a la derecha visualmente (reversed) ---
   &.reversed {
-    direction: rtl; /* Truco rápido, o usar grid-areas */
-    .text-column { direction: ltr; } /* Restaurar texto */
-    .image-column { direction: ltr; }
+    grid-template-areas: 'image text';
   }
 
-  @media (max-width: 900px) {
+  // --- Responsive: una columna en tablet / móvil ---
+  @include bp(md) {
     grid-template-columns: 1fr;
-    gap: 40px;
-    direction: ltr !important; /* En móvil siempre uno debajo del otro */
-    
-    /* Ordenar para que la imagen quede arriba o abajo según prefieras en móvil */
-    .image-column { order: -1; } 
+    gap: clamp(1.5rem, 5vw, 3rem);
+
+    // Siempre imagen arriba / texto abajo en móvil
+    // IMPORTANTE: necesitamos especificidad igual o mayor que &.reversed (0-2-0)
+    // por eso repetimos el override dentro del mismo bloque
+    grid-template-areas:
+      'image'
+      'text';
+
+    // Override explícito para .reversed en móvil
+    // (evita que la especificidad de .split-layout.reversed gane al media query)
+    &.reversed {
+      grid-template-areas:
+        'image'
+        'text';
+    }
+  }
+}
+
+// Asignación de áreas a columnas
+.text-column  { grid-area: text; }
+.image-column { grid-area: image; }
+
+// ============================================================
+//  COLUMNA DE TEXTO
+// ============================================================
+
+.text-column {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+
+  @include bp(md) {
+    align-items: center;
+    text-align: center;
   }
 }
 
 .section-title {
-  font-family: var(--font-heading, sans-serif);
-  font-size: 2.5rem;
-  font-weight: 700;
-  margin-bottom: 24px;
+  font-family: var(--font-heading);
+  font-size: var(--text-3xl);
+  font-weight: 800;
+  line-height: 1.15;
+  letter-spacing: -0.03em;
   color: var(--qrl-text-main);
-  
-  /* Pequeña línea decorativa verde debajo del título */
+  margin-bottom: var(--space-5);
+
+  // Línea decorativa verde debajo del título
   &::after {
     content: '';
     display: block;
-    width: 60px;
+    width: 44px;
     height: 4px;
     background: var(--qrl-green);
-    margin-top: 16px;
-    border-radius: 2px;
+    border-radius: 4px;
+    margin-top: var(--space-4);
+
+    @include bp(md) {
+      margin-inline: auto; // Centrado en móvil
+    }
   }
 }
 
-.section-body p {
-  font-size: 1.125rem;
-  line-height: 1.6;
-  color: var(--qrl-text-body);
-  margin-bottom: 16px;
+.section-body {
+  margin-top: var(--space-2);
+
+  p {
+    font-family: var(--font-body);
+    font-size: var(--text-base);
+    line-height: 1.75;
+    color: var(--qrl-text-body);
+
+    & + p { margin-top: var(--space-4); }
+  }
 }
 
+// Botón de acción (opcional)
 .qrl-btn-link {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin-top: var(--space-8);
   background: none;
   border: none;
-  color: var(--qrl-blue);
-  font-weight: 600;
-  font-size: 1rem;
-  cursor: pointer;
   padding: 0;
-  margin-top: 16px;
-  border-bottom: 2px solid transparent;
-  transition: all 0.3s;
+  cursor: pointer;
+  font-family: var(--font-body);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--qrl-blue);
+  letter-spacing: 0.01em;
+  position: relative;
+
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: -2px; left: 0;
+    width: 0; height: 2px;
+    background: var(--qrl-green);
+    border-radius: 2px;
+    transition: width var(--t-base);
+  }
 
   &:hover {
-    border-bottom-color: var(--qrl-green);
     color: var(--qrl-green-dark);
+    &::after { width: 100%; }
   }
+
+  .arrow { transition: transform var(--t-base); }
+  &:hover .arrow { transform: translateX(4px); }
 }

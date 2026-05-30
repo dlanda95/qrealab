@@ -1,18 +1,31 @@
-<div class="leaf-wrapper" [ngClass]="{'inverted': inverted}">
-  
+<div class="leaf-wrapper" [class.inverted]="inverted">
+
   <div class="leaf-glow-border"></div>
 
   <div class="leaf-mask">
-    
-    <div *ngIf="imageSrc" 
-         class="leaf-media" 
-         [style.background-image]="'url(' + imageSrc + ')'">
-    </div>
 
-    <div *ngIf="!imageSrc" class="leaf-content">
-      <ng-content></ng-content>
-    </div>
-    
+    @if (imageSrc) {
+      <!--
+        .leaf-parallax: capa que se desplaza vía JS (translateY).
+        Se extiende 20% más allá del clip de .leaf-mask (inset: -20% 0)
+        para que la imagen siempre llene el frame sin mostrar bordes,
+        independientemente de cuánto se desplace.
+        .leaf-mask tiene overflow:hidden → solo se ve la zona del frame.
+      -->
+      <div class="leaf-parallax">
+        <div
+          class="leaf-media"
+          [style.background-image]="'url(' + imageSrc + ')'">
+        </div>
+      </div>
+    }
+
+    @if (!imageSrc) {
+      <div class="leaf-content">
+        <ng-content></ng-content>
+      </div>
+    }
+
   </div>
 
 </div>

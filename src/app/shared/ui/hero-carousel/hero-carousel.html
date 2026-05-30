@@ -1,43 +1,76 @@
 <section class="hero-carousel-wrapper">
-  
+
   <swiper-container init="false" #swiper class="hero-swiper">
-    
-    <swiper-slide *ngFor="let slide of slides; let i = index">
-      
-      <div class="slide-bg">
-        <img 
-          [src]="slide.image" 
-          [alt]="slide.title"
-          [attr.loading]="i === 0 ? 'eager' : 'lazy'"
-          [attr.fetchpriority]="i === 0 ? 'high' : 'auto'"
-        >
-      </div>
 
-      <div class="slide-overlay"></div>
+    @for (slide of slides; track slide.id; let i = $index) {
+      <swiper-slide>
 
-      <div class="slide-content container">
-        <div class="content-box">
-          <span *ngIf="slide.tag" class="hero-tag">{{ slide.tag }}</span>
-          
-          <h1 class="hero-title" [innerHTML]="slide.title"></h1>
-          
-          <p *ngIf="slide.subtitle" class="hero-subtitle">{{ slide.subtitle }}</p>
-          
-          <div *ngIf="slide.cta" class="hero-actions">
-            <a [routerLink]="slide.cta.link" class="btn-primary-apple">
-              {{ slide.cta.text }}
-            </a>
+        <div class="slide-bg">
+          <img
+            [src]="slide.image"
+            [alt]="slide.title"
+            [attr.loading]="i === 0 ? 'eager' : 'lazy'"
+            [attr.fetchpriority]="i === 0 ? 'high' : 'auto'"
+          >
+        </div>
+
+        <div class="slide-overlay"></div>
+
+        <div class="slide-content">
+          <div class="content-box">
+
+            @if (slide.tag) {
+              <span class="hero-tag">{{ slide.tag }}</span>
+            }
+
+            <h1 class="hero-title" [innerHTML]="slide.title"></h1>
+
+            @if (slide.subtitle) {
+              <p class="hero-subtitle">{{ slide.subtitle }}</p>
+            }
+
+            @if (slide.cta) {
+              <div class="hero-actions">
+                <a [routerLink]="slide.cta.link" class="btn-primary-apple">
+                  {{ slide.cta.text }}
+                </a>
+              </div>
+            }
+
           </div>
         </div>
-      </div>
 
-    </swiper-slide>
-    
+      </swiper-slide>
+    }
+
   </swiper-container>
 
-  <div class="hero-curve">
-    <svg viewBox="0 0 1440 120" preserveAspectRatio="none">
-      <path d="M0,0 C480,100 960,100 1440,0 L1440,120 L0,120 Z" fill="#ffffff"></path>
+  <!-- Olas de transición: 4 capas blancas con opacidad progresiva -->
+  <div class="hero-waves" aria-hidden="true">
+    <svg xmlns="http://www.w3.org/2000/svg"
+         viewBox="0 0 1440 210"
+         preserveAspectRatio="none">
+
+      <!-- Ola 4 — más alta, apenas perceptible -->
+      <path
+        d="M0,42 C200,118 440,14 720,54 C980,92 1240,18 1440,58 L1440,210 L0,210 Z"
+        fill="rgba(255,255,255,0.10)"/>
+
+      <!-- Ola 3 — segunda capa, un poco más opaca -->
+      <path
+        d="M0,70 C280,150 560,36 880,78 C1060,108 1300,50 1440,86 L1440,210 L0,210 Z"
+        fill="rgba(255,255,255,0.22)"/>
+
+      <!-- Ola 2 — tercera capa, visible -->
+      <path
+        d="M0,98 C360,175 720,76 1040,112 C1200,128 1380,98 1440,116 L1440,210 L0,210 Z"
+        fill="rgba(255,255,255,0.52)"/>
+
+      <!-- Ola 1 — cierre sólido, empalma con la sección siguiente -->
+      <path
+        d="M0,134 C480,208 960,110 1440,148 L1440,210 L0,210 Z"
+        fill="#ffffff"/>
+
     </svg>
   </div>
 

@@ -1,137 +1,234 @@
 @use '../../../../styles/variables' as *;
+@use '../../../../styles/mixins'    as *;
 
-
+// ============================================================
+//  LEAF FRAME  —  MOLDE ÚNICO (single source of truth)
+//
+//  Este es el único archivo que controla el diseño de la hoja:
+//  tamaño, forma, curvas, glow, zoom al hover, blend de imagen.
+//
+//  ▸ Para cambiar el tamaño máximo      → edita max-width en .leaf-wrapper
+//  ▸ Para cambiar la forma de curva     → edita los tokens --leaf-curve*
+//                                         en styles/_variables.scss
+//  ▸ Para cambiar el glow verde         → edita .leaf-glow-border
+//  ▸ Para cambiar el blend de imagen    → edita .leaf-media::after
+//  ▸ Para cambiar la animación hover    → edita .leaf-wrapper:hover
+//
+//  Los componentes padres (split-section, our-values, etc.) solo
+//  deben proveer espacio en su grid — nunca deben re-declarar tamaño,
+//  curva ni efectos de la hoja.
+//
+//  Sistema de capas:
+//  ┌─ :host ──────────────────────────────────────────────┐
+//  │  display:flex · justify-content:center · width:100%  │
+//  │  └─ .leaf-wrapper  (max 440px, autocentrado)          │
+//  │       ├─ z:0  .leaf-glow-border  → aura verde difusa  │
+//  │       └─ z:1  .leaf-mask         → clip + gap interno  │
+//  │                 └─ .leaf-media   → img + blend color   │
+//  └──────────────────────────────────────────────────────┘
+//
+//  Hoja normal    (0px 96px 0px 96px): curvas en TR y BL
+//  Hoja invertida (96px 0px 96px 0px): curvas en TL y BR
+// ============================================================
 
 :host {
-  display: block;
-  width: 100%;
-  /* Centrado por defecto para evitar alineaciones raras en móvil */
   display: flex;
-  justify-content: center; 
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  // GPU layer dedicada para el parallax — sin repaint en cada frame
+  will-change: transform;
 }
 
-/* --- VARIABLES LOCALES PARA FÁCIL AJUSTE --- */
-$leaf-curve: 0px 100px 0px 100px; /* La forma base */
-$leaf-curve-inv: 100px 0px 100px 0px; /* La forma invertida */
+// ============================================================
+//  WRAPPER
+// ============================================================
 
 .leaf-wrapper {
   position: relative;
+  aspect-ratio: 1 / 0.96;
   width: 100%;
-  
-  /* 1. ANTI-DEFORMACIÓN (La clave) */
-  /* Mantiene la hoja siempre proporcional (casi cuadrada) */
-  aspect-ratio: 1 / 0.95; 
-  
-  /* 2. LÍMITES DE TAMAÑO (Control de impacto) */
-  max-width: 450px; /* Nunca será monstruosamente grande */
-  min-width: 280px; /* Nunca será demasiado pequeña */
-  
-  border-radius: $leaf-curve;
-  transition: all 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
-  
-  /* Centrado en su propio contenedor */
-  margin: 0 auto; 
-  
-  /* Variante Invertida */
+  max-width: 440px;
+  min-width: 260px;
+  border-radius: var(--leaf-curve);
+  margin: 0 auto;
+
+  transition:
+    transform  var(--t-slow),
+    box-shadow var(--t-slow);
+
+  &:hover {
+    transform: translateY(-7px);
+  }
+
+  // Variante invertida
   &.inverted {
-    border-radius: $leaf-curve-inv;
-    
-    .leaf-glow-border {
-      border-radius: $leaf-curve-inv;
-      /* Invertimos el gradiente del borde para variar */
-      background: linear-gradient(45deg, transparent 30%, var(--qrl-green) 100%);
-    }
-    .leaf-mask { border-radius: $leaf-curve-inv; }
+    border-radius: var(--leaf-curve-inv);
+
+    .leaf-glow-border { border-radius: var(--leaf-curve-inv); }
+    .leaf-mask        { border-radius: var(--leaf-curve-inv); }
   }
 }
 
-/* --- CAPA 1: BORDE DIFUMINADO VARIABLE --- */
+// ============================================================
+//  CAPA 0 — AURA DE BORDE (direccional, sigue las curvas)
+//
+//  El aura es MÁS intensa en los ángulos redondeados de la hoja
+//  y se desvanece en los ángulos agudos → efecto de "luz curva"
+// ============================================================
+
 .leaf-glow-border {
   position: absolute;
-  inset: 0; /* Ocupa todo el espacio */
+  inset: -6px;           // Sobresale levemente para crear el halo
   border-radius: inherit;
   z-index: 0;
 
-  /* TRUCO VISUAL: Gradiente diagonal */
-  /* Esto crea el efecto de "Grosor variable": 
-     - Arriba derecha: Verde intenso (Glow)
-     - Abajo izquierda: Transparente (Adelgazamiento) 
-  */
-  background: linear-gradient(
-    225deg, 
-    var(--qrl-green) 0%, 
-    rgba(46, 198, 67, 0.5) 40%, 
-    rgba(255,255,255,0) 80%
-  );
+  // Hoja normal: curvas en top-right y bottom-left
+  // Glow fuerte en top-right → desvanece → reaparece en bottom-left
+  background:
+    radial-gradient(ellipse 70% 65% at 100%   0%, var(--qrl-green)            0%, transparent 68%),  // top-right  (principal)
+    radial-gradient(ellipse 55% 50% at   0% 100%, rgba(46, 198, 67, 0.60)    0%, transparent 65%); // bottom-left (eco)
 
-  /* DIFUMINADO DEL BORDE (Blur) */
-  filter: blur(8px); /* Hace que el verde parezca luz, no una línea sólida */
-  opacity: 0.8;
-  
-  /* Sombra de profundidad para levantar la hoja */
-  box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.15);
-  
-  transition: all 0.5s ease;
+  filter: blur(10px);
+  opacity: 0.72;
+
+  transition:
+    filter    var(--t-slow),
+    opacity   var(--t-slow),
+    transform var(--t-slow);
 }
 
-/* --- CAPA 2: MÁSCARA DEL CONTENIDO --- */
+// Invertida: curvas en top-left y bottom-right
+.leaf-wrapper.inverted .leaf-glow-border {
+  background:
+    radial-gradient(ellipse 70% 65% at   0%   0%, var(--qrl-green)            0%, transparent 68%),  // top-left   (principal)
+    radial-gradient(ellipse 55% 50% at 100% 100%, rgba(46, 198, 67, 0.60)    0%, transparent 65%); // bottom-right (eco)
+}
+
+.leaf-wrapper:hover .leaf-glow-border {
+  filter: blur(15px);
+  opacity: 0.90;
+  transform: scale(1.04);
+}
+
+// ============================================================
+//  CAPA 1 — MÁSCARA / CLIP
+//
+//  inset: 4px → deja un delgado espacio donde el glow se asoma,
+//  creando el "borde de luz" sin necesidad de border sólido.
+//  SIN mask-image → la imagen no se difumina de forma uniforme.
+// ============================================================
+
 .leaf-mask {
   position: absolute;
-  /* El inset define el grosor del borde visual.
-     Al ser blur atrás, parece que se funde. */
-  inset: 4px; 
-  background: white;
+  inset: 4px;
+  background: transparent;
   border-radius: inherit;
   overflow: hidden;
   z-index: 1;
-  
-  /* Sombra interna muy sutil (Volumen) */
-  box-shadow: inset 0 0 20px rgba(0,0,0,0.03);
 }
 
-/* --- CONTENIDOS --- */
+// ============================================================
+//  CAPA PARALLAX
+//
+//  .leaf-parallax: wrapper que el JS desplaza en translateY.
+//  inset: -20% 0 → se extiende 20% del alto de .leaf-mask
+//  por arriba y por abajo, dando margen para que la imagen
+//  se mueva sin mostrar bordes vacíos.
+//  .leaf-mask overflow:hidden recorta al tamaño del frame.
+//
+//  Flujo:
+//    scroll → rAF → JS → leaf-parallax.style.transform
+//                      → imagen se desliza dentro del frame
+// ============================================================
+
+.leaf-parallax {
+  position: absolute;
+  inset: -20% 0;       // extiende 20% arriba y abajo
+  will-change: transform;
+  // JS setea --leaf-parallax-y en :host → cae en cascada hasta aquí
+  transform: translateY(var(--leaf-parallax-y, 0px));
+}
+
+// ============================================================
+//  IMAGEN + BLEND INTERNO DIRECCIONAL
+//
+//  .leaf-media llena .leaf-parallax (position:absolute inset:0).
+//  La imagen siempre cubre el área extendida con background-size:cover.
+//  El blend sigue los ángulos curvos de la hoja.
+//  mix-blend-mode: overlay → colorea sin destruir los detalles.
+// ============================================================
+
 .leaf-media {
-  width: 100%; height: 100%;
+  position: absolute;
+  inset: 0;
   background-size: cover;
   background-position: center;
-  transition: transform 0.7s ease;
+  background-repeat: no-repeat;
+  // Sin transition de transform: el parallax JS usa rAF, no CSS transition
+
+  // Blend interno en los ángulos curvos (hoja normal: top-right y bottom-left)
+  &::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+
+    background:
+      radial-gradient(ellipse 58% 52% at 100%   0%, rgba(46, 198, 67, 0.32) 0%, transparent 68%),
+      radial-gradient(ellipse 50% 45% at   0% 100%, rgba(46, 198, 67, 0.18) 0%, transparent 65%),
+      linear-gradient(225deg, rgba(46, 198, 67, 0.06) 0%, transparent 55%);
+
+    mix-blend-mode: overlay;
+  }
 }
+
+// Blend para hoja invertida (curvas en top-left y bottom-right)
+.leaf-wrapper.inverted .leaf-media::after {
+  background:
+    radial-gradient(ellipse 58% 52% at   0%   0%, rgba(46, 198, 67, 0.32) 0%, transparent 68%),
+    radial-gradient(ellipse 50% 45% at 100% 100%, rgba(46, 198, 67, 0.18) 0%, transparent 65%),
+    linear-gradient(135deg, rgba(46, 198, 67, 0.06) 0%, transparent 55%);
+}
+
+// El hover zoom se eliminó de la imagen — la imagen tiene el
+// efecto parallax al hacer scroll. El frame sí se eleva al hover
+// (ver .leaf-wrapper:hover más abajo).
+
+// ============================================================
+//  SLOT GENÉRICO (sin imagen)
+// ============================================================
 
 .leaf-content {
   height: 100%;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  padding: 40px; /* Espacio interno seguro */
-  
-  /* Fondo interior sutilísimo */
-  background: radial-gradient(circle at top right, rgba(46, 198, 67, 0.05), transparent 70%);
+  padding: clamp(24px, 5%, 40px);
+  background: radial-gradient(
+    circle at 70% 30%,
+    rgba(46, 198, 67, 0.07) 0%,
+    transparent 65%
+  );
 }
 
-/* --- HOVER EFFECTS (PREMIUM) --- */
-.leaf-wrapper:hover {
-  transform: translateY(-5px); /* Levitación suave */
+// ============================================================
+//  RESPONSIVE
+// ============================================================
 
-  .leaf-glow-border {
-    filter: blur(12px); /* El borde brilla más */
-    opacity: 1;
-    /* Movemos un poco el fondo para simular luz viva */
-    transform: scale(1.02); 
-  }
-
-  .leaf-media {
-    transform: scale(1.08); /* Zoom lento foto */
-  }
-}
-
-/* --- RESPONSIVE INTELIGENTE --- */
-/* En móviles muy estrechos, ajustamos ligeramente la proporción */
-@media (max-width: 480px) {
+@include bp(sm) {
   .leaf-wrapper {
-    /* Permitimos que sea un poco más alta si es necesario, pero sin deformarse */
-    aspect-ratio: 1 / 1.1; 
-    border-radius: 0px 60px 0px 60px; /* Curvas más suaves para pantalla chica */
-    
-    &.inverted { border-radius: 60px 0px 60px 0px; }
+    aspect-ratio: 1 / 1.05;
+    border-radius: var(--leaf-curve-sm);
+
+    &.inverted {
+      border-radius: var(--leaf-curve-sm-inv);
+      .leaf-glow-border { border-radius: var(--leaf-curve-sm-inv); }
+      .leaf-mask        { border-radius: var(--leaf-curve-sm-inv); }
+    }
+
+    .leaf-glow-border { border-radius: var(--leaf-curve-sm); }
+    .leaf-mask        { border-radius: var(--leaf-curve-sm); }
   }
 }

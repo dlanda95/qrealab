@@ -1,43 +1,98 @@
-/* 1. Importamos las variables (Sass moderno) */
-@use 'styles/variables' as *;
+// ============================================================
+//  QREALAB — ESTILOS GLOBALES
+//  Orden: 1-Herramientas (no generan CSS) → 2-Externas → 3-Reset → 4-Base → 5-Utilidades
+// ============================================================
 
-/* 2. Reset básico */
-* {
+// --- 1. Herramientas (sin output CSS) ---
+@use 'styles/variables' as *;
+@use 'styles/mixins'    as *;
+
+// --- 2. Librerías externas ---
+@import 'aos/dist/aos.css';
+
+// --- 3. Reset ---
+*,
+*::before,
+*::after {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
 }
 
-/* 3. APLICACIÓN DE LA FUENTE (Aquí arreglamos el problema) */
-html, body {
-  height: 100%;
-  width: 100%;
-  
-  /* Forzamos la fuente en todo el documento */
-  font-family: var(--font-main); 
-  color: var(--color-text-main);
+// --- 4. Base ---
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+body {
+  font-family:    var(--font-body);
+  font-size:      var(--text-base);
+  color:          var(--color-text-main);
   background-color: var(--color-bg);
-  
-  /* Suavizado de fuente para que se vea premium (Apple style) */
-  -webkit-font-smoothing: antialiased;
+  line-height:    1.65;
+  overflow-x:     hidden;
+
+  // Suavizado premium (Apple-style)
+  -webkit-font-smoothing:  antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* 4. Aseguramos que los títulos también usen la fuente */
-h1, h2, h3, h4, h5, h6, button, input, textarea {
-  font-family: var(--font-main);
+// Headings usan la fuente de display
+h1, h2, h3, h4, h5, h6 {
+  @include heading-style;
 }
 
-/* Clases utilitarias */
+// Inputs y buttons heredan la fuente del body
+button, input, textarea, select {
+  font-family: inherit;
+}
+
+// Links sin subrayado por defecto
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+// Imágenes responsivas
+img, video, svg {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+// Lista limpia cuando se usa sin semántica visual
+ul, ol {
+  list-style: none;
+}
+
+// --- 5. Utilidades globales ---
+
+// Contenedor centrado fluido
+.container {
+  @include container;
+}
+
+// Gradiente de texto (marca)
 .text-gradient {
-  background: linear-gradient(90deg, var(--qrl-blue) 0%, var(--qrl-green) 100%);
+  background: linear-gradient(100deg, var(--qrl-blue) 0%, var(--qrl-green) 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
-  display: inline-block;
 }
 
+// Accesibilidad
+.sr-only {
+  @include sr-only;
+}
 
-/* Estilos base de Swiper */
-
-@import 'aos/dist/aos.css';
+// Separador decorativo verde (debajo de h2)
+.qrl-divider {
+  display: block;
+  width: 48px;
+  height: 4px;
+  background: var(--qrl-green);
+  border-radius: 4px;
+  margin-top: var(--space-4);
+}

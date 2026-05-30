@@ -1,24 +1,37 @@
+@if (heroSlides.length > 0) {
+  <qrl-hero-carousel [slides]="heroSlides"></qrl-hero-carousel>
+}
 
+@if (storyData) {
+  <app-section-wrapper backgroundColor="white">
+    <app-split-section
+      [title]="storyData.title"
+      [description]="storyData.description"
+      [imageSrc]="storyData.image"
+      imagePosition="right"
+      [leafInverted]="false">
+    </app-split-section>
+  </app-section-wrapper>
+}
 
-<qrl-hero-carousel *ngIf="heroSlides.length > 0" [slides]="heroSlides"></qrl-hero-carousel>
+@if (whoweareData) {
+  <app-section-wrapper backgroundColor="gray">
+    <app-split-section
+      [title]="whoweareData.title"
+      [description]="whoweareData.description"
+      [imageSrc]="whoweareData.image"
+      imagePosition="left"
+      [leafInverted]="true">
+    </app-split-section>
+  </app-section-wrapper>
+}
 
-<app-section-wrapper *ngIf="storyData" backgroundColor="white">
-  <app-split-section
-    [title]="storyData.title"
-    [description]="storyData.description"
-    [imageSrc]="storyData.image"
-    imagePosition="right"
-    [leafInverted]="false">
-  </app-split-section>
-</app-section-wrapper>
-
-<app-section-wrapper *ngIf="whoweareData" backgroundColor="gray">
-  <app-split-section
-    [title]="whoweareData.title"
-    [description]="whoweareData.description"
-    [imageSrc]="whoweareData.image"
-    imagePosition="left"
-    [leafInverted]="true">
-  </app-split-section>
-</app-section-wrapper>
-
+@if (ourValuesData) {
+  <app-section-wrapper backgroundColor="white">
+    <app-our-values
+      [sectionTitle]="ourValuesData.sectionTitle"
+      [image]="ourValuesData.image"
+      [values]="ourValuesData.values">
+    </app-our-values>
+  </app-section-wrapper>
+}

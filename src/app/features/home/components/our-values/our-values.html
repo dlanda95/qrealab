@@ -1,0 +1,53 @@
+<div class="ov-section">
+
+  <!-- ── Header ─────────────────────────────────────────── -->
+  <div class="ov-header">
+    <span class="ov-eyebrow">Lo que nos define</span>
+    <h2 class="ov-title">{{ sectionTitle }}</h2>
+  </div>
+
+  <!-- ── Content: imagen + tarjetas de valores ───────────── -->
+  <div class="ov-body">
+
+    <!-- Imagen decorativa (leaf frame) -->
+    @if (image) {
+      <div class="ov-image-col" aria-hidden="true">
+        <app-leaf-frame [imageSrc]="image" [inverted]="false"></app-leaf-frame>
+      </div>
+    }
+
+    <!-- Grid de tarjetas -->
+    <div class="ov-cards" [class.no-image]="!image">
+      @for (value of values; track value.id) {
+
+        <article class="ov-card">
+
+          <!-- Icono -->
+          <div class="ov-card__icon">
+            <lucide-icon [name]="value.icon" class="ov-icon-svg"></lucide-icon>
+          </div>
+
+          <!-- Título del valor -->
+          <h3 class="ov-card__title">{{ value.title }}</h3>
+
+          <!-- Puntos / bullets -->
+          <ul class="ov-card__points">
+            @for (point of value.points; track $index) {
+              <li>
+                <strong>{{ point.label }}:</strong>
+                <span>{{ point.description }}</span>
+              </li>
+            }
+          </ul>
+
+          <!-- Línea decorativa inferior -->
+          <div class="ov-card__line"></div>
+
+        </article>
+
+      }
+    </div>
+
+  </div>
+
+</div>

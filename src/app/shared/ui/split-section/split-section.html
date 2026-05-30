@@ -1,16 +1,27 @@
 <div class="split-layout" [class.reversed]="imagePosition === 'right'">
-      <div class="text-column">
-        <h2 class="section-title">{{ title }}</h2>
-        <div class="section-body">
-          <p *ngFor="let para of description">{{ para }}</p>
-        </div>
-        <button *ngIf="ctaText" class="qrl-btn-link">{{ ctaText }} &rarr;</button>
-      </div>
 
-      <div class="image-column">
-        <app-leaf-frame 
-          [imageSrc]="imageSrc" 
-          [inverted]="leafInverted">
-        </app-leaf-frame>
-      </div>
+  <div class="text-column">
+    <h2 class="section-title">{{ title }}</h2>
+
+    <div class="section-body">
+      @for (para of description; track $index) {
+        <p>{{ para }}</p>
+      }
     </div>
+
+    @if (ctaText) {
+      <button class="qrl-btn-link">
+        {{ ctaText }}
+        <span class="arrow" aria-hidden="true">→</span>
+      </button>
+    }
+  </div>
+
+  <div class="image-column">
+    <app-leaf-frame
+      [imageSrc]="imageSrc"
+      [inverted]="leafInverted">
+    </app-leaf-frame>
+  </div>
+
+</div>

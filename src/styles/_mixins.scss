@@ -1,0 +1,138 @@
+// ============================================================
+//  QREALAB — MIXINS & HELPERS
+//  El "toolkit Lego" para construir componentes consistentes.
+//  Uso: @use 'path/to/mixins' as m; → @include m.bp(md) { ... }
+//  O:   @use 'path/to/mixins' as *;  → @include bp(md) { ... }
+// ============================================================
+
+// --------------------------------------------------------
+// BREAKPOINTS
+// Convención: "bp(md)" = "en pantallas HASTA 768px"
+// --------------------------------------------------------
+
+$bp-xs:  390px;
+$bp-sm:  576px;
+$bp-md:  768px;
+$bp-lg: 1024px;
+$bp-xl: 1280px;
+
+// → hasta X px (mobile-first: escribe estilos base para móvil, sobreescribe arriba)
+@mixin bp($size) {
+  @if      $size == 'xs' { @media (max-width: #{$bp-xs})  { @content; } }
+  @else if $size == 'sm' { @media (max-width: #{$bp-sm})  { @content; } }
+  @else if $size == 'md' { @media (max-width: #{$bp-md})  { @content; } }
+  @else if $size == 'lg' { @media (max-width: #{$bp-lg})  { @content; } }
+  @else if $size == 'xl' { @media (max-width: #{$bp-xl})  { @content; } }
+}
+
+// → desde X px en adelante
+@mixin bp-up($size) {
+  @if      $size == 'xs' { @media (min-width: #{$bp-xs})  { @content; } }
+  @else if $size == 'sm' { @media (min-width: #{$bp-sm})  { @content; } }
+  @else if $size == 'md' { @media (min-width: #{$bp-md})  { @content; } }
+  @else if $size == 'lg' { @media (min-width: #{$bp-lg})  { @content; } }
+  @else if $size == 'xl' { @media (min-width: #{$bp-xl})  { @content; } }
+}
+
+// → rango entre dos breakpoints
+@mixin bp-between($min, $max) {
+  @media (min-width: #{$min}) and (max-width: #{$max}) { @content; }
+}
+
+// --------------------------------------------------------
+// CONTAINER
+// Uso: @include container; → centra el contenido con padding fluido
+// --------------------------------------------------------
+
+@mixin container($max: 1200px) {
+  width: 100%;
+  max-width: $max;
+  margin-inline: auto;
+  padding-inline: var(--container-pad);
+}
+
+// --------------------------------------------------------
+// TIPOGRAFÍA DE HEADING
+// Aplica el estilo premium de headings (heading font + tracking ajustado)
+// --------------------------------------------------------
+
+@mixin heading-style {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  line-height: 1.15;
+  letter-spacing: -0.025em;
+  color: var(--color-text-main);
+}
+
+// --------------------------------------------------------
+// FORMA DE HOJA
+// Uso: @include leaf; o @include leaf(true) para invertida
+// --------------------------------------------------------
+
+@mixin leaf($inverted: false) {
+  @if $inverted {
+    border-radius: var(--leaf-curve-inv);
+  } @else {
+    border-radius: var(--leaf-curve);
+  }
+}
+
+@mixin leaf-sm($inverted: false) {
+  @if $inverted {
+    border-radius: var(--leaf-curve-sm-inv);
+  } @else {
+    border-radius: var(--leaf-curve-sm);
+  }
+}
+
+// --------------------------------------------------------
+// FLEX HELPERS
+// --------------------------------------------------------
+
+@mixin flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@mixin flex-between {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+// --------------------------------------------------------
+// OVERLAY GENÉRICO
+// Uso: capa que cubre todo el padre
+// --------------------------------------------------------
+
+@mixin overlay($z: 1) {
+  position: absolute;
+  inset: 0;
+  z-index: $z;
+}
+
+// --------------------------------------------------------
+// VISUALLY HIDDEN (Accesibilidad)
+// --------------------------------------------------------
+
+@mixin sr-only {
+  position: absolute;
+  width: 1px; height: 1px;
+  padding: 0; margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+// --------------------------------------------------------
+// ANIMATION RESET
+// Útil para forzar re-run de animaciones en Angular
+// --------------------------------------------------------
+
+@mixin animation-reset {
+  animation: none !important;
+  opacity: 0;
+  transform: translateY(20px);
+}

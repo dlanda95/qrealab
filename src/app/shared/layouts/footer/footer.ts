@@ -1,11 +1,28 @@
-import { Component } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
+import { RouterLink } from '@angular/router';
+import { FooterService } from '../../../core/footer.service';
+import { FooterData } from '../../../core/footer.interface';
 
 @Component({
   selector: 'app-footer',
-  imports: [],
+  imports: [RouterLink],
   templateUrl: './footer.html',
   styleUrl: './footer.scss',
 })
-export class Footer {
+export class Footer implements OnInit {
 
+  private footerService = inject(FooterService);
+  footerData?: FooterData;
+
+  ngOnInit(): void {
+    this.footerService.getFooter().subscribe({
+      next:  data  => (this.footerData = data),
+      error: err   => console.error('Footer CMS error:', err),
+    });
+  }
+
+  /** Determina si la url es interna (ruta Angular) o externa (http…) */
+  isExternal(url: string): boolean {
+    return url.startsWith('http://') || url.startsWith('https://');
+  }
 }

@@ -1,42 +1,149 @@
+// ============================================================
+//  QREALAB — DESIGN TOKENS
+//  Cambia aquí → se refleja en TODA la app.
+//  Estructura: Tipografía → Colores → Espaciado → Formas → Efectos
+// ============================================================
+
 :root {
-  /* --- 1. TIPOGRAFÍA (El problema actual) --- */
-  /* Definimos UNA sola variable principal para evitar errores */
-  --font-main: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-  
-  /* --- 2. PALETA DE COLORES --- */
-  --qrl-green: #2EC643;        /* Verde vibrante */
-  --qrl-green-soft: #E8F9EA;   /* Verde muy claro para fondos */
-  --qrl-blue: #0A1145;         /* Azul muy oscuro (Casi negro) */
-  --qrl-blue-light: #F0F4FF;   /* Azul muy claro */
-  
-  /* --- 3. NEUTROS (Apple Style) --- */
-  --color-bg: #FFFFFF;
-  --color-bg-alt: #F5F5F7;     /* Gris suave */
-  --color-text-main: #1D1D1F;  /* Texto principal (No es negro puro) */
-  --color-text-body: #86868B;  /* Texto secundario */
-  --color-border: rgba(0, 0, 0, 0.1);
 
-  /* --- 4. INTERFAZ (Glass & Shadows) --- */
-  --glass-bg: rgba(255, 255, 255, 0.8);
-  --glass-blur: blur(20px);
-  
-  --shadow-sm: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
-  --shadow-md: 0 10px 15px -3px rgba(0, 0, 0, 0.08);
-  
-  /* --- FORMA ORGÁNICA AVANZADA --- */
-  /* Usamos 8 valores en el border-radius para crear una curva de Bezier compleja y fluida */
---leaf-radius-symmetrical: 4px 120px 4px 120px;
-  
-  /* Versión invertida (Espejo) */
-  --leaf-radius-symmetrical-alt: 120px 4px 120px 4px;
+  // --------------------------------------------------------
+  // TIPOGRAFÍA
+  // --------------------------------------------------------
 
-  /* --- GRADIENTE DEL BORDE --- */
-  /* Mezcla el verde corporativo con un tono más lima y uno más profundo */
- --leaf-border-gradient: linear-gradient(
-    135deg,
-    #134e1d 0%,    /* Verde oscuro (Sombra) */
-    #2EC643 50%,   /* Verde Qrealab (Cuerpo) */
-    #a2f0ab 100%   /* Verde luz (Brillo) */
-  );
+  // Dos fuentes: cuerpo (legible) + heading (impacto visual)
+  --font-body:    'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-heading: 'Plus Jakarta Sans', 'Inter', -apple-system, sans-serif;
+
+  // Alias para compatibilidad con código existente
+  --font-main:    var(--font-body);
+
+  // Escala fluida: clamp(mínimo, fluido, máximo)
+  // → en móvil usa el mínimo, escala con el viewport, máximo en desktop
+  --text-xs:    clamp(0.70rem, 1.2vw,  0.80rem);   //  ~11-13px
+  --text-sm:    clamp(0.82rem, 1.5vw,  0.92rem);   //  ~13-15px
+  --text-base:  clamp(0.95rem, 1.8vw,  1.0rem);    //  ~15-16px
+  --text-lg:    clamp(1.05rem, 2.0vw,  1.20rem);   //  ~17-19px
+  --text-xl:    clamp(1.20rem, 2.4vw,  1.40rem);   //  ~19-22px
+  --text-2xl:   clamp(1.40rem, 2.8vw,  1.80rem);   //  ~22-29px
+  --text-3xl:   clamp(1.80rem, 3.5vw,  2.40rem);   //  ~29-38px
+  --text-4xl:   clamp(2.20rem, 4.5vw,  3.20rem);   //  ~35-51px
+  --text-hero:  clamp(2.60rem, 6.0vw,  5.00rem);   //  ~42-80px
+
+  // --------------------------------------------------------
+  // PALETA DE MARCA
+  // --------------------------------------------------------
+
+  --qrl-green:       #2EC643;
+  --qrl-green-dark:  #21963A;
+  --qrl-green-soft:  #E6F9EA;
+  --qrl-green-glow:  rgba(46, 198, 67, 0.18);
+
+  --qrl-blue:        #0A1145;
+  --qrl-blue-mid:    #1A237E;
+  --qrl-blue-light:  #EEF2FF;
+  --qrl-blue-glow:   rgba(10, 17, 69, 0.14);
+
+  // --------------------------------------------------------
+  // SUPERFICIES (semántico — úsalos en lugar de colores directos)
+  // --------------------------------------------------------
+
+  --color-bg:        #FFFFFF;
+  --color-bg-alt:    #F5F5F7;
+  --qrl-surface:     #FFFFFF;        // Fondo de tarjetas / secciones blancas
+  --qrl-background:  #F5F5F7;        // Fondo de secciones grises
+
+  // --------------------------------------------------------
+  // TEXTOS
+  // --------------------------------------------------------
+
+  --color-text-main: #1A1A2E;        // Casi negro con un toque azul
+  --color-text-body: #5C6478;        // Gris medio para párrafos
+  --qrl-text-main:   #1A1A2E;
+  --qrl-text-body:   #5C6478;
+  --qrl-text-muted:  #9CA3AF;        // Texto deshabilitado / metadata
+
+  // --------------------------------------------------------
+  // BORDES
+  // --------------------------------------------------------
+
+  --color-border:    rgba(0, 0, 0, 0.07);
+  --color-border-md: rgba(0, 0, 0, 0.12);
+
+  // --------------------------------------------------------
+  // SOMBRAS (Sistema de 4 niveles)
+  // --------------------------------------------------------
+
+  --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.06),  0 1px 2px rgba(0, 0, 0, 0.04);
+  --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.08),  0 2px 6px rgba(0, 0, 0, 0.04);
+  --shadow-lg: 0 20px 48px rgba(0, 0, 0, 0.10), 0 6px 12px rgba(0, 0, 0, 0.05);
+  --shadow-xl: 0 40px 80px rgba(0, 0, 0, 0.13), 0 16px 32px rgba(0, 0, 0, 0.06);
+
+  // Sombras con color de marca (para hojas, botones)
+  --shadow-green: 0 16px 40px rgba(46, 198, 67, 0.22), 0 4px 12px rgba(46, 198, 67, 0.14);
+  --shadow-blue:  0 16px 40px rgba(10, 17, 69, 0.18),  0 4px 12px rgba(10, 17, 69, 0.10);
+
+  // --------------------------------------------------------
+  // GLASS EFFECT
+  // --------------------------------------------------------
+
+  --glass-bg:    rgba(255, 255, 255, 0.80);
+  --glass-blur:  blur(20px);
+  --glass-border: rgba(255, 255, 255, 0.50);
+
+  // --------------------------------------------------------
+  // ESPACIADO (Escala × 1.5 desde 4px)
+  // --------------------------------------------------------
+
+  --space-1:   0.25rem;   //   4px
+  --space-2:   0.50rem;   //   8px
+  --space-3:   0.75rem;   //  12px
+  --space-4:   1.00rem;   //  16px
+  --space-5:   1.25rem;   //  20px
+  --space-6:   1.50rem;   //  24px
+  --space-8:   2.00rem;   //  32px
+  --space-10:  2.50rem;   //  40px
+  --space-12:  3.00rem;   //  48px
+  --space-16:  4.00rem;   //  64px
+  --space-20:  5.00rem;   //  80px
+  --space-24:  6.00rem;   //  96px
+
+  // Fluido — úsalos para padding de secciones
+  --section-pad:   clamp(3.5rem, 9vw, 7rem);
+  --container-pad: clamp(1rem, 5vw, 2rem);
+
+  // --------------------------------------------------------
+  // FORMAS ORGÁNICAS — HOJA
+  // Ajusta estos 2 valores y cambia el look de toda la app
+  // --------------------------------------------------------
+
+  --leaf-curve:           0px 96px 0px 96px;
+  --leaf-curve-inv:       96px 0px 96px 0px;
+  --leaf-curve-sm:        0px 60px 0px 60px;
+  --leaf-curve-sm-inv:    60px 0px 60px 0px;
+
+  // --------------------------------------------------------
+  // TRANSICIONES (Sistema de tokens)
+  // --------------------------------------------------------
+
+  --ease-out:    cubic-bezier(0.20, 0.00, 0.00, 1.00);
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1.00);
+  --ease-in-out: cubic-bezier(0.45, 0.00, 0.55, 1.00);
+
+  --t-fast:   150ms var(--ease-out);
+  --t-base:   280ms var(--ease-out);
+  --t-slow:   480ms var(--ease-out);
+  --t-xslow:  720ms var(--ease-out);
+  --t-spring: 500ms var(--ease-spring);
+
+  // --------------------------------------------------------
+  // Z-INDEX (Escala declarativa — no hay que memorizar números)
+  // --------------------------------------------------------
+
+  --z-base:    0;
+  --z-raised:  10;
+  --z-sticky:  100;
+  --z-nav:     1000;
+  --z-modal:   2000;
+  --z-toast:   3000;
 }
-  

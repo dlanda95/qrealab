@@ -1,18 +1,35 @@
-.qrl-section {
-  padding: 80px 0; /* Espaciado generoso vertical */
-  width: 100%;
-  
-  &.white { background-color: var(--qrl-surface); }
-  &.gray  { background-color: var(--qrl-background); }
-  &.dark  { background-color: var(--qrl-blue); color: white; }
+@use '../../../../styles/variables' as *;
+@use '../../../../styles/mixins'    as *;
 
-  @media (max-width: 768px) {
-    padding: 40px 0;
+// ============================================================
+//  SECTION WRAPPER
+//  Uso: <app-section-wrapper backgroundColor="white|gray|dark">
+// ============================================================
+
+.qrl-section {
+  width: 100%;
+  padding-block: var(--section-pad);
+  transition: background-color var(--t-base);
+
+  // --- Variantes de color ---
+  &.white {
+    background-color: var(--qrl-surface);      // #FFFFFF
+  }
+
+  &.gray  {
+    background-color: var(--qrl-background);   // #F5F5F7
+  }
+
+  &.dark  {
+    background-color: var(--qrl-blue);
+    color: white;
+
+    // En modo oscuro los párrafos se aclaran
+    p { color: rgba(255, 255, 255, 0.75); }
   }
 }
 
+// Contenedor interno (max-width + padding lateral fluido)
 .qrl-container {
-  max-width: 1200px; /* Ancho máximo estándar */
-  margin: 0 auto;
-  padding: 0 24px;   /* Márgenes laterales en móviles */
+  @include container(1200px);
 }
