@@ -4,21 +4,27 @@
 
   <div class="leaf-mask">
 
-    @if (imageSrc) {
-      <!--
-        .leaf-parallax: capa que se desplaza vía JS (translateY).
-        Se extiende 20% más allá del clip de .leaf-mask (inset: -20% 0)
-        para que la imagen siempre llene el frame sin mostrar bordes,
-        independientemente de cuánto se desplace.
-        .leaf-mask tiene overflow:hidden → solo se ve la zona del frame.
-      -->
-      <div class="leaf-parallax">
-        <div
-          class="leaf-media"
-          [style.background-image]="'url(' + imageSrc + ')'">
+    <!--
+      VENTANA PARALLAX
+      ─────────────────────────────────────────────────────────
+      .leaf-parallax es el "fondo" que se desliza detrás de la hoja.
+      Siempre está en el DOM (no dentro de @if) para que @ViewChild
+      lo encuentre de forma confiable, incluso cuando imageSrc
+      llega async desde el CMS.
+
+      .leaf-mask actúa como la "ventana": overflow:hidden recorta
+      todo lo que sobresale de la forma de hoja.
+      JS aplica translateY directamente → la imagen se desliza dentro
+      de la ventana creando el efecto parallax de profundidad.
+      ─────────────────────────────────────────────────────────
+    -->
+    <div class="leaf-parallax" #leafParallax>
+      @if (imageSrc) {
+        <div class="leaf-media"
+             [style.background-image]="'url(' + imageSrc + ')'">
         </div>
-      </div>
-    }
+      }
+    </div>
 
     @if (!imageSrc) {
       <div class="leaf-content">

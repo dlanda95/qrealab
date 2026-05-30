@@ -1,6 +1,6 @@
 import {
-  Component, Input,
-  ElementRef, AfterViewInit, OnDestroy,
+  Component, Input, ViewChild, ElementRef,
+  AfterViewInit, OnChanges, OnDestroy, SimpleChanges,
   PLATFORM_ID, Inject,
 } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
@@ -8,13 +8,32 @@ import { isPlatformBrowser } from '@angular/common';
 // ============================================================
 //  LEAF FRAME  — Componente molde único de la hoja orgánica
 //
-//  Parallax: se setea --leaf-parallax-y en el host element.
-//  .leaf-parallax lo consume via CSS: transform: translateY(var(...))
+//  Arquitectura de capas:
+//  ┌─ :host ─────────────────────────────────────────────────┐
+//  │  └─ .leaf-wrapper  (border-radius, glow, hover lift)    │
+//  │       ├─ .leaf-glow-border  → aura verde difusa         │
+//  │       └─ .leaf-mask  → LA VENTANA (overflow:hidden)     │
+//  │             ├─ .leaf-parallax  → fondo deslizante       │
+//  │             │     └─ .leaf-media  → imagen (background) │
+//  │             └─ .leaf-content  → slot ng-content         │
+//  └─────────────────────────────────────────────────────────┘
 //
-//  Ventaja sobre querySelector:
-//  • Funciona aunque @if(imageSrc) renderice DESPUÉS de ngAfterViewInit
-//  • Las CSS custom properties heredan sin importar el orden de render
-//  • Angular ViewEncapsulation no afecta la herencia de custom props
+//  Parallax:
+//  ─────────
+//  .leaf-parallax se extiende un BUFFER por arriba y abajo de
+//  .leaf-mask (ver SCSS: inset con valor negativo).
+//  JS aplica translateY directamente al elemento via @ViewChild —
+//  sin pasar por CSS custom properties ni querySelector.
+//
+//  Por qué @ViewChild en lugar de querySelector:
+//  • .leaf-parallax SIEMPRE está en el DOM (no dentro de @if)
+//    → @ViewChild lo encuentra aunque imageSrc llegue async del CMS
+//  • Referencia directa al nativeElement → sin riesgo de null
+//
+//  parallaxStrength (px):
+//  • Define el desplazamiento máximo de la imagen (en viewport center = 0)
+//  • Recomendado: 160–300 para impacto visible
+//  • El buffer del SCSS debe ser ≥ parallaxStrength / 2
 // ============================================================
 
 @Component({
@@ -23,14 +42,22 @@ import { isPlatformBrowser } from '@angular/common';
   templateUrl: './leaf-frame.html',
   styleUrl:    './leaf-frame.scss',
 })
-export class LeafFrame implements AfterViewInit, OnDestroy {
+export class LeafFrame implements AfterViewInit, OnChanges, OnDestroy {
 
-  @Input() imageSrc: string  = '';
-  @Input() altText:  string  = 'Qrealab image';
-  @Input() inverted: boolean = false;
+  @Input() imageSrc:         string  = '';
+  @Input() altText:          string  = 'Qrealab image';
+  @Input() inverted:         boolean = false;
 
-  /** Intensidad del parallax (px). Rango recomendado: 40–100. */
-  @Input() parallaxStrength: number = 80;
+  /**
+   * Desplazamiento máximo en px que aplica el parallax.
+   * Mayor valor = efecto más dramático.
+   * Debe ser ≤ (buffer SCSS) × (alto del frame).
+   * Con inset: -50% 0 en SCSS y frame ~400px → buffer = 200px → max 200px.
+   */
+  @Input() parallaxStrength: number = 220;
+
+  /** Referencia directa al contenedor parallax (siempre en DOM). */
+  @ViewChild('leafParallax') private leafParallaxRef!: ElementRef<HTMLElement>;
 
   private rafId: number | null = null;
 
@@ -43,18 +70,22 @@ export class LeafFrame implements AfterViewInit, OnDestroy {
 
   ngAfterViewInit(): void {
     if (!isPlatformBrowser(this.platformId)) return;
-
-    // Limpiar transform residual de implementaciones anteriores
-    this.el.nativeElement.style.transform = '';
-
-    // Inicializar la variable a 0 para evitar flash al primer scroll
-    this.el.nativeElement.style.setProperty('--leaf-parallax-y', '0px');
-
     window.addEventListener('scroll', this.onScroll, { passive: true });
     window.addEventListener('resize', this.onScroll, { passive: true });
-
-    // Calcular posición inicial correcta (por si la hoja ya está en pantalla)
     this.applyParallax();
+  }
+
+  /**
+   * ngOnChanges: cuando imageSrc llega async del CMS, Angular
+   * renderiza @if(imageSrc) en la siguiente detección de cambios.
+   * Forzamos un cálculo de parallax tras dos frames para asegurar
+   * que .leaf-media ya esté en el DOM con su tamaño correcto.
+   */
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['imageSrc'] && isPlatformBrowser(this.platformId)) {
+      // Double rAF: Angular renderiza el @if entre el 1.º y 2.º frame
+      requestAnimationFrame(() => requestAnimationFrame(() => this.applyParallax()));
+    }
   }
 
   ngOnDestroy(): void {
@@ -71,19 +102,21 @@ export class LeafFrame implements AfterViewInit, OnDestroy {
   };
 
   private applyParallax(): void {
+    const parallaxEl = this.leafParallaxRef?.nativeElement;
+    if (!parallaxEl) return;
+
     const host  = this.el.nativeElement;
     const rect  = host.getBoundingClientRect();
     const viewH = window.innerHeight;
 
-    // Saltear cómputo si el elemento está muy lejos del viewport
-    if (rect.bottom < -300 || rect.top > viewH + 300) return;
+    // Omitir cómputo si el elemento está muy lejos del viewport
+    if (rect.bottom < -viewH || rect.top > viewH * 2) return;
 
-    // relPos: 0 = centrado en viewport · +0.5 = borde inferior · -0.5 = borde superior
+    // relPos: −0.5 = sale por arriba · 0 = centrado · +0.5 = entra por abajo
     const relPos  = (rect.top + rect.height / 2 - viewH / 2) / viewH;
     const offsetY = relPos * this.parallaxStrength;
 
-    // Setear custom property en el host → cascada a .leaf-parallax via CSS
-    // Funciona aunque .leaf-parallax sea renderizado después por @if(imageSrc)
-    host.style.setProperty('--leaf-parallax-y', `${offsetY.toFixed(2)}px`);
+    // Aplicar transform directo: sin CSS custom properties, sin overhead
+    parallaxEl.style.transform = `translateY(${offsetY.toFixed(2)}px)`;
   }
 }
