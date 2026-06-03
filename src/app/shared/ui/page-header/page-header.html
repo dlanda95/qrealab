@@ -1,0 +1,48 @@
+<header class="page-header">
+
+  <!-- Fondo decorativo -->
+  <div class="ph-bg" aria-hidden="true">
+    <div class="ph-glow ph-glow--1"></div>
+    <div class="ph-glow ph-glow--2"></div>
+  </div>
+
+  <div class="ph-content container">
+
+    <!-- Breadcrumbs -->
+    @if (breadcrumbs.length) {
+      <nav class="ph-breadcrumb" aria-label="Breadcrumb">
+        @for (crumb of breadcrumbs; track crumb.label; let last = $last) {
+          @if (crumb.link && !last) {
+            <a [routerLink]="crumb.link" class="ph-crumb ph-crumb--link">{{ crumb.label }}</a>
+          } @else {
+            <span class="ph-crumb" [class.ph-crumb--active]="last">{{ crumb.label }}</span>
+          }
+          @if (!last) { <span class="ph-sep" aria-hidden="true">/</span> }
+        }
+      </nav>
+    }
+
+    <!-- Eyebrow -->
+    @if (eyebrow) {
+      <span class="ph-eyebrow">{{ eyebrow }}</span>
+    }
+
+    <!-- Title -->
+    <h1 class="ph-title">{{ title }}</h1>
+
+    <!-- Subtitle -->
+    @if (subtitle) {
+      <p class="ph-subtitle">{{ subtitle }}</p>
+    }
+
+  </div>
+
+  <!-- Ola de transición al blanco -->
+  <div class="ph-wave" aria-hidden="true">
+    <svg viewBox="0 0 1440 72" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+      <path fill="white"
+        d="M0,48 C240,8 480,68 720,40 C960,12 1200,60 1440,32 L1440,72 L0,72 Z"/>
+    </svg>
+  </div>
+
+</header>

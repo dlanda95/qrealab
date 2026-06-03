@@ -69,58 +69,72 @@
 }
 
 // ============================================================
-//  CAPA 0 — BORDE LUMINOSO (recorre el perímetro como una línea)
+//  CAPA 0 — BORDE LUMINOSO (trazo continuo que adelgaza hacia las puntas)
 //
-//  Técnica: conic-gradient como borde verdadero.
+//  Concepto: trazo de pincel que recorre todo el perímetro.
 //
-//  El conic-gradient asigna color por ÁNGULO desde el centro:
-//    0° = 12 h  |  90° = 3 h  |  180° = 6 h  |  270° = 9 h
-//  Las esquinas de la hoja (aspect ~1:1) caen en ≈45°/135°/225°/315°.
+//  La OPACIDAD controla el grosor aparente con blur activo:
+//    - opacidad 1.00 + blur → trazo ancho  (~10px visible)
+//    - opacidad 0.06 + blur → trazo fino   (~1px  visible)
 //
-//  Con `from 315deg` el gradiente arranca en TL (punta aguda):
-//    TL(0°/cero) → top → TR(90°/máx) → right → BR(180°/cero)
-//                → bottom → BL(270°/máx) → left → TL(360°/cero)
+//  Nunca llega a cero → el borde es continuo en todo el perímetro.
+//  La opacidad sube de forma no lineal (curva de aceleración):
+//    lenta al salir de la punta → rápida al acercarse a la curva.
+//  Resultado: el trazo "engrosa" de forma orgánica igual que en
+//  caligrafía o un trazo de pincel con presión variable.
 //
-//  `border: 5px solid transparent` + `background-origin: border-box`
-//  → el gradiente se pinta también sobre la franja del borde.
-//  El área interior queda cubierta por .leaf-mask (z-index:1),
-//  por lo que solo se ve la franja exterior → línea luminosa.
-//
-//  `filter: blur(5px)` suaviza la línea y crea el efecto glow.
+//  Coordenadas (from 315deg → 0° = TL):
+//    0° / 360° = TL (punta aguda)   |   90°  = TR (curva, máximo)
+//    180°      = BR (punta aguda)   |   270° = BL (curva, máximo)
 // ============================================================
 
 .leaf-glow-border {
   position: absolute;
-  inset: -5px;
+  inset: -3px;
   border-radius: inherit;
   z-index: 0;
   pointer-events: none;
 
-  // Franja de borde visible: 5px que sobresalen del frame
-  border: 5px solid transparent;
+  border: 3px solid transparent;
 
-  // ── Hoja normal: curvas TR y BL ─────────────────────────────
-  // from 315deg → arranca en TL (punta aguda)
-  // 90° después = 45° abs → TR (curva, máximo)
-  // 180° después = 135° abs → BR (punta aguda)
-  // 270° después = 225° abs → BL (curva, máximo)
+  // ── Hoja normal: curvas TR (90°) y BL (270°) ────────────────
   background-image:
     conic-gradient(
       from 315deg at 50% 50%,
-      rgba(46, 198, 67, 0.00)   0deg,  // TL  — punta aguda  (cero)
-      rgba(46, 198, 67, 0.55)  45deg,  // top — subiendo
-      var(--qrl-green)          90deg, // TR  — curva         (máximo)
-      rgba(46, 198, 67, 0.55) 135deg,  // right — bajando
-      rgba(46, 198, 67, 0.00) 180deg,  // BR  — punta aguda  (cero)
-      rgba(46, 198, 67, 0.55) 225deg,  // bottom — subiendo
-      var(--qrl-green)         270deg, // BL  — curva         (máximo)
-      rgba(46, 198, 67, 0.55) 315deg,  // left — bajando
-      rgba(46, 198, 67, 0.00) 360deg   // TL  — punta aguda  (cero)
+
+      //  TL ──── top ────▶ TR (curva)
+      rgba(46, 198, 67, 0.06)   0deg,  // TL  — punta (trazo fino)
+      rgba(46, 198, 67, 0.12)  22deg,  //      lento al inicio
+      rgba(46, 198, 67, 0.28)  42deg,  //      comienza a engrosar
+      rgba(46, 198, 67, 0.55)  62deg,  //      engrosando
+      rgba(46, 198, 67, 0.82)  78deg,  //      casi máximo
+      var(--qrl-green)          90deg, // TR  — curva (trazo grueso)
+
+      //  TR (curva) ──── right ────▶ BR
+      rgba(46, 198, 67, 0.82) 102deg,
+      rgba(46, 198, 67, 0.55) 118deg,
+      rgba(46, 198, 67, 0.28) 138deg,
+      rgba(46, 198, 67, 0.12) 158deg,
+      rgba(46, 198, 67, 0.06) 180deg,  // BR  — punta (trazo fino)
+
+      //  BR ──── bottom ────▶ BL (curva)
+      rgba(46, 198, 67, 0.12) 202deg,
+      rgba(46, 198, 67, 0.28) 222deg,
+      rgba(46, 198, 67, 0.55) 242deg,
+      rgba(46, 198, 67, 0.82) 258deg,
+      var(--qrl-green)         270deg, // BL  — curva (trazo grueso)
+
+      //  BL (curva) ──── left ────▶ TL
+      rgba(46, 198, 67, 0.82) 282deg,
+      rgba(46, 198, 67, 0.55) 298deg,
+      rgba(46, 198, 67, 0.28) 318deg,
+      rgba(46, 198, 67, 0.12) 338deg,
+      rgba(46, 198, 67, 0.06) 360deg   // TL  — punta (trazo fino)
     );
   background-origin: border-box;
 
-  filter: blur(5px);
-  opacity: 0.90;
+  filter: blur(4px);
+  opacity: 0.95;
 
   transition:
     filter    var(--t-slow),
@@ -128,32 +142,43 @@
     transform var(--t-slow);
 }
 
-// ── Invertida: curvas TL y BR ────────────────────────────────────────
-// from 45deg → arranca en TR (punta aguda)
-// 90° después = 135° abs → BR (curva, máximo)
-// 180° después = 225° abs → BL (punta aguda)
-// 270° después = 315° abs → TL (curva, máximo)
+// ── Invertida: curvas TL (270°) y BR (90°) ───────────────────────────
+// Mismo patrón exacto — solo cambia el ángulo de arranque:
+// from 45deg → 0° = TR (punta), 90° = BR (curva), 270° = TL (curva)
 
 .leaf-wrapper.inverted .leaf-glow-border {
   background-image:
     conic-gradient(
       from 45deg at 50% 50%,
-      rgba(46, 198, 67, 0.00)   0deg,  // TR  — punta aguda  (cero)
-      rgba(46, 198, 67, 0.55)  45deg,  // right — subiendo
-      var(--qrl-green)          90deg, // BR  — curva         (máximo)
-      rgba(46, 198, 67, 0.55) 135deg,  // bottom — bajando
-      rgba(46, 198, 67, 0.00) 180deg,  // BL  — punta aguda  (cero)
-      rgba(46, 198, 67, 0.55) 225deg,  // left — subiendo
-      var(--qrl-green)         270deg, // TL  — curva         (máximo)
-      rgba(46, 198, 67, 0.55) 315deg,  // top — bajando
-      rgba(46, 198, 67, 0.00) 360deg   // TR  — punta aguda  (cero)
+
+      rgba(46, 198, 67, 0.06)   0deg,  // TR  — punta
+      rgba(46, 198, 67, 0.12)  22deg,
+      rgba(46, 198, 67, 0.28)  42deg,
+      rgba(46, 198, 67, 0.55)  62deg,
+      rgba(46, 198, 67, 0.82)  78deg,
+      var(--qrl-green)          90deg, // BR  — curva
+      rgba(46, 198, 67, 0.82) 102deg,
+      rgba(46, 198, 67, 0.55) 118deg,
+      rgba(46, 198, 67, 0.28) 138deg,
+      rgba(46, 198, 67, 0.12) 158deg,
+      rgba(46, 198, 67, 0.06) 180deg,  // BL  — punta
+      rgba(46, 198, 67, 0.12) 202deg,
+      rgba(46, 198, 67, 0.28) 222deg,
+      rgba(46, 198, 67, 0.55) 242deg,
+      rgba(46, 198, 67, 0.82) 258deg,
+      var(--qrl-green)         270deg, // TL  — curva
+      rgba(46, 198, 67, 0.82) 282deg,
+      rgba(46, 198, 67, 0.55) 298deg,
+      rgba(46, 198, 67, 0.28) 318deg,
+      rgba(46, 198, 67, 0.12) 338deg,
+      rgba(46, 198, 67, 0.06) 360deg   // TR  — punta
     );
 }
 
 .leaf-wrapper:hover .leaf-glow-border {
-  filter: blur(7px) brightness(1.15);
+  filter: blur(5px) brightness(1.12);
   opacity: 1.0;
-  transform: scale(1.05);
+  transform: scale(1.04);
 }
 
 // ============================================================

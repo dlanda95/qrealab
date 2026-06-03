@@ -1,0 +1,100 @@
+@if (loading()) {
+  <div class="pd-loading">
+    <div class="pd-spinner"></div>
+  </div>
+}
+
+@if (notFound()) {
+  <div class="pd-not-found">
+    <p>Producto no encontrado.</p>
+    <a routerLink="/products" class="pd-back-btn">← Volver a productos</a>
+  </div>
+}
+
+@if (product(); as p) {
+
+  <!-- Page header -->
+  <app-page-header
+    [eyebrow]="p.category.name"
+    [title]="p.name"
+    [breadcrumbs]="[
+      {label:'Inicio',    link:'/'},
+      {label:'Productos', link:'/products'},
+      {label: p.name}
+    ]">
+  </app-page-header>
+
+  <!-- Main product section -->
+  <section class="pd-main">
+    <div class="pd-container container">
+
+      <div class="pd-grid">
+
+        <!-- Left: image with leaf frame -->
+        <div class="pd-image-col">
+          <app-leaf-frame
+            [imageSrc]="p.image ?? ''"
+            [parallaxStrength]="140">
+          </app-leaf-frame>
+        </div>
+
+        <!-- Right: info -->
+        <div class="pd-info-col">
+
+          <span class="pd-category">{{ p.category.name }}</span>
+          <h1 class="pd-name">{{ p.name }}</h1>
+
+          @if (p.activeIngredient) {
+            <p class="pd-ingredient">
+              <span class="pd-label">Principio activo</span>
+              {{ p.activeIngredient }}
+            </p>
+          }
+
+          @if (p.description) {
+            <div class="pd-description">
+              <p>{{ p.description }}</p>
+            </div>
+          }
+
+          @if (p.presentations.length > 0) {
+            <div class="pd-presentations">
+              <h3 class="pd-label">Presentaciones</h3>
+              <div class="pd-pills">
+                @for (pres of p.presentations; track pres.label) {
+                  <span class="pd-pill">{{ pres.label }}</span>
+                }
+              </div>
+            </div>
+          }
+
+          <!-- CTA -->
+          <div class="pd-cta-group">
+            <a routerLink="/contact" class="pd-cta-primary">
+              Solicitar información
+            </a>
+            <a routerLink="/products" class="pd-cta-secondary">
+              ← Ver todos los productos
+            </a>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Related products -->
+  @if (related().length > 0) {
+    <section class="pd-related">
+      <div class="container">
+        <h2 class="pd-related-title">Productos relacionados</h2>
+        <div class="pd-related-grid">
+          @for (rel of related(); track rel.id) {
+            <app-product-card [product]="rel"></app-product-card>
+          }
+        </div>
+      </div>
+    </section>
+  }
+
+}

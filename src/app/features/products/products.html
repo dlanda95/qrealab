@@ -1,0 +1,72 @@
+<!-- Page header -->
+<app-page-header
+  eyebrow="Portafolio"
+  title="Nuestros Productos"
+  subtitle="Soluciones farmacéuticas de alta calidad, respaldadas por innovación y ciencia."
+  [breadcrumbs]="[{label:'Inicio', link:'/'}, {label:'Productos'}]">
+</app-page-header>
+
+<!-- Filter bar -->
+<section class="filter-section">
+  <div class="filter-container container">
+
+    <div class="filter-tabs" role="tablist" aria-label="Filtrar por categoría">
+
+      <button
+        class="filter-tab"
+        [class.filter-tab--active]="selected() === 'all'"
+        (click)="selectCategory('all')"
+        role="tab"
+        [attr.aria-selected]="selected() === 'all'">
+        Todos
+        <span class="filter-count">{{ allProducts().length }}</span>
+      </button>
+
+      @for (cat of categories(); track cat.id) {
+        <button
+          class="filter-tab"
+          [class.filter-tab--active]="selected() === cat.slug"
+          (click)="selectCategory(cat.slug)"
+          role="tab"
+          [attr.aria-selected]="selected() === cat.slug">
+          {{ cat.name }}
+          <span class="filter-count">{{ countByCategory(cat.slug) }}</span>
+        </button>
+      }
+
+    </div>
+
+  </div>
+</section>
+
+<!-- Products grid -->
+<section class="products-section">
+  <div class="products-container container">
+
+    @if (loading()) {
+      <!-- Skeleton loader -->
+      <div class="products-grid">
+        @for (i of [1,2,3,4,5,6]; track i) {
+          <div class="skeleton-card"></div>
+        }
+      </div>
+
+    } @else if (filtered().length === 0) {
+      <div class="empty-state">
+        <svg width="64" height="64" viewBox="0 0 64 64" fill="none">
+          <path d="M32 8 C32 8 52 18 52 34 C52 46 43.6 56 32 56 C20.4 56 12 46 12 34 C12 18 32 8 32 8Z"
+                fill="rgba(46,198,67,0.08)" stroke="rgba(46,198,67,0.3)" stroke-width="1.5"/>
+        </svg>
+        <p>No hay productos en esta categoría.</p>
+      </div>
+
+    } @else {
+      <div class="products-grid">
+        @for (product of filtered(); track product.id) {
+          <app-product-card [product]="product"></app-product-card>
+        }
+      </div>
+    }
+
+  </div>
+</section>
