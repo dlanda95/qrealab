@@ -90,8 +90,10 @@ export class LeafFrame implements AfterViewInit, OnChanges, OnDestroy {
 
   ngOnDestroy(): void {
     if (this.rafId !== null) cancelAnimationFrame(this.rafId);
-    window.removeEventListener('scroll', this.onScroll);
-    window.removeEventListener('resize', this.onScroll);
+    if (isPlatformBrowser(this.platformId)) {
+      window.removeEventListener('scroll', this.onScroll);
+      window.removeEventListener('resize', this.onScroll);
+    }
   }
 
   // ── Parallax engine ──────────────────────────────────────────

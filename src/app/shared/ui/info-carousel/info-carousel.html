@@ -1,0 +1,93 @@
+<!-- ── Cabecera de sección ──────────────────────────────────── -->
+@if (eyebrow || title || subtitle) {
+  <header class="ic-header">
+    @if (eyebrow) {
+      <span class="ic-eyebrow">{{ eyebrow }}</span>
+    }
+    @if (title) {
+      <h2 class="ic-title">{{ title }}</h2>
+    }
+    @if (subtitle) {
+      <p class="ic-subtitle">{{ subtitle }}</p>
+    }
+  </header>
+}
+
+<!-- ── Barra de navegación ──────────────────────────────────── -->
+<div class="ic-nav-row">
+  <p class="ic-nav-info">
+    {{ currentPage() + 1 }} / {{ totalPages }}
+  </p>
+
+  <div class="ic-nav-buttons" role="group" aria-label="Navegación de bloques">
+    <button
+      class="ic-btn"
+      (click)="navigate('prev')"
+      [disabled]="currentPage() === 0"
+      aria-label="Bloque anterior">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+        <path d="M10 12L6 8l4-4" stroke="currentColor"
+              stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </button>
+
+    <button
+      class="ic-btn"
+      (click)="navigate('next')"
+      [disabled]="currentPage() === totalPages - 1"
+      aria-label="Bloque siguiente">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+        <path d="M6 4l4 4-4 4" stroke="currentColor"
+              stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </button>
+  </div>
+</div>
+
+<!-- ── Bloques de contenido ─────────────────────────────────── -->
+<div class="ic-slide" [class.ic-slide--fading]="fading()">
+
+  @for (block of currentBlocks; track block.title; let pos = $index) {
+    <article class="ic-block" [style.animation-delay]="pos * 80 + 'ms'">
+
+      <!-- Número decorativo -->
+      <div class="ic-block-number" aria-hidden="true">{{ globalIndex(pos) }}</div>
+
+      <!-- Separador -->
+      <div class="ic-block-divider"></div>
+
+      <!-- Título -->
+      <h3 class="ic-block-title">{{ block.title }}</h3>
+
+      <!-- Lista de ítems -->
+      <ul class="ic-items" [class.ic-items--numbered]="block.style === 'numbered'">
+        @for (item of block.items; track item.text; let i = $index) {
+          <li class="ic-item">
+            <span class="ic-item-marker" aria-hidden="true">
+              {{ block.style === 'numbered' ? (i + 1) + '.' : '•' }}
+            </span>
+            <span>{{ item.text }}</span>
+          </li>
+        }
+      </ul>
+
+    </article>
+  }
+
+</div>
+
+<!-- ── Puntos de paginación ─────────────────────────────────── -->
+@if (totalPages > 1) {
+  <div class="ic-dots" role="tablist" aria-label="Páginas">
+    @for (page of pages; track page) {
+      <button
+        class="ic-dot"
+        [class.ic-dot--active]="page === currentPage()"
+        (click)="goToPage(page)"
+        [attr.aria-selected]="page === currentPage()"
+        [attr.aria-label]="'Página ' + (page + 1)"
+        role="tab">
+      </button>
+    }
+  </div>
+}

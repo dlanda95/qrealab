@@ -1,6 +1,6 @@
 <nav class="navbar" [ngClass]="{'scrolled': isScrolled}">
   <div class="navbar-container">
-    
+
     <a routerLink="/" class="navbar-logo">
       <img
         src="assets/images/logo-white.png"
@@ -10,14 +10,17 @@
     </a>
 
     <div class="navbar-links desktop-menu">
-      <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Home</a>
-      <a routerLink="/about" routerLinkActive="active">Nosotros</a>
-      <a routerLink="/products" routerLinkActive="active">Productos</a>
-      <a routerLink="/vigilance" routerLinkActive="active">Farmacovigilancia</a>
-      
+      <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">{{ lang.t('nav.home') }}</a>
+      <a routerLink="/about" routerLinkActive="active">{{ lang.t('nav.about') }}</a>
+      <a routerLink="/products" routerLinkActive="active">{{ lang.t('nav.products') }}</a>
+      <a routerLink="/vigilance" routerLinkActive="active">{{ lang.t('nav.vigilance') }}</a>
+
       <div class="navbar-actions">
-        <button class="lang-switch">ES</button>
-        <a routerLink="/contact" class="btn-contact">Contáctenos</a>
+        <div class="lang-switch">
+          <button [class.active]="lang.currentLang() === 'es'" (click)="lang.setLanguage('es')">ES</button>
+          <button [class.active]="lang.currentLang() === 'en'" (click)="lang.setLanguage('en')">EN</button>
+        </div>
+        <a routerLink="/contact" class="btn-contact">{{ lang.t('nav.contact') }}</a>
       </div>
     </div>
 
@@ -28,21 +31,23 @@
 </nav>
 
 <div class="mobile-menu-overlay" [class.open]="isMobileMenuOpen">
-  
+
   <button class="close-btn" (click)="toggleMobileMenu()" aria-label="Cerrar menú">
     <lucide-icon name="x" class="icon-stroke"></lucide-icon>
   </button>
 
   <div class="mobile-menu-content">
-    <a routerLink="/" (click)="toggleMobileMenu()">Home</a>
-    <a routerLink="/about" (click)="toggleMobileMenu()">Nosotros</a>
-    <a routerLink="/products" (click)="toggleMobileMenu()">Productos</a>
-    <a routerLink="/vigilance" (click)="toggleMobileMenu()">Farmacovigilancia</a>
-    <a routerLink="/contact" (click)="toggleMobileMenu()" class="highlight">Contáctenos</a>
-    
+    <a routerLink="/" (click)="toggleMobileMenu()">{{ lang.t('nav.home') }}</a>
+    <a routerLink="/about" (click)="toggleMobileMenu()">{{ lang.t('nav.about') }}</a>
+    <a routerLink="/products" (click)="toggleMobileMenu()">{{ lang.t('nav.products') }}</a>
+    <a routerLink="/vigilance" (click)="toggleMobileMenu()">{{ lang.t('nav.vigilance') }}</a>
+    <a routerLink="/contact" (click)="toggleMobileMenu()" class="highlight">{{ lang.t('nav.contact') }}</a>
+
     <div class="mobile-lang">
-      <span class="active">ES</span>
-      <span>EN</span>
+      <div class="lang-switch">
+        <button [class.active]="lang.currentLang() === 'es'" (click)="lang.setLanguage('es')">ES</button>
+        <button [class.active]="lang.currentLang() === 'en'" (click)="lang.setLanguage('en')">EN</button>
+      </div>
     </div>
   </div>
 </div>

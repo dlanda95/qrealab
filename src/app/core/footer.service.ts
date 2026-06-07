@@ -7,14 +7,17 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { map, Observable } from 'rxjs';
 import { FooterData } from './footer.interface';
+import { LanguageService } from './language.service';
 
 @Injectable({ providedIn: 'root' })
 export class FooterService {
-  private http   = inject(HttpClient);
-  private apiUrl = 'http://localhost:3000/api/footer';
+  private http = inject(HttpClient);
+  private lang = inject(LanguageService);
+  private base = 'http://localhost:3000';
 
   getFooter(): Observable<FooterData> {
-    return this.http.get<any>(this.apiUrl).pipe(
+    const apiUrl = `${this.base}/api/footer?locale=${this.lang.currentLang()}`;
+    return this.http.get<any>(apiUrl).pipe(
       map(res => {
         const doc = res.docs[0];
         return {

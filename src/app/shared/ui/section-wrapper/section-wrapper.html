@@ -1,4 +1,23 @@
-<section class="qrl-section" [ngClass]="backgroundColor">
+<section class="qrl-section"
+         [class.white]="backgroundColor === 'white'"
+         [class.gray]="backgroundColor === 'gray'"
+         [class.dark]="backgroundColor === 'dark'"
+         [class.has-wave]="hasWave">
+
   <div class="qrl-container">
-    <ng-content></ng-content> </div>
+    <ng-content></ng-content>
+  </div>
+
+  @if (hasWave) {
+    <div class="section-wave" [ngClass]="waveBottom" aria-hidden="true">
+      <svg xmlns="http://www.w3.org/2000/svg"
+           viewBox="0 0 1440 88"
+           preserveAspectRatio="none">
+        <path d="M0,52 C200,14 480,76 720,44 C960,12 1200,62 1440,38 L1440,88 L0,88 Z"/>
+        <path d="M0,62 C280,30 600,82 900,55 C1100,36 1300,68 1440,52 L1440,88 L0,88 Z"
+              opacity="0.45"/>
+      </svg>
+    </div>
+  }
+
 </section>

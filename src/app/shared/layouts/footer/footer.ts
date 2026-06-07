@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, ChangeDetectorRef } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { FooterService } from '../../../core/footer.service';
 import { FooterData } from '../../../core/footer.interface';
@@ -12,11 +12,12 @@ import { FooterData } from '../../../core/footer.interface';
 export class Footer implements OnInit {
 
   private footerService = inject(FooterService);
+  private cdr           = inject(ChangeDetectorRef);
   footerData?: FooterData;
 
   ngOnInit(): void {
     this.footerService.getFooter().subscribe({
-      next:  data  => (this.footerData = data),
+      next:  data  => { this.footerData = data; this.cdr.markForCheck(); },
       error: err   => console.error('Footer CMS error:', err),
     });
   }

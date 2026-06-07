@@ -3,7 +3,7 @@
 }
 
 @if (storyData) {
-  <app-section-wrapper backgroundColor="white">
+  <app-section-wrapper backgroundColor="white" waveBottom="to-gray">
     <app-split-section
       [title]="storyData.title"
       [description]="storyData.description"
@@ -15,7 +15,7 @@
 }
 
 @if (whoweareData) {
-  <app-section-wrapper backgroundColor="gray">
+  <app-section-wrapper backgroundColor="gray" waveBottom="to-white">
     <app-split-section
       [title]="whoweareData.title"
       [description]="whoweareData.description"

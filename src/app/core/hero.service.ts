@@ -2,18 +2,20 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { map, Observable } from 'rxjs';
 import { HeroSlide } from './hero-slide.interface';
+import { LanguageService } from './language.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class HeroService {
   private http = inject(HttpClient);
+  private lang = inject(LanguageService);
 
   private baseUrl = 'http://localhost:3000';
-  private apiUrl = `${this.baseUrl}/api/hero-slides?sort=_order`;
 
   getHeroSlides(): Observable<HeroSlide[]> {
-    return this.http.get<any>(this.apiUrl).pipe(
+    const apiUrl = `${this.baseUrl}/api/hero-slides?sort=_order&locale=${this.lang.currentLang()}`;
+    return this.http.get<any>(apiUrl).pipe(
       map(response => {
         return response.docs.map((doc: any) => ({
           id: doc.id,

@@ -1,0 +1,24 @@
+@use '../../../styles/variables' as *;
+@use '../../../styles/mixins'    as *;
+
+// La sección de info lleva un gradiente muy sutil en la parte
+// superior para conectar visualmente con el hero azul oscuro.
+.vigilance-info-section {
+  position: relative;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 80px;
+    background: linear-gradient(
+      to bottom,
+      rgba(10, 17, 69, 0.04) 0%,
+      transparent 100%
+    );
+    pointer-events: none;
+    z-index: 1;
+  }
+}

@@ -18,7 +18,7 @@
 
     <!-- Grid de tarjetas -->
     <div class="ov-cards" [class.no-image]="!image">
-      @for (value of values; track value.id) {
+      @for (value of values; track $index) {
 
         <article class="ov-card">
 

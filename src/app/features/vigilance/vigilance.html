@@ -1,0 +1,17 @@
+<!-- ── Hero (reutiliza el mismo carousel del home) ─────────── -->
+@if (heroSlides.length > 0) {
+  <qrl-hero-carousel [slides]="heroSlides"></qrl-hero-carousel>
+}
+
+<!-- ── Sección de información ──────────────────────────────── -->
+@if (infoBlocks.length > 0) {
+  <div id="informacion" class="vigilance-info-section">
+    <app-section-wrapper backgroundColor="white">
+      <app-info-carousel
+        [eyebrow]="lang.t('vigilance.eyebrow')"
+        [title]="lang.t('vigilance.title')"
+        [blocks]="infoBlocks">
+      </app-info-carousel>
+    </app-section-wrapper>
+  </div>
+}

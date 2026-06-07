@@ -2,15 +2,15 @@
 
   <swiper-container init="false" #swiper class="hero-swiper">
 
-    @for (slide of slides; track slide.id; let i = $index) {
+    @for (slide of slides; track $index; let i = $index) {
       <swiper-slide>
 
         <div class="slide-bg">
           <img
             [src]="slide.image"
             [alt]="slide.title"
-            [attr.loading]="i === 0 ? 'eager' : 'lazy'"
-            [attr.fetchpriority]="i === 0 ? 'high' : 'auto'"
+            loading="eager"
+            [attr.fetchpriority]="i === 0 ? 'high' : 'low'"
           >
         </div>
 

@@ -1,14 +1,17 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { map, Observable } from 'rxjs';
+import { LanguageService } from './language.service';
 
 @Injectable({ providedIn: 'root' })
 export class HistoryService {
   private http = inject(HttpClient);
-  private apiUrl = 'http://localhost:3000/api/history'; // Ajusta la URL de tu API
+  private lang = inject(LanguageService);
+  private base = 'http://localhost:3000';
 
   getHistory(): Observable<any> {
-    return this.http.get<any>(this.apiUrl).pipe(
+    const apiUrl = `${this.base}/api/history?locale=${this.lang.currentLang()}`;
+    return this.http.get<any>(apiUrl).pipe(
       map(response => {
         // Payload devuelve { docs: [...] }. Nos quedamos con el primero.
         const doc = response.docs[0];

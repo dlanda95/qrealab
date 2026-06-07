@@ -1,14 +1,17 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { map } from 'rxjs';
+import { LanguageService } from './language.service';
 
 @Injectable({ providedIn: 'root' })
 export class WhoweareService {
   private http = inject(HttpClient);
-  private apiUrl = 'http://localhost:3000/api/whoweare';
+  private lang = inject(LanguageService);
+  private base = 'http://localhost:3000';
 
   getWhoweare() {
-    return this.http.get<any>(this.apiUrl).pipe(
+    const apiUrl = `${this.base}/api/whoweare?locale=${this.lang.currentLang()}`;
+    return this.http.get<any>(apiUrl).pipe(
       map(res => {
         const doc = res.docs[0];
         return {

@@ -1,9 +1,9 @@
 <!-- Page header -->
 <app-page-header
-  eyebrow="Portafolio"
-  title="Nuestros Productos"
-  subtitle="Soluciones farmacéuticas de alta calidad, respaldadas por innovación y ciencia."
-  [breadcrumbs]="[{label:'Inicio', link:'/'}, {label:'Productos'}]">
+  [eyebrow]="lang.t('products.eyebrow')"
+  [title]="lang.t('products.title')"
+  [subtitle]="lang.t('products.subtitle')"
+  [breadcrumbs]="[{label: lang.t('breadcrumb.home'), link:'/'}, {label: lang.t('breadcrumb.products')}]">
 </app-page-header>
 
 <!-- Filter bar -->
@@ -18,7 +18,7 @@
         (click)="selectCategory('all')"
         role="tab"
         [attr.aria-selected]="selected() === 'all'">
-        Todos
+        {{ 'products.filterAll' | t }}
         <span class="filter-count">{{ allProducts().length }}</span>
       </button>
 
@@ -57,7 +57,7 @@
           <path d="M32 8 C32 8 52 18 52 34 C52 46 43.6 56 32 56 C20.4 56 12 46 12 34 C12 18 32 8 32 8Z"
                 fill="rgba(46,198,67,0.08)" stroke="rgba(46,198,67,0.3)" stroke-width="1.5"/>
         </svg>
-        <p>No hay productos en esta categoría.</p>
+        <p>{{ 'products.empty' | t }}</p>
       </div>
 
     } @else {

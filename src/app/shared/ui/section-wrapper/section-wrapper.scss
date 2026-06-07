@@ -3,33 +3,84 @@
 
 // ============================================================
 //  SECTION WRAPPER
-//  Uso: <app-section-wrapper backgroundColor="white|gray|dark">
+//  Uso: <app-section-wrapper backgroundColor="white|gray|dark"
+//                             waveBottom="to-gray|to-white|to-dark">
 // ============================================================
 
+// ── Scroll-reveal (host) ─────────────────────────────────────
+:host {
+  display: block;
+  opacity: 0;
+  transform: translateY(32px);
+  transition:
+    opacity   0.80s var(--ease-out),
+    transform 0.80s var(--ease-out);
+
+  &.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+
+// ── Sección ──────────────────────────────────────────────────
 .qrl-section {
+  position: relative;
+  overflow: hidden;
   width: 100%;
   padding-block: var(--section-pad);
   transition: background-color var(--t-base);
 
-  // --- Variantes de color ---
-  &.white {
-    background-color: var(--qrl-surface);      // #FFFFFF
-  }
-
-  &.gray  {
-    background-color: var(--qrl-background);   // #F5F5F7
-  }
-
+  &.white { background-color: var(--qrl-surface); }
+  &.gray  { background-color: var(--qrl-background); }
   &.dark  {
     background-color: var(--qrl-blue);
     color: white;
-
-    // En modo oscuro los párrafos se aclaran
     p { color: rgba(255, 255, 255, 0.75); }
+  }
+
+  // Con ola: asegura que el padding-bottom sea ≥ altura de la ola
+  &.has-wave {
+    padding-bottom: max(var(--section-pad), 96px);
   }
 }
 
-// Contenedor interno (max-width + padding lateral fluido)
+// ── Container ────────────────────────────────────────────────
 .qrl-container {
   @include container(1200px);
+}
+
+// ── Ola de transición inferior ────────────────────────────────
+.section-wave {
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  width: 100%;
+  height: 88px;
+  pointer-events: none;
+  line-height: 0;
+
+  svg {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+
+  // Relleno según el color de la siguiente sección
+  &.to-gray  path { fill: var(--qrl-background); }
+  &.to-white path { fill: var(--qrl-surface); }
+  &.to-dark  path { fill: var(--qrl-blue); }
+
+  // La segunda capa (semitransparente) hereda el mismo fill
+  &.to-gray  path + path { fill: var(--qrl-background); }
+  &.to-white path + path { fill: var(--qrl-surface); }
+  &.to-dark  path + path { fill: var(--qrl-blue); }
+
+  @include bp(md) { height: 64px; }
+  @include bp(sm) { height: 48px; }
 }

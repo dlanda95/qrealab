@@ -6,10 +6,12 @@ import { PageHeader }    from '../../../shared/ui/page-header/page-header';
 import { ProductCard }   from '../../../shared/ui/product-card/product-card';
 import { ProductsService } from '../../../core/products.service';
 import { Product } from '../../../core/product.interface';
+import { TranslatePipe } from '../../../shared/pipes/translate.pipe';
+import { LanguageService } from '../../../core/language.service';
 
 @Component({
   selector: 'app-product-detail',
-  imports: [RouterLink, LeafFrame, PageHeader, ProductCard],
+  imports: [RouterLink, LeafFrame, PageHeader, ProductCard, TranslatePipe],
   templateUrl: './product-detail.html',
   styleUrl: './product-detail.scss',
 })
@@ -17,6 +19,7 @@ export class ProductDetail implements OnInit {
 
   private route = inject(ActivatedRoute);
   private svc   = inject(ProductsService);
+  lang = inject(LanguageService);
 
   product  = signal<Product | null>(null);
   related  = signal<Product[]>([]);

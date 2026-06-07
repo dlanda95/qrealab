@@ -18,5 +18,10 @@ export const routes: Routes = [
       },
     ],
   },
+  {
+    path: 'vigilance',
+    loadComponent: () =>
+      import('./features/vigilance/vigilance').then(m => m.Vigilance),
+  },
   { path: '**', redirectTo: '' },
 ];

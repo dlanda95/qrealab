@@ -1,16 +1,18 @@
-import { Component, HostListener } from '@angular/core';
+import { Component, HostListener, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { LucideAngularModule } from 'lucide-angular';
+import { LanguageService } from '../../../core/language.service';
 
 
 @Component({
   selector: 'app-navbar',
-  imports: [CommonModule, RouterLink, RouterLinkActive,LucideAngularModule],
+  imports: [CommonModule, RouterLink, RouterLinkActive, LucideAngularModule],
   templateUrl: './navbar.html',
   styleUrl: './navbar.scss',
 })
 export class Navbar {
+  lang = inject(LanguageService);
   isScrolled = false;
   isMobileMenuOpen = false;
   // Aquí pondrás la URL de tu imagen en el futuro, ej: 'assets/logo-white.png'

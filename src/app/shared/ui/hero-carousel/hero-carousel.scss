@@ -75,19 +75,21 @@ swiper-slide {
 .slide-overlay {
   @include overlay(1);
 
-  // Dos gradientes superpuestos:
-  // 1) Oscurece el fondo para legibilidad del texto
-  // 2) Añade un tinte sutil de marca (azul → verde)
   background:
     linear-gradient(
       180deg,
-      rgba(0, 0, 0, 0.10)  0%,
-      rgba(10, 17, 69, 0.65) 100%
+      rgba(0, 0, 0, 0.18)   0%,
+      rgba(10, 17, 69, 0.72) 100%
+    ),
+    radial-gradient(
+      ellipse 90% 65% at 50% 52%,
+      rgba(5, 11, 46, 0.52) 0%,
+      transparent 70%
     ),
     linear-gradient(
       120deg,
-      rgba(10, 17, 69, 0.30) 0%,
-      rgba(46, 198, 67, 0.12) 100%
+      rgba(10, 17, 69, 0.25) 0%,
+      rgba(46, 198, 67, 0.08) 100%
     );
 }
 
@@ -142,8 +144,12 @@ swiper-slide {
   line-height: 1.08;
   letter-spacing: -0.03em;
   margin-bottom: var(--space-6);
-  // Sombra suave para legibilidad sobre cualquier imagen
-  text-shadow: 0 2px 24px rgba(0, 0, 0, 0.25);
+  color: #ffffff;
+  text-shadow:
+    0 1px 2px  rgba(0, 0, 0, 0.70),
+    0 3px 10px rgba(0, 0, 0, 0.55),
+    0 6px 24px rgba(0, 0, 0, 0.40),
+    0 12px 48px rgba(5, 11, 46, 0.30);
 
   opacity: 0;
   transform: translateY(22px);
@@ -156,7 +162,10 @@ swiper-slide {
   line-height: 1.60;
   max-width: 620px;
   margin: 0 auto var(--space-10);
-  color: rgba(255, 255, 255, 0.82);
+  color: rgba(255, 255, 255, 0.90);
+  text-shadow:
+    0 1px 4px  rgba(0, 0, 0, 0.55),
+    0 3px 16px rgba(0, 0, 0, 0.35);
 
   opacity: 0;
   transform: translateY(28px);
