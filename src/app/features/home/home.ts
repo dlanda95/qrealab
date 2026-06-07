@@ -4,12 +4,12 @@ import { SplitSection } from '../../shared/ui/split-section/split-section';
 import { HeroCarouselComponent } from '../../shared/ui/hero-carousel/hero-carousel';
 import { OurValues } from './components/our-values/our-values';
 
-import { HeroService } from '../../core/hero.service';
-import { HeroSlide } from '../../core/hero-slide.interface';
-import { HistoryService } from '../../core/history.service';
-import { WhoweareService } from '../../core/whoweare.service';
-import { OurValuesService } from '../../core/our-values.service';
-import { OurValuesSection } from '../../core/our-values.interface';
+import { HeroService } from './services/hero.service';
+import { HeroSlide } from '../../shared/models/hero-slide.interface';
+import { HistoryService } from './services/history.service';
+import { WhoweareService } from './services/whoweare.service';
+import { OurValuesService } from './services/our-values.service';
+import { OurValuesSection } from './models/our-values.interface';
 
 @Component({
   selector: 'app-home',

@@ -1,8 +1,8 @@
 import { Component, Input, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { Product } from '../../../core/product.interface';
+import { Product } from '../../models/product.interface';
 import { TranslatePipe } from '../../pipes/translate.pipe';
-import { LanguageService } from '../../../core/language.service';
+import { LanguageService } from '../../../core/i18n/language.service';
 
 @Component({
   selector: 'app-product-card',

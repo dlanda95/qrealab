@@ -4,6 +4,7 @@ import { RouterOutlet } from '@angular/router';
 
 import { Footer } from './shared/layouts/footer/footer';
 import { Navbar } from './shared/layouts/navbar/navbar';
+import { ContactModal } from './features/contact/ui/contact-modal/contact-modal';
 import { isPlatformBrowser } from '@angular/common'; // <--- IMPORTAR ESTO
 
 import * as AOS from 'aos'; // <--- Importamos
@@ -12,7 +13,7 @@ import * as AOS from 'aos'; // <--- Importamos
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, Navbar,Footer],
+  imports: [RouterOutlet, Navbar, Footer, ContactModal],
   templateUrl: './app.html',
   styleUrl: './app.scss'
 })

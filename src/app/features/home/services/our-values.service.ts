@@ -6,14 +6,15 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { map, Observable } from 'rxjs';
-import { OurValuesSection } from './our-values.interface';
-import { LanguageService } from './language.service';
+import { OurValuesSection } from '../models/our-values.interface';
+import { LanguageService } from '../../../core/i18n/language.service';
+import { environment } from '../../../../environments/environment';
 
 @Injectable({ providedIn: 'root' })
 export class OurValuesService {
   private http = inject(HttpClient);
   private lang = inject(LanguageService);
-  private base = 'http://localhost:3000';
+  private base = environment.apiUrl;
 
   getOurValues(): Observable<OurValuesSection> {
     const apiUrl = `${this.base}/api/our-values?locale=${this.lang.currentLang()}`;

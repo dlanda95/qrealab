@@ -1,8 +1,9 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { map, Observable } from 'rxjs';
-import { HeroSlide } from './hero-slide.interface';
-import { LanguageService } from './language.service';
+import { HeroSlide } from '../../../shared/models/hero-slide.interface';
+import { LanguageService } from '../../../core/i18n/language.service';
+import { environment } from '../../../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -11,7 +12,7 @@ export class HeroService {
   private http = inject(HttpClient);
   private lang = inject(LanguageService);
 
-  private baseUrl = 'http://localhost:3000';
+  private baseUrl = environment.apiUrl;
 
   getHeroSlides(): Observable<HeroSlide[]> {
     const apiUrl = `${this.baseUrl}/api/hero-slides?sort=_order&locale=${this.lang.currentLang()}`;

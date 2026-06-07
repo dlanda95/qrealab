@@ -38,11 +38,11 @@
         </div>
 
         <!-- ── Columnas 2-3: Links ──────────────────────────── -->
-        @for (col of footerData.linkColumns; track col.title) {
+        @for (col of footerData.linkColumns; track $index) {
           <div class="footer-links">
             <h3>{{ col.title }}</h3>
             <ul>
-              @for (link of col.links; track link.label) {
+              @for (link of col.links; track $index) {
                 <li>
                   @if (isExternal(link.url)) {
                     <a [href]="link.url" target="_blank" rel="noopener noreferrer">

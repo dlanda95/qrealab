@@ -1,7 +1,7 @@
 import { Component, inject, OnInit, ChangeDetectorRef } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { FooterService } from '../../../core/footer.service';
-import { FooterData } from '../../../core/footer.interface';
+import { FooterService } from './footer.service';
+import { FooterData } from './footer.interface';
 
 @Component({
   selector: 'app-footer',

@@ -4,10 +4,10 @@ import { HeroCarouselComponent } from '../../shared/ui/hero-carousel/hero-carous
 import { SectionWrapper }        from '../../shared/ui/section-wrapper/section-wrapper';
 import { InfoCarousel }          from '../../shared/ui/info-carousel/info-carousel';
 
-import { VigilanceService }  from '../../core/vigilance.service';
-import { HeroSlide }         from '../../core/hero-slide.interface';
-import { InfoBlock }         from '../../core/vigilance.interface';
-import { LanguageService }   from '../../core/language.service';
+import { VigilanceService }  from './services/vigilance.service';
+import { HeroSlide }         from '../../shared/models/hero-slide.interface';
+import { InfoBlock }         from './models/vigilance.interface';
+import { LanguageService }   from '../../core/i18n/language.service';
 
 @Component({
   selector: 'app-vigilance',

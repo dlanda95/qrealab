@@ -2,7 +2,7 @@ import { Component, Input, CUSTOM_ELEMENTS_SCHEMA, ViewChild, ElementRef, AfterV
 import { isPlatformBrowser } from '@angular/common';
 import { RouterLink } from '@angular/router';
 
-import { HeroSlide } from '../../../core/hero-slide.interface';
+import { HeroSlide } from '../../models/hero-slide.interface';
 // 1. IMPORTAR DESDE EL BUNDLE (Incluye todo: Fade, Autoplay, etc.)
 import { register } from 'swiper/element/bundle';
 

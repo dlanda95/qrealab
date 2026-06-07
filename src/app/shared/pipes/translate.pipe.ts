@@ -1,5 +1,5 @@
 import { Pipe, PipeTransform, inject } from '@angular/core';
-import { LanguageService } from '../../core/language.service';
+import { LanguageService } from '../../core/i18n/language.service';
 
 @Pipe({ name: 't', standalone: true, pure: true })
 export class TranslatePipe implements PipeTransform {

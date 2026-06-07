@@ -1,4 +1,4 @@
-<nav class="navbar" [ngClass]="{'scrolled': isScrolled}">
+<nav class="navbar" [class.scrolled]="isScrolled()">
   <div class="navbar-container">
 
     <a routerLink="/" class="navbar-logo">
@@ -20,7 +20,7 @@
           <button [class.active]="lang.currentLang() === 'es'" (click)="lang.setLanguage('es')">ES</button>
           <button [class.active]="lang.currentLang() === 'en'" (click)="lang.setLanguage('en')">EN</button>
         </div>
-        <a routerLink="/contact" class="btn-contact">{{ lang.t('nav.contact') }}</a>
+        <button class="btn-contact" (click)="modal.open()">{{ lang.t('nav.contact') }}</button>
       </div>
     </div>
 
@@ -30,7 +30,7 @@
   </div>
 </nav>
 
-<div class="mobile-menu-overlay" [class.open]="isMobileMenuOpen">
+<div class="mobile-menu-overlay" [class.open]="isMobileMenuOpen()">
 
   <button class="close-btn" (click)="toggleMobileMenu()" aria-label="Cerrar menú">
     <lucide-icon name="x" class="icon-stroke"></lucide-icon>
@@ -41,7 +41,7 @@
     <a routerLink="/about" (click)="toggleMobileMenu()">{{ lang.t('nav.about') }}</a>
     <a routerLink="/products" (click)="toggleMobileMenu()">{{ lang.t('nav.products') }}</a>
     <a routerLink="/vigilance" (click)="toggleMobileMenu()">{{ lang.t('nav.vigilance') }}</a>
-    <a routerLink="/contact" (click)="toggleMobileMenu()" class="highlight">{{ lang.t('nav.contact') }}</a>
+    <button class="highlight" (click)="toggleMobileMenu(); modal.open()">{{ lang.t('nav.contact') }}</button>
 
     <div class="mobile-lang">
       <div class="lang-switch">

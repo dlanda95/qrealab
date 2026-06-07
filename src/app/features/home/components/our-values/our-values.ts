@@ -1,7 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { LucideAngularModule } from 'lucide-angular';
 import { LeafFrame } from '../../../../shared/ui/leaf-frame/leaf-frame';
-import { OurValue } from '../../../../core/our-values.interface';
+import { OurValue } from '../../models/our-values.interface';
 
 // ============================================================
 //  OUR VALUES COMPONENT

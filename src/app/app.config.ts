@@ -9,11 +9,13 @@ import {
   LucideAngularModule,
   // Layout / nav
   Menu, X, ChevronDown, Globe,
+  // Contacto
+  MessageCircle, Phone, Mail, ArrowRight, CircleCheck,
   // Valores — íconos disponibles para Payload CMS
   Heart, Lightbulb, TrendingUp,
   Shield, Star, Users, Award,
   Target, Leaf, HandHeart, Brain,
-  BookOpen, Rocket, CircleCheck,
+  BookOpen, Rocket,
 } from 'lucide-angular';
 
 import { importProvidersFrom } from '@angular/core';
@@ -34,11 +36,13 @@ export const appConfig: ApplicationConfig = {
       LucideAngularModule.pick({
         // Nav
         Menu, X, ChevronDown, Globe,
+        // Contacto
+        MessageCircle, Phone, Mail, ArrowRight, CircleCheck,
         // Our Values — íconos semánticos para valores corporativos
         Heart, Lightbulb, TrendingUp,
         Shield, Star, Users, Award,
         Target, Leaf, HandHeart, Brain,
-        BookOpen, Rocket, CircleCheck,
+        BookOpen, Rocket,
       })
     ),
     provideHttpClient(withFetch()),

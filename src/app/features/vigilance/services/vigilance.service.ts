@@ -7,16 +7,17 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { map, Observable } from 'rxjs';
 
-import { VigilanceData } from './vigilance.interface';
-import { HeroSlide }     from './hero-slide.interface';
-import { LanguageService } from './language.service';
+import { VigilanceData } from '../models/vigilance.interface';
+import { HeroSlide }     from '../../../shared/models/hero-slide.interface';
+import { LanguageService } from '../../../core/i18n/language.service';
+import { environment } from '../../../../environments/environment';
 
 @Injectable({ providedIn: 'root' })
 export class VigilanceService {
 
   private http = inject(HttpClient);
   private lang = inject(LanguageService);
-  private base = 'http://localhost:3000';
+  private base = environment.apiUrl;
 
   getVigilance(): Observable<VigilanceData> {
     return this.http.get<any>(`${this.base}/api/vigilance?locale=${this.lang.currentLang()}`).pipe(

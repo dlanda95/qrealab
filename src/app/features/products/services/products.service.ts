@@ -1,14 +1,15 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { map, Observable } from 'rxjs';
-import { Product, ProductCategory } from './product.interface';
-import { LanguageService } from './language.service';
+import { Product, ProductCategory } from '../../../shared/models/product.interface';
+import { LanguageService } from '../../../core/i18n/language.service';
+import { environment } from '../../../../environments/environment';
 
 @Injectable({ providedIn: 'root' })
 export class ProductsService {
   private http = inject(HttpClient);
   private lang = inject(LanguageService);
-  private base = 'http://localhost:3000';
+  private base = environment.apiUrl;
 
   getCategories(): Observable<ProductCategory[]> {
     return this.http

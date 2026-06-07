@@ -1,5 +1,5 @@
 import { Component, Input, signal } from '@angular/core';
-import { InfoBlock } from '../../../core/vigilance.interface';
+import { InfoBlock } from '../../../features/vigilance/models/vigilance.interface';
 
 @Component({
   selector: 'app-info-carousel',

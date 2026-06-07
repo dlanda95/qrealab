@@ -1,0 +1,208 @@
+<!-- ── Overlay ──────────────────────────────────────────────────────────── -->
+<div class="cm-overlay"
+     [class.is-open]="modal.isOpen()"
+     (click)="onOverlayClick($event)"
+     role="dialog"
+     aria-modal="true"
+     aria-label="Formulario de contacto">
+
+  <!-- ── Sheet ─────────────────────────────────────────────────────────── -->
+  <div class="cm-sheet">
+
+    <!-- Cerrar -->
+    <button class="cm-close" (click)="modal.close()" aria-label="Cerrar">
+      <lucide-icon name="x" [size]="20"></lucide-icon>
+    </button>
+
+    <!-- ═══════════════════════════════════════════════════════════════════
+         PANEL IZQUIERDO — WhatsApp
+    ═══════════════════════════════════════════════════════════════════ -->
+    <div class="cm-panel cm-panel--wa">
+
+      <div class="cm-wa-bg" aria-hidden="true"></div>
+
+      <div class="cm-wa-content">
+
+        <!-- Card WhatsApp -->
+        <div class="cm-wa-card">
+          <div class="cm-wa-card__header">
+            <!-- Ícono WhatsApp -->
+            <div class="cm-wa-icon">
+              <svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+              </svg>
+            </div>
+            <div class="cm-wa-card__info">
+              @if (cfg().whatsappDisponible) {
+                <span class="cm-wa-card__status">
+                  <span class="cm-wa-card__dot"></span>Disponible
+                </span>
+              }
+              <p class="cm-wa-card__name">{{ cfg().whatsappNombreAgente }}</p>
+              <p class="cm-wa-card__role">{{ cfg().whatsappRolAgente }}</p>
+            </div>
+          </div>
+
+          <h3 class="cm-wa-card__title">{{ cfg().waTitulo }}</h3>
+          <p class="cm-wa-card__subtitle">{{ cfg().waSubtitulo }}</p>
+
+          <a [href]="whatsappUrl()"
+             target="_blank"
+             rel="noopener noreferrer"
+             class="cm-wa-btn">
+            <lucide-icon name="message-circle" [size]="18"></lucide-icon>
+            {{ cfg().waBtnTexto }}
+            <lucide-icon name="arrow-right" [size]="16" class="cm-wa-btn__arrow"></lucide-icon>
+          </a>
+
+          <p class="cm-wa-card__number">{{ cfg().telefono }}</p>
+        </div>
+
+        <!-- Contacto directo -->
+        <div class="cm-direct-links">
+          <a [href]="'tel:' + cfg().telefono" class="cm-direct-link">
+            <lucide-icon name="phone" [size]="16"></lucide-icon>
+            <span>{{ cfg().telefono }}</span>
+          </a>
+          <a [href]="'mailto:' + cfg().email" class="cm-direct-link">
+            <lucide-icon name="mail" [size]="16"></lucide-icon>
+            <span>{{ cfg().email }}</span>
+          </a>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════════════════════
+         PANEL DERECHO — Formulario
+    ═══════════════════════════════════════════════════════════════════ -->
+    <div class="cm-panel cm-panel--form">
+
+      <!-- Estado: éxito -->
+      @if (submitStatus() === 'success') {
+        <div class="cm-success">
+          <div class="cm-success__icon">
+            <lucide-icon name="circle-check" [size]="40"></lucide-icon>
+          </div>
+          <h3 class="cm-success__title">{{ cfg().formTituloExito }}</h3>
+          <p class="cm-success__text">{{ cfg().formSubtituloExito }}</p>
+          <button class="cm-btn cm-btn--outline" (click)="resetStatus()">
+            Enviar otro mensaje
+          </button>
+        </div>
+
+      <!-- Estado: formulario -->
+      } @else {
+
+        <div class="cm-form-header">
+          <span class="cm-eyebrow">{{ cfg().formEyebrow }}</span>
+          <h2 class="cm-form-title">{{ cfg().formTitulo }}</h2>
+        </div>
+
+        <form [formGroup]="form" (ngSubmit)="onSubmit()" class="cm-form" novalidate>
+
+          <!-- Nombre / Apellido -->
+          <div class="cm-row">
+            <div class="cm-field" [class.cm-field--error]="isInvalid('nombres')">
+              <input formControlName="nombres" type="text"
+                     placeholder="Tu nombre" autocomplete="given-name">
+              @if (isInvalid('nombres')) {
+                <span class="cm-error">Nombre requerido</span>
+              }
+            </div>
+            <div class="cm-field" [class.cm-field--error]="isInvalid('apellidos')">
+              <input formControlName="apellidos" type="text"
+                     placeholder="Tu apellido" autocomplete="family-name">
+              @if (isInvalid('apellidos')) {
+                <span class="cm-error">Apellido requerido</span>
+              }
+            </div>
+          </div>
+
+          <!-- Teléfono / Correo -->
+          <div class="cm-row">
+            <div class="cm-field" [class.cm-field--error]="isInvalid('telefono')">
+              <input formControlName="telefono" type="tel"
+                     placeholder="999 999 999" autocomplete="tel">
+              @if (isInvalid('telefono')) {
+                <span class="cm-error">Teléfono requerido (mín. 7 dígitos)</span>
+              }
+            </div>
+            <div class="cm-field" [class.cm-field--error]="isInvalid('correo')">
+              <input formControlName="correo" type="email"
+                     placeholder="tu@correo.com" autocomplete="email">
+              @if (isInvalid('correo')) {
+                <span class="cm-error">Correo electrónico inválido</span>
+              }
+            </div>
+          </div>
+
+          <!-- Forma de contacto (opciones desde CMS) -->
+          @if (activeOptions().length > 0) {
+            <div class="cm-field cm-field--full">
+              <label class="cm-label">Prefiero que me contacten por</label>
+              <div class="cm-contact-toggle">
+                @for (opt of activeOptions(); track opt.valor) {
+                  <button type="button"
+                          class="cm-toggle-btn"
+                          [class.is-active]="f.formaContacto.value === opt.valor"
+                          (click)="setForma(opt.valor)">
+                    <lucide-icon [name]="opt.icono" [size]="16"></lucide-icon>
+                    {{ opt.etiqueta }}
+                  </button>
+                }
+              </div>
+            </div>
+          }
+
+          <!-- Mensaje -->
+          <div class="cm-field cm-field--full">
+            <textarea formControlName="mensaje"
+                      placeholder="¿En qué podemos ayudarte? (opcional)"
+                      rows="3"></textarea>
+          </div>
+
+          <!-- Política de privacidad -->
+          <div class="cm-field cm-field--full cm-field--check"
+               [class.cm-field--error]="isInvalid('aceptaPoliticas')">
+            <label class="cm-check-label">
+              <input formControlName="aceptaPoliticas" type="checkbox">
+              <span class="cm-checkmark"></span>
+              <span class="cm-check-text">
+                {{ politica().antes }}<a [href]="politica().linkUrl"
+                   target="_blank">{{ politica().linkTexto }}</a>{{ politica().despues }}
+              </span>
+            </label>
+            @if (isInvalid('aceptaPoliticas')) {
+              <span class="cm-error">Debes aceptar las políticas para continuar</span>
+            }
+          </div>
+
+          <!-- Error de envío -->
+          @if (submitStatus() === 'error') {
+            <p class="cm-send-error">
+              Ocurrió un error al enviar. Por favor intenta nuevamente o escríbenos directamente.
+            </p>
+          }
+
+          <!-- Submit -->
+          <button type="submit"
+                  class="cm-btn cm-btn--primary"
+                  [disabled]="submitStatus() === 'loading'">
+            @if (submitStatus() === 'loading') {
+              <span class="cm-spinner"></span>
+              Enviando...
+            } @else {
+              {{ cfg().formBtnEnviar }}
+              <lucide-icon name="arrow-right" [size]="16"></lucide-icon>
+            }
+          </button>
+
+        </form>
+      }
+
+    </div>
+
+  </div>
+
+</div>
