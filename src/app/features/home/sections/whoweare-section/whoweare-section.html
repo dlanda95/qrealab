@@ -1,0 +1,11 @@
+@if (data(); as d) {
+  <app-section-wrapper backgroundColor="gray" waveBottom="to-white">
+    <app-split-section
+      [title]="d.title"
+      [description]="d.description"
+      [imageSrc]="d.image"
+      imagePosition="left"
+      [leafInverted]="true">
+    </app-split-section>
+  </app-section-wrapper>
+}

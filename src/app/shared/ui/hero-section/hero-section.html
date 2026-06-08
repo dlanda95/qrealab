@@ -1,0 +1,35 @@
+<section class="hs-section">
+
+  <!-- Hojas decorativas de fondo -->
+  <div class="hs-leaf hs-leaf--tr" aria-hidden="true"></div>
+  <div class="hs-leaf hs-leaf--bl" aria-hidden="true"></div>
+
+  <div class="hs-content container">
+    <div class="hs-layout">
+
+      @if (eyebrow) {
+        <span class="hs-eyebrow">{{ eyebrow }}</span>
+      }
+
+      <h1 class="hs-title">{{ title }}</h1>
+
+      @if (subtitle) {
+        <p class="hs-subtitle">{{ subtitle }}</p>
+      }
+
+      @if (description) {
+        <p class="hs-description">{{ description }}</p>
+      }
+
+    </div>
+  </div>
+
+  <!-- Ola de transición al blanco -->
+  <div class="hs-wave" aria-hidden="true">
+    <svg viewBox="0 0 1440 72" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+      <path fill="white"
+        d="M0,48 C240,8 480,68 720,40 C960,12 1200,60 1440,32 L1440,72 L0,72 Z"/>
+    </svg>
+  </div>
+
+</section>

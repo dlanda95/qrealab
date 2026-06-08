@@ -1,12 +1,6 @@
 @use '../../../../../styles/variables' as *;
 @use '../../../../../styles/mixins'    as *;
 
-// ============================================================
-//  OUR VALUES
-//  Layout: [imagen hoja] + [título + grid 3 tarjetas]
-//  Fondo: blanco (sección alternada con gray de whoweare)
-// ============================================================
-
 // ── Bloque raíz ─────────────────────────────────────────────
 .ov-section {
   display: flex;
@@ -51,7 +45,6 @@
   letter-spacing: -0.03em;
   color: var(--qrl-text-main);
 
-  // Línea verde inferior — idéntica a split-section
   &::after {
     content: '';
     display: block;
@@ -64,12 +57,6 @@
 }
 
 // ── Body: imagen + tarjetas ─────────────────────────────────
-//
-//  La columna de imagen usa minmax(260px, 440px) para que leaf-frame
-//  reciba hasta 440px — su propio max-width — igual que en split-section.
-//  El componente leaf-frame se autogestiona: tamaño, curva, glow y
-//  centrado los controla él solo. Aquí solo declaramos el área de grid.
-//
 .ov-body {
   display: grid;
   grid-template-columns: minmax(260px, 440px) 1fr;
@@ -77,7 +64,6 @@
   gap: clamp(2rem, 5vw, 4rem);
   align-items: start;
 
-  // Tablet / móvil: imagen apilada encima de las tarjetas
   @include bp(lg) {
     grid-template-columns: 1fr;
     grid-template-areas:
@@ -87,11 +73,6 @@
 }
 
 // ── Columna imagen ───────────────────────────────────────────
-//
-//  Solo declara el área de grid. leaf-frame maneja max-width,
-//  min-width, autocentrado y todos los efectos visuales.
-//  Patrón idéntico al de split-section (.image-column).
-//
 .ov-image-col {
   grid-area: img;
 }
@@ -124,14 +105,12 @@
   border-radius: 16px;
   box-shadow: var(--shadow-sm);
 
-  // Transiciones: fondo incluido para que el hover verde sea suave
   transition:
     transform    var(--t-base),
     box-shadow   var(--t-base),
     border-color var(--t-base),
     background   var(--t-base);
 
-  // Hover — todas las tarjetas se elevan y reciben el sombreado verde
   &:hover {
     transform:    translateY(-4px);
     background:   var(--qrl-green-soft);

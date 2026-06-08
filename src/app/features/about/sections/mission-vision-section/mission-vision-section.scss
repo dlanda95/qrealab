@@ -1,0 +1,81 @@
+@use '../../../../../styles/variables' as *;
+@use '../../../../../styles/mixins'    as *;
+
+// ============================================================
+//  MISSION / VISION SECTION
+//  Dos tarjetas lado a lado, con ícono de hoja y tipografía impactante
+// ============================================================
+
+.mv-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: clamp(1.5rem, 3vw, 2rem);
+
+  @include bp(md) { grid-template-columns: 1fr; }
+}
+
+// ── Card base ─────────────────────────────────────────────────
+.mv-card {
+  padding: clamp(2rem, 4vw, 2.5rem);
+  border-radius: 0 24px 0 24px;   // hoja suave
+  border: 1px solid transparent;
+  transition: transform var(--t-base), box-shadow var(--t-base);
+
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-md);
+  }
+
+  // Misión: verde suave
+  &--mision {
+    background: var(--qrl-green-soft);
+    border-color: rgba(46, 198, 67, 0.20);
+  }
+
+  // Visión: azul suave
+  &--vision {
+    background: var(--qrl-blue-light);
+    border-color: rgba(10, 17, 69, 0.08);
+  }
+}
+
+// ── Ícono ─────────────────────────────────────────────────────
+.mv-card__icon {
+  width: 56px;
+  height: 56px;
+  border-radius: var(--leaf-curve-sm);
+  @include flex-center;
+  margin-bottom: var(--space-5);
+
+  .mv-card--mision & {
+    background: rgba(46, 198, 67, 0.18);
+    color: var(--qrl-green-dark);
+  }
+
+  .mv-card--vision & {
+    background: rgba(10, 17, 69, 0.10);
+    color: var(--qrl-blue);
+  }
+}
+
+// ── Título ────────────────────────────────────────────────────
+.mv-card__title {
+  font-family: var(--font-heading);
+  font-size: var(--text-2xl);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+  margin: 0 0 var(--space-4);
+
+  .mv-card--mision & { color: var(--qrl-green-dark); }
+  .mv-card--vision & { color: var(--qrl-blue); }
+}
+
+// ── Texto ─────────────────────────────────────────────────────
+.mv-card__text {
+  font-family: var(--font-body);
+  font-size: var(--text-base);
+  line-height: 1.75;
+  color: var(--qrl-text-body);
+  margin: 0;
+}

@@ -1,0 +1,48 @@
+@if (section(); as s) {
+  <app-section-wrapper backgroundColor="white">
+    <div class="ov-section">
+
+      <!-- Header -->
+      <div class="ov-header">
+        <span class="ov-eyebrow">Lo que nos define</span>
+        <h2 class="ov-title">{{ s.sectionTitle }}</h2>
+      </div>
+
+      <!-- Imagen + tarjetas -->
+      <div class="ov-body">
+
+        @if (s.image) {
+          <div class="ov-image-col" aria-hidden="true">
+            <app-leaf-frame [imageSrc]="s.image" [inverted]="false"></app-leaf-frame>
+          </div>
+        }
+
+        <div class="ov-cards" [class.no-image]="!s.image">
+          @for (value of s.values; track $index) {
+            <article class="ov-card">
+
+              <div class="ov-card__icon">
+                <lucide-icon [name]="value.icon" class="ov-icon-svg"></lucide-icon>
+              </div>
+
+              <h3 class="ov-card__title">{{ value.title }}</h3>
+
+              <ul class="ov-card__points">
+                @for (point of value.points; track $index) {
+                  <li>
+                    <strong>{{ point.label }}:</strong>
+                    <span>{{ point.description }}</span>
+                  </li>
+                }
+              </ul>
+
+              <div class="ov-card__line"></div>
+
+            </article>
+          }
+        </div>
+
+      </div>
+    </div>
+  </app-section-wrapper>
+}

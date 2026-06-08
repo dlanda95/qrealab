@@ -89,7 +89,8 @@
 // ╚══════════════════════════════════════════════════════════════
 .cm-panel--wa {
   position: relative;
-  background: linear-gradient(160deg, var(--qrl-blue) 0%, #050B2E 100%);
+  // Gradiente botánico: verde oscuro-foresta → azul profundo
+  background: linear-gradient(160deg, #0B1F17 0%, #061629 55%, var(--qrl-blue) 100%);
   padding: var(--space-10) var(--space-6) var(--space-8);
   display: flex;
   flex-direction: column;
@@ -98,17 +99,31 @@
   @include bp(md) {
     padding: var(--space-12) var(--space-6) var(--space-8);
   }
+
+  // Hoja decorativa inferior-izquierda
+  &::before {
+    content: '';
+    position: absolute;
+    width: 200px;
+    height: 200px;
+    bottom: -60px;
+    left: -60px;
+    background: rgba(46, 198, 67, 0.07);
+    border-radius: var(--leaf-curve-inv);
+    pointer-events: none;
+    z-index: 0;
+  }
 }
 
-// Blob decorativo
+// Hoja decorativa superior-derecha (reemplaza el blob circular)
 .cm-wa-bg {
   position: absolute;
   top: -80px;
   right: -80px;
   width: 260px;
   height: 260px;
-  background: radial-gradient(circle, rgba(46,198,67,0.18) 0%, transparent 70%);
-  border-radius: 50%;
+  background: radial-gradient(ellipse at center, rgba(46,198,67,0.20) 0%, transparent 70%);
+  border-radius: var(--leaf-curve);  // hoja en vez de círculo
   pointer-events: none;
 }
 
@@ -214,15 +229,20 @@
   font-size: var(--text-sm);
   font-weight: 700;
   padding: 11px 20px;
-  border-radius: 100px;
+  border-radius: 0 20px 0 20px;  // forma de hoja
   text-decoration: none;
-  transition: transform var(--t-base), box-shadow var(--t-base), background var(--t-base);
+  transition:
+    transform     var(--t-base),
+    box-shadow    var(--t-base),
+    background    var(--t-base),
+    border-radius var(--t-base);
   box-shadow: 0 4px 16px rgba(37,211,102,0.35);
 
   &:hover {
     background: #1eb35a;
     transform: translateY(-2px);
     box-shadow: 0 8px 24px rgba(37,211,102,0.45);
+    border-radius: 20px 0 20px 0;  // voltea la hoja
   }
 
   .cm-wa-btn__arrow { transition: transform var(--t-base); }
@@ -401,14 +421,20 @@
   color: var(--qrl-text-body);
   background: var(--qrl-background);
   border: 1.5px solid var(--color-border);
-  border-radius: 100px;
+  border-radius: 0 11px 0 11px;  // micro-hoja
   padding: 8px 16px;
   cursor: pointer;
-  transition: all var(--t-base);
+  transition:
+    background     var(--t-base),
+    border-color   var(--t-base),
+    color          var(--t-base),
+    box-shadow     var(--t-base),
+    border-radius  var(--t-base);
 
   &:hover {
     border-color: var(--qrl-green);
     color: var(--qrl-green-dark);
+    border-radius: 11px 0 11px 0;  // voltea
   }
 
   &.is-active {
@@ -416,6 +442,7 @@
     border-color: var(--qrl-green);
     color: var(--qrl-green-dark);
     box-shadow: 0 0 0 3px rgba(46,198,67,0.12);
+    border-radius: 11px 0 11px 0;  // hoja invertida = seleccionado
   }
 }
 
@@ -490,65 +517,7 @@
   margin: 0;
 }
 
-// ── Botón submit ──────────────────────────────────────────────
-.cm-btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: var(--space-2);
-  font-family: var(--font-body);
-  font-size: var(--text-sm);
-  font-weight: 700;
-  letter-spacing: 0.02em;
-  padding: 14px 28px;
-  border-radius: 100px;
-  border: none;
-  cursor: pointer;
-  transition: all var(--t-base);
-
-  &--primary {
-    background: var(--qrl-blue);
-    color: white;
-    box-shadow: var(--shadow-md);
-
-    &:hover:not(:disabled) {
-      background: var(--qrl-green);
-      color: var(--qrl-blue);
-      transform: translateY(-2px);
-      box-shadow: var(--shadow-green);
-    }
-
-    &:disabled {
-      opacity: 0.65;
-      cursor: not-allowed;
-    }
-
-    lucide-icon { transition: transform var(--t-base); }
-    &:hover:not(:disabled) lucide-icon { transform: translateX(4px); }
-  }
-
-  &--outline {
-    background: transparent;
-    color: var(--qrl-blue);
-    border: 2px solid var(--color-border-md);
-    margin-top: var(--space-4);
-
-    &:hover {
-      border-color: var(--qrl-green);
-      color: var(--qrl-green-dark);
-    }
-  }
-}
-
-// Spinner
-.cm-spinner {
-  width: 16px;
-  height: 16px;
-  border: 2px solid rgba(255,255,255,0.30);
-  border-top-color: white;
-  border-radius: 50%;
-  animation: spin 0.7s linear infinite;
-}
+// Botón submit → <app-leaf-button> (leaf-button.scss)
 
 // ╔══════════════════════════════════════════════════════════════
 //  ESTADO ÉXITO
@@ -568,7 +537,7 @@
   width: 80px;
   height: 80px;
   background: var(--qrl-green-soft);
-  border-radius: 50%;
+  border-radius: var(--leaf-curve-sm);  // forma de hoja en vez de círculo
   @include flex-center;
   color: var(--qrl-green-dark);
   margin-bottom: var(--space-5);
@@ -593,10 +562,6 @@
 // ╔══════════════════════════════════════════════════════════════
 //  KEYFRAMES
 // ╚══════════════════════════════════════════════════════════════
-@keyframes spin {
-  to { transform: rotate(360deg); }
-}
-
 @keyframes pulse-dot {
   0%, 100% { opacity: 1; box-shadow: 0 0 6px rgba(74,222,128,0.70); }
   50%       { opacity: 0.6; box-shadow: 0 0 12px rgba(74,222,128,0.90); }

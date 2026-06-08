@@ -1,13 +1,12 @@
-import { Component, OnInit, inject, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, inject, signal } from '@angular/core';
 
 import { HeroCarouselComponent } from '../../shared/ui/hero-carousel/hero-carousel';
 import { SectionWrapper }        from '../../shared/ui/section-wrapper/section-wrapper';
 import { InfoCarousel }          from '../../shared/ui/info-carousel/info-carousel';
-
-import { VigilanceService }  from './services/vigilance.service';
-import { HeroSlide }         from '../../shared/models/hero-slide.interface';
-import { InfoBlock }         from './models/vigilance.interface';
-import { LanguageService }   from '../../core/i18n/language.service';
+import { VigilanceService }      from './services/vigilance.service';
+import { LanguageService }       from '../../core/i18n/language.service';
+import { HeroSlide }             from '../../shared/models/hero-slide.interface';
+import { InfoBlock }             from './models/vigilance.interface';
 
 @Component({
   selector: 'app-vigilance',
@@ -16,20 +15,17 @@ import { LanguageService }   from '../../core/i18n/language.service';
   styleUrl: './vigilance.scss',
 })
 export class Vigilance implements OnInit {
-
   private svc = inject(VigilanceService);
-  private cdr = inject(ChangeDetectorRef);
-  lang = inject(LanguageService);
+  lang        = inject(LanguageService);
 
-  heroSlides: HeroSlide[] = [];
-  infoBlocks: InfoBlock[] = [];
+  heroSlides = signal<HeroSlide[]>([]);
+  infoBlocks = signal<InfoBlock[]>([]);
 
   ngOnInit(): void {
     this.svc.getVigilance().subscribe({
       next: data => {
-        this.heroSlides = this.svc.toHeroSlides(data);
-        this.infoBlocks = data.infoBlocks;
-        this.cdr.markForCheck();
+        this.heroSlides.set(this.svc.toHeroSlides(data));
+        this.infoBlocks.set(data.infoBlocks);
       },
       error: err => console.error('Error cargando vigilancia:', err),
     });

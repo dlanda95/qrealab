@@ -1,0 +1,16 @@
+<button
+  [type]="type"
+  [disabled]="disabled || loading"
+  [ngClass]="['lb-btn', 'lb-btn--' + variant, 'lb-btn--' + size]"
+  [class.is-loading]="loading">
+
+  <!-- Estado cargando -->
+  <span class="lb-spinner" aria-hidden="true"></span>
+  <span class="lb-loading-text">{{ loadingLabel }}</span>
+
+  <!-- Contenido normal (ng-content siempre en DOM, CSS lo oculta al cargar) -->
+  <span class="lb-content">
+    <ng-content></ng-content>
+  </span>
+
+</button>

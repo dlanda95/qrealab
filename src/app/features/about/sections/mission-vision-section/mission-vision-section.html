@@ -1,0 +1,23 @@
+<app-section-wrapper backgroundColor="white" waveBottom="to-gray">
+  <div class="mv-grid">
+
+    <!-- Misión -->
+    <div class="mv-card mv-card--mision">
+      <div class="mv-card__icon">
+        <lucide-icon [name]="cfg().misionIcono" [size]="28"></lucide-icon>
+      </div>
+      <h2 class="mv-card__title">{{ cfg().misionTitulo }}</h2>
+      <p class="mv-card__text">{{ cfg().misionTexto }}</p>
+    </div>
+
+    <!-- Visión -->
+    <div class="mv-card mv-card--vision">
+      <div class="mv-card__icon">
+        <lucide-icon [name]="cfg().visionIcono" [size]="28"></lucide-icon>
+      </div>
+      <h2 class="mv-card__title">{{ cfg().visionTitulo }}</h2>
+      <p class="mv-card__text">{{ cfg().visionTexto }}</p>
+    </div>
+
+  </div>
+</app-section-wrapper>

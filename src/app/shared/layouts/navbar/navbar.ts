@@ -4,6 +4,7 @@ import { RouterLink, RouterLinkActive } from '@angular/router';
 import { LucideAngularModule } from 'lucide-angular';
 import { LanguageService }      from '../../../core/i18n/language.service';
 import { ContactModalService }  from '../../../features/contact/services/contact-modal.service';
+import { NavService }           from '../../../core/nav/nav.service';
 
 @Component({
   selector: 'app-navbar',
@@ -12,17 +13,18 @@ import { ContactModalService }  from '../../../features/contact/services/contact
   styleUrl: './navbar.scss',
 })
 export class Navbar implements OnInit, OnDestroy {
-  lang       = inject(LanguageService);
-  modal      = inject(ContactModalService);
+  lang  = inject(LanguageService);
+  modal = inject(ContactModalService);
+  nav   = inject(NavService);
   private pid = inject(PLATFORM_ID);
 
-  // Signals → zoneless CD los detecta automáticamente
   isScrolled       = signal(false);
   isMobileMenuOpen = signal(false);
 
   private readonly onScroll = () => this.isScrolled.set(window.scrollY > 20);
 
   ngOnInit(): void {
+    this.nav.load().subscribe();
     if (isPlatformBrowser(this.pid)) {
       window.addEventListener('scroll', this.onScroll, { passive: true });
     }

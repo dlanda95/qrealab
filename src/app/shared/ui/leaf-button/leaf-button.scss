@@ -1,0 +1,119 @@
+@use '../../../../styles/variables' as *;
+
+// ============================================================
+//  LEAF BUTTON — Botón con forma de hoja
+//
+//  La forma voltea al hover: 0 18px 0 18px → 18px 0 18px 0
+//  El efecto usa CSS custom properties por variante de tamaño.
+//  Reutilizable en toda la app como lego.
+// ============================================================
+
+:host {
+  display: inline-flex;
+
+  &.is-loading { pointer-events: none; }
+}
+
+.lb-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  font-family: var(--font-body);
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  border: none;
+  cursor: pointer;
+  white-space: nowrap;
+  transition:
+    background    var(--t-base),
+    color         var(--t-base),
+    box-shadow    var(--t-base),
+    transform     var(--t-base),
+    border-color  var(--t-base),
+    border-radius var(--t-base);  // hoja voltea suavemente
+
+  // ── Tamaños + formas ──────────────────────────────────────
+  // Cada tamaño define sus propias variables de curva
+  &--sm {
+    --_r:     0 12px 0 12px;
+    --_r-inv: 12px 0 12px 0;
+    font-size: var(--text-xs);
+    padding: 8px 18px;
+    border-radius: var(--_r);
+  }
+
+  &--md {
+    --_r:     0 18px 0 18px;
+    --_r-inv: 18px 0 18px 0;
+    font-size: var(--text-sm);
+    padding: 13px 26px;
+    border-radius: var(--_r);
+  }
+
+  &--lg {
+    --_r:     0 22px 0 22px;
+    --_r-inv: 22px 0 22px 0;
+    font-size: var(--text-base);
+    padding: 15px 32px;
+    border-radius: var(--_r);
+  }
+
+  // ── Variante primaria ─────────────────────────────────────
+  &--primary {
+    background: var(--qrl-blue);
+    color: white;
+    box-shadow: var(--shadow-md);
+
+    &:hover:not([disabled]):not(.is-loading) {
+      background: var(--qrl-green);
+      color: var(--qrl-blue);
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-green);
+      border-radius: var(--_r-inv);  // voltea la hoja
+    }
+  }
+
+  // ── Variante outline ─────────────────────────────────────
+  &--outline {
+    background: transparent;
+    color: var(--qrl-blue);
+    border: 2px solid var(--color-border-md);
+
+    &:hover:not([disabled]):not(.is-loading) {
+      border-color: var(--qrl-green);
+      color: var(--qrl-green-dark);
+      border-radius: var(--_r-inv);  // voltea la hoja
+    }
+  }
+
+  // ── Estado deshabilitado/cargando ────────────────────────
+  &[disabled] { opacity: 0.65; cursor: not-allowed; }
+}
+
+// ── Contenido loading vs normal ───────────────────────────
+.lb-spinner,
+.lb-loading-text { display: none; }
+
+.lb-content { display: inline-flex; align-items: center; gap: var(--space-2); }
+
+.lb-btn.is-loading {
+  .lb-spinner     { display: inline-block; }
+  .lb-loading-text { display: inline; }
+  .lb-content     { display: none; }
+}
+
+// ── Spinner ───────────────────────────────────────────────
+.lb-spinner {
+  width: 15px;
+  height: 15px;
+  border: 2px solid rgba(255, 255, 255, 0.30);
+  border-top-color: white;
+  border-radius: 50%;
+  flex-shrink: 0;
+  animation: lb-spin 0.7s linear infinite;
+}
+
+@keyframes lb-spin {
+  to { transform: rotate(360deg); }
+}

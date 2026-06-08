@@ -11,13 +11,14 @@ import { ContactModalService }   from '../../services/contact-modal.service';
 import { ContactSettingsService } from '../../services/contact-settings.service';
 import { ContactService }         from '../../services/contact.service';
 import { FormaContacto }          from '../../models/contact.interface';
+import { LeafButton }             from '../../../../shared/ui/leaf-button/leaf-button';
 
 type SubmitStatus = 'idle' | 'loading' | 'success' | 'error';
 
 @Component({
   selector: 'app-contact-modal',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, LucideAngularModule],
+  imports: [CommonModule, ReactiveFormsModule, LucideAngularModule, LeafButton],
   templateUrl: './contact-modal.html',
   styleUrl:    './contact-modal.scss',
 })

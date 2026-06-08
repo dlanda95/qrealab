@@ -15,7 +15,7 @@ import {
   Heart, Lightbulb, TrendingUp,
   Shield, Star, Users, Award,
   Target, Leaf, HandHeart, Brain,
-  BookOpen, Rocket,
+  BookOpen, Rocket, Eye,
 } from 'lucide-angular';
 
 import { importProvidersFrom } from '@angular/core';
@@ -42,7 +42,7 @@ export const appConfig: ApplicationConfig = {
         Heart, Lightbulb, TrendingUp,
         Shield, Star, Users, Award,
         Target, Leaf, HandHeart, Brain,
-        BookOpen, Rocket,
+        BookOpen, Rocket, Eye,
       })
     ),
     provideHttpClient(withFetch()),

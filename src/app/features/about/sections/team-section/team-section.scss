@@ -1,0 +1,106 @@
+@use '../../../../../styles/variables' as *;
+@use '../../../../../styles/mixins'    as *;
+
+// ============================================================
+//  TEAM SECTION
+//  Eyebrow + título + pestañas de grupos + grid de PersonCards
+// ============================================================
+
+// ── Header ───────────────────────────────────────────────────
+.ts-header {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  margin-bottom: var(--space-8);
+}
+
+.ts-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-family: var(--font-body);
+  font-size: var(--text-xs);
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--qrl-green);
+
+  &::before {
+    content: '';
+    width: 24px;
+    height: 2px;
+    background: var(--qrl-green);
+    border-radius: 2px;
+  }
+}
+
+.ts-title {
+  font-family: var(--font-heading);
+  font-size: var(--text-3xl);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  color: var(--qrl-text-main);
+  margin: 0;
+  line-height: 1.1;
+
+  &::after {
+    content: '';
+    display: block;
+    width: 44px;
+    height: 4px;
+    background: var(--qrl-green);
+    border-radius: 4px;
+    margin-top: var(--space-4);
+  }
+}
+
+// ── Pestañas ──────────────────────────────────────────────────
+.ts-tabs {
+  display: flex;
+  gap: var(--space-2);
+  flex-wrap: wrap;
+  margin-bottom: var(--space-8);
+}
+
+.ts-tab {
+  font-family: var(--font-body);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  padding: 9px 22px;
+  border-radius: 0 12px 0 12px;  // micro-hoja
+  border: 1.5px solid var(--color-border-md);
+  background: var(--qrl-surface);
+  color: var(--qrl-text-body);
+  cursor: pointer;
+  transition:
+    background    var(--t-base),
+    color         var(--t-base),
+    border-color  var(--t-base),
+    border-radius var(--t-base),
+    box-shadow    var(--t-base);
+
+  &:hover:not(.is-active) {
+    border-color: var(--qrl-green);
+    color: var(--qrl-green-dark);
+    border-radius: 12px 0 12px 0;  // voltea
+  }
+
+  &.is-active {
+    background: var(--qrl-green-soft);
+    border-color: var(--qrl-green);
+    color: var(--qrl-green-dark);
+    border-radius: 12px 0 12px 0;  // hoja invertida = activo
+    box-shadow: 0 0 0 3px rgba(46, 198, 67, 0.12);
+  }
+}
+
+// ── Grid de PersonCards ───────────────────────────────────────
+.ts-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: clamp(1.5rem, 3vw, 2.5rem);
+
+  @include bp(xl) { grid-template-columns: repeat(3, 1fr); }
+  @include bp(md) { grid-template-columns: repeat(2, 1fr); }
+  @include bp(sm) { grid-template-columns: repeat(2, 1fr); gap: var(--space-6); }
+}

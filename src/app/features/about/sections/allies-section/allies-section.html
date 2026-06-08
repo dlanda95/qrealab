@@ -1,0 +1,29 @@
+<app-section-wrapper backgroundColor="white">
+
+  <!-- Header -->
+  <div class="al-header">
+    <span class="al-eyebrow">{{ cfg().aliadosEyebrow }}</span>
+    <h2 class="al-title">{{ cfg().aliadosTitulo }}</h2>
+    @if (cfg().aliadosSubtitulo) {
+      <p class="al-subtitle">{{ cfg().aliadosSubtitulo }}</p>
+    }
+  </div>
+
+  <!-- Grid de aliados -->
+  <div class="al-grid">
+    @for (ally of cfg().aliados; track $index) {
+      <div class="al-card" [class.al-card--link]="ally.url"
+           [attr.role]="ally.url ? 'link' : null"
+           (click)="ally.url && openAlly(ally.url)">
+
+        @if (ally.logo) {
+          <img [src]="ally.logo" [alt]="ally.nombre" class="al-card__logo">
+        } @else {
+          <span class="al-card__name">{{ ally.nombre }}</span>
+        }
+
+      </div>
+    }
+  </div>
+
+</app-section-wrapper>

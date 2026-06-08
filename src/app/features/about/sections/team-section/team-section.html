@@ -1,0 +1,40 @@
+<app-section-wrapper backgroundColor="gray" waveBottom="to-white">
+
+  <!-- Header -->
+  <div class="ts-header">
+    <span class="ts-eyebrow">{{ cfg().equipoEyebrow }}</span>
+    <h2 class="ts-title">{{ cfg().equipoTitulo }}</h2>
+  </div>
+
+  <!-- Pestañas de grupos -->
+  @if (cfg().equipoGrupos.length > 1) {
+    <div class="ts-tabs" role="tablist">
+      @for (group of cfg().equipoGrupos; track $index) {
+        <button
+          class="ts-tab"
+          role="tab"
+          [class.is-active]="activeGroupIdx() === $index"
+          [attr.aria-selected]="activeGroupIdx() === $index"
+          (click)="selectGroup($index)">
+          {{ group.nombre }}
+        </button>
+      }
+    </div>
+  }
+
+  <!-- Grid de miembros -->
+  @if (activeGroup(); as group) {
+    <div class="ts-grid">
+      @for (member of group.miembros; track $index) {
+        <app-person-card
+          [nombre]="member.nombre"
+          [cargo]="member.cargo"
+          [foto]="member.foto ?? ''"
+          [linkedin]="member.linkedin ?? ''"
+          [inverted]="$index % 2 === 1">
+        </app-person-card>
+      }
+    </div>
+  }
+
+</app-section-wrapper>

@@ -113,6 +113,13 @@
   --container-pad: clamp(1rem, 5vw, 2rem);
 
   // --------------------------------------------------------
+  // GRADIENTES COMPARTIDOS (hero de páginas internas)
+  // --------------------------------------------------------
+
+  // Gradiente estándar para heroes oscuros: azul profundo → índigo → azul
+  --gradient-hero:  linear-gradient(160deg, var(--qrl-blue) 0%, var(--qrl-blue-mid) 60%, var(--qrl-blue) 100%);
+
+  // --------------------------------------------------------
   // FORMAS ORGÁNICAS — HOJA
   // Ajusta estos 2 valores y cambia el look de toda la app
   // --------------------------------------------------------

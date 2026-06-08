@@ -86,9 +86,9 @@
           </div>
           <h3 class="cm-success__title">{{ cfg().formTituloExito }}</h3>
           <p class="cm-success__text">{{ cfg().formSubtituloExito }}</p>
-          <button class="cm-btn cm-btn--outline" (click)="resetStatus()">
+          <app-leaf-button variant="outline" (click)="resetStatus()">
             Enviar otro mensaje
-          </button>
+          </app-leaf-button>
         </div>
 
       <!-- Estado: formulario -->
@@ -186,17 +186,14 @@
           }
 
           <!-- Submit -->
-          <button type="submit"
-                  class="cm-btn cm-btn--primary"
-                  [disabled]="submitStatus() === 'loading'">
-            @if (submitStatus() === 'loading') {
-              <span class="cm-spinner"></span>
-              Enviando...
-            } @else {
-              {{ cfg().formBtnEnviar }}
-              <lucide-icon name="arrow-right" [size]="16"></lucide-icon>
-            }
-          </button>
+          <app-leaf-button
+            type="submit"
+            size="lg"
+            [loading]="submitStatus() === 'loading'"
+            loadingLabel="Enviando...">
+            {{ cfg().formBtnEnviar }}
+            <lucide-icon name="arrow-right" [size]="16"></lucide-icon>
+          </app-leaf-button>
 
         </form>
       }

@@ -11,43 +11,34 @@
 
   <div class="footer-content container">
 
-    @if (footerData) {
+    @if (footerData(); as fd) {
       <div class="footer-grid">
 
         <!-- ── Columna 1: Marca ─────────────────────────────── -->
         <div class="footer-brand">
-          <img
-            src="assets/images/logo-white.png"
-            alt="Qrealab"
-            class="brand-logo-img"
-          />
-          <p class="brand-desc">{{ footerData.brandDescription }}</p>
+          <img src="assets/images/logo-white.png" alt="Qrealab" class="brand-logo-img" />
+          <p class="brand-desc">{{ fd.brandDescription }}</p>
 
-          @if (footerData.socialLinks.length > 0) {
+          @if (fd.socialLinks.length > 0) {
             <div class="social-links">
-              @for (social of footerData.socialLinks; track social.label) {
-                <a
-                  [href]="social.url"
-                  class="social-icon"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >{{ social.label }}</a>
+              @for (social of fd.socialLinks; track social.label) {
+                <a [href]="social.url" class="social-icon" target="_blank" rel="noopener noreferrer">
+                  {{ social.label }}
+                </a>
               }
             </div>
           }
         </div>
 
-        <!-- ── Columnas 2-3: Links ──────────────────────────── -->
-        @for (col of footerData.linkColumns; track $index) {
+        <!-- ── Columnas de links ─────────────────────────────── -->
+        @for (col of fd.linkColumns; track $index) {
           <div class="footer-links">
             <h3>{{ col.title }}</h3>
             <ul>
               @for (link of col.links; track $index) {
                 <li>
                   @if (isExternal(link.url)) {
-                    <a [href]="link.url" target="_blank" rel="noopener noreferrer">
-                      {{ link.label }}
-                    </a>
+                    <a [href]="link.url" target="_blank" rel="noopener noreferrer">{{ link.label }}</a>
                   } @else {
                     <a [routerLink]="link.url">{{ link.label }}</a>
                   }
@@ -57,22 +48,19 @@
           </div>
         }
 
-        <!-- ── Columna 4: Contacto ──────────────────────────── -->
+        <!-- ── Columna de contacto ──────────────────────────── -->
         <div class="footer-contact">
-          <h3>{{ footerData.contactTitle }}</h3>
-          @for (line of footerData.address; track line) {
-            <p>{{ line }}</p>
-          }
-          @if (footerData.contactEmail) {
-            <p class="contact-email">{{ footerData.contactEmail }}</p>
+          <h3>{{ fd.contactTitle }}</h3>
+          @for (line of fd.address; track line) { <p>{{ line }}</p> }
+          @if (fd.contactEmail) {
+            <p class="contact-email">{{ fd.contactEmail }}</p>
           }
         </div>
 
       </div>
 
-      <!-- ── Barra inferior ───────────────────────────────── -->
       <div class="footer-bottom">
-        <p>&copy; {{ footerData.copyrightText }}</p>
+        <p>&copy; {{ fd.copyrightText }}</p>
       </div>
     }
 

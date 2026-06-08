@@ -10,17 +10,19 @@
     </a>
 
     <div class="navbar-links desktop-menu">
-      <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">{{ lang.t('nav.home') }}</a>
-      <a routerLink="/about" routerLinkActive="active">{{ lang.t('nav.about') }}</a>
-      <a routerLink="/products" routerLinkActive="active">{{ lang.t('nav.products') }}</a>
-      <a routerLink="/vigilance" routerLinkActive="active">{{ lang.t('nav.vigilance') }}</a>
+      @for (item of nav.settings().items; track item.ruta) {
+        <a [routerLink]="item.ruta" routerLinkActive="active"
+           [routerLinkActiveOptions]="{ exact: item.ruta === '/' }">
+          {{ item.etiqueta }}
+        </a>
+      }
 
       <div class="navbar-actions">
         <div class="lang-switch">
           <button [class.active]="lang.currentLang() === 'es'" (click)="lang.setLanguage('es')">ES</button>
           <button [class.active]="lang.currentLang() === 'en'" (click)="lang.setLanguage('en')">EN</button>
         </div>
-        <button class="btn-contact" (click)="modal.open()">{{ lang.t('nav.contact') }}</button>
+        <button class="btn-contact" (click)="modal.open()">{{ nav.settings().ctaLabel }}</button>
       </div>
     </div>
 
@@ -37,11 +39,10 @@
   </button>
 
   <div class="mobile-menu-content">
-    <a routerLink="/" (click)="toggleMobileMenu()">{{ lang.t('nav.home') }}</a>
-    <a routerLink="/about" (click)="toggleMobileMenu()">{{ lang.t('nav.about') }}</a>
-    <a routerLink="/products" (click)="toggleMobileMenu()">{{ lang.t('nav.products') }}</a>
-    <a routerLink="/vigilance" (click)="toggleMobileMenu()">{{ lang.t('nav.vigilance') }}</a>
-    <button class="highlight" (click)="toggleMobileMenu(); modal.open()">{{ lang.t('nav.contact') }}</button>
+    @for (item of nav.settings().items; track item.ruta) {
+      <a [routerLink]="item.ruta" (click)="toggleMobileMenu()">{{ item.etiqueta }}</a>
+    }
+    <button class="highlight" (click)="toggleMobileMenu(); modal.open()">{{ nav.settings().ctaLabel }}</button>
 
     <div class="mobile-lang">
       <div class="lang-switch">

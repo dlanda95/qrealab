@@ -1,0 +1,112 @@
+@use '../../../../styles/variables' as *;
+@use '../../../../styles/mixins'    as *;
+
+// ============================================================
+//  PERSON CARD — Tarjeta de miembro del equipo
+//  Foto con forma de hoja (brand identity), nombre, rol, LinkedIn
+//  La hoja voltea según @Input inverted.
+// ============================================================
+
+:host { display: block; }
+
+.pc-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: var(--space-4);
+
+  &:hover .pc-photo__frame {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-green);
+  }
+}
+
+// ── Foto ─────────────────────────────────────────────────────
+.pc-photo {
+  width: 100%;
+}
+
+.pc-photo__frame {
+  width: 100%;
+  max-width: 180px;
+  aspect-ratio: 1 / 0.96;
+  background-size: cover;
+  background-position: top center;
+  background-color: var(--qrl-green-soft);
+  border-radius: var(--leaf-curve);
+  margin: 0 auto;
+  transition: transform var(--t-slow), box-shadow var(--t-slow);
+
+  // Borde verde sutil
+  box-shadow: 0 0 0 3px var(--qrl-green-soft), var(--shadow-sm);
+}
+
+// Hoja invertida
+.pc-photo--inverted .pc-photo__frame {
+  border-radius: var(--leaf-curve-inv);
+}
+
+// Placeholder (sin foto)
+.pc-photo__placeholder {
+  @include flex-center;
+  color: var(--qrl-green);
+}
+
+.pc-placeholder-icon {
+  width: 52px;
+  height: 52px;
+  opacity: 0.5;
+}
+
+// ── Info ─────────────────────────────────────────────────────
+.pc-info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-1);
+}
+
+.pc-name {
+  font-family: var(--font-heading);
+  font-size: var(--text-base);
+  font-weight: 700;
+  color: var(--qrl-text-main);
+  margin: 0;
+  line-height: 1.25;
+}
+
+.pc-role {
+  font-family: var(--font-body);
+  font-size: var(--text-xs);
+  color: var(--qrl-text-muted);
+  margin: 0;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+// ── LinkedIn ─────────────────────────────────────────────────
+.pc-linkedin {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 0 8px 0 8px;    // micro-hoja
+  background: var(--qrl-blue-light);
+  color: var(--qrl-blue);
+  text-decoration: none;
+  margin-top: var(--space-1);
+  transition: background var(--t-base), color var(--t-base), border-radius var(--t-base);
+
+  &:hover {
+    background: var(--qrl-blue);
+    color: white;
+    border-radius: 8px 0 8px 0;  // voltea
+  }
+}
+
+.pc-linkedin__icon {
+  width: 14px;
+  height: 14px;
+}
