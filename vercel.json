@@ -1,6 +1,6 @@
 {
   "framework": "angular",
-  "buildCommand": "npm run build",
-  "outputDirectory": "dist/qrealab",
+  "buildCommand": "ng build --configuration=production",
+  "outputDirectory": "dist/qrealab/browser",
   "installCommand": "npm install"
 }
