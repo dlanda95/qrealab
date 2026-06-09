@@ -20,7 +20,7 @@ export class FooterService {
     const apiUrl = `${this.base}/api/footer?locale=${this.lang.currentLang()}`;
     return this.http.get<any>(apiUrl).pipe(
       map(res => {
-        const doc = res.docs[0];
+        const doc = res.docs?.[0] ?? {};
         return {
           brandDescription: doc.brandDescription ?? '',
           socialLinks: (doc.socialLinks ?? []).map((s: any) => ({
