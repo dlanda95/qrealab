@@ -17,89 +17,121 @@
       inset: 0;
       z-index: 9999;
       display: flex;
+      flex-direction: column;
       align-items: center;
       justify-content: center;
-      background: #ffffff;
-      transition: opacity 0.45s ease, visibility 0.45s ease;
+      background: #f5f8ff;
+      transition: opacity 0.6s cubic-bezier(0.4,0,0.2,1),
+                  visibility 0.6s cubic-bezier(0.4,0,0.2,1);
     }
     #qrl-preloader.hide {
       opacity: 0;
       visibility: hidden;
     }
-    .qrl-pre-inner {
+
+    /* ── Centro ─────────────────────────────────────────────── */
+    .qrl-pre-center {
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 28px;
-      animation: qrl-fadein 0.5s ease forwards;
+      gap: 32px;
     }
+
+    /* ── Anillo + logo ───────────────────────────────────────── */
     .qrl-pre-ring {
       position: relative;
-      width: 96px;
-      height: 96px;
+      width: 136px;
+      height: 136px;
+      animation: qrl-scalein 0.6s cubic-bezier(0.34,1.56,0.64,1) forwards;
     }
     .qrl-pre-ring svg {
       position: absolute;
       inset: 0;
       width: 100%;
       height: 100%;
-      animation: qrl-spin 1.4s linear infinite;
     }
+    .qrl-pre-track { opacity: 0.12; }
+    .qrl-pre-arc   { animation: qrl-spin 1.6s cubic-bezier(0.45,0.05,0.55,0.95) infinite; transform-origin: 68px 68px; }
+    .qrl-pre-glow  { animation: qrl-spin 1.6s cubic-bezier(0.45,0.05,0.55,0.95) infinite; transform-origin: 68px 68px; filter: blur(4px); opacity: 0.35; }
     .qrl-pre-logo {
       position: absolute;
       inset: 0;
       margin: auto;
-      width: 52px;
-      height: 52px;
+      width: 72px;
+      height: 72px;
       object-fit: contain;
-      animation: qrl-pulse 2s ease-in-out infinite;
+      animation: qrl-logoin 0.5s 0.3s ease both;
     }
-    .qrl-pre-dots {
-      display: flex;
-      gap: 8px;
-    }
-    .qrl-pre-dots span {
-      width: 7px;
-      height: 7px;
-      border-radius: 50%;
-      background: #1a3a8f;
-      animation: qrl-dot 1.4s ease-in-out infinite;
-    }
-    .qrl-pre-dots span:nth-child(2) { animation-delay: 0.18s; background: #2060c8; }
-    .qrl-pre-dots span:nth-child(3) { animation-delay: 0.36s; background: #2EC643; }
 
-    @keyframes qrl-fadein {
-      from { opacity: 0; transform: scale(0.92); }
+    /* ── Nombre empresa ──────────────────────────────────────── */
+    .qrl-pre-name {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.28em;
+      color: #1a3a8f;
+      text-transform: uppercase;
+      opacity: 0;
+      animation: qrl-fadein 0.5s 0.5s ease forwards;
+    }
+
+    /* ── Barra de progreso ───────────────────────────────────── */
+    .qrl-pre-bar-wrap {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: rgba(26,58,143,0.08);
+    }
+    .qrl-pre-bar {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, #1a3a8f 0%, #2060c8 60%, #2EC643 100%);
+      animation: qrl-progress 2.5s cubic-bezier(0.4,0,0.2,1) forwards;
+      border-radius: 0 2px 2px 0;
+    }
+
+    /* ── Keyframes ───────────────────────────────────────────── */
+    @keyframes qrl-scalein {
+      from { opacity: 0; transform: scale(0.7); }
       to   { opacity: 1; transform: scale(1); }
+    }
+    @keyframes qrl-logoin {
+      from { opacity: 0; transform: scale(0.8); }
+      to   { opacity: 1; transform: scale(1); }
+    }
+    @keyframes qrl-fadein {
+      to { opacity: 1; }
     }
     @keyframes qrl-spin {
       to { transform: rotate(360deg); }
     }
-    @keyframes qrl-pulse {
-      0%, 100% { opacity: 1;    transform: scale(1); }
-      50%       { opacity: 0.75; transform: scale(0.94); }
-    }
-    @keyframes qrl-dot {
-      0%, 80%, 100% { transform: scale(0.7); opacity: 0.4; }
-      40%           { transform: scale(1);   opacity: 1; }
+    @keyframes qrl-progress {
+      0%   { width: 0%; }
+      60%  { width: 75%; }
+      85%  { width: 88%; }
+      100% { width: 98%; }
     }
   </style>
 </head>
 <body>
   <div id="qrl-preloader">
-    <div class="qrl-pre-inner">
+    <div class="qrl-pre-center">
       <div class="qrl-pre-ring">
-        <!-- Anillo azul→verde giratorio con track suave -->
-        <svg viewBox="0 0 96 96" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <circle cx="48" cy="48" r="44" stroke="#e8eef8" stroke-width="4"/>
-          <circle cx="48" cy="48" r="44"
-            stroke="url(#qrl-grad)"
-            stroke-width="4"
-            stroke-linecap="round"
-            stroke-dasharray="207 69"
-            stroke-dashoffset="0"/>
+        <svg viewBox="0 0 136 136" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <!-- Track -->
+          <circle class="qrl-pre-track" cx="68" cy="68" r="62" stroke="#1a3a8f" stroke-width="5"/>
+          <!-- Glow (duplicado desenfocado para el halo) -->
+          <circle class="qrl-pre-glow" cx="68" cy="68" r="62"
+            stroke="url(#qrl-g1)" stroke-width="5" stroke-linecap="round"
+            stroke-dasharray="260 130"/>
+          <!-- Arco principal -->
+          <circle class="qrl-pre-arc" cx="68" cy="68" r="62"
+            stroke="url(#qrl-g1)" stroke-width="5" stroke-linecap="round"
+            stroke-dasharray="260 130"/>
           <defs>
-            <linearGradient id="qrl-grad" x1="96" y1="48" x2="0" y2="48" gradientUnits="userSpaceOnUse">
+            <linearGradient id="qrl-g1" x1="136" y1="68" x2="0" y2="68" gradientUnits="userSpaceOnUse">
               <stop offset="0%"   stop-color="#2EC643"/>
               <stop offset="100%" stop-color="#1a3a8f"/>
             </linearGradient>
@@ -107,22 +139,29 @@
         </svg>
         <img src="assets/images/logo-q.png" class="qrl-pre-logo" alt="Qrealab">
       </div>
-      <div class="qrl-pre-dots">
-        <span></span><span></span><span></span>
-      </div>
+      <div class="qrl-pre-name">QREALAB</div>
+    </div>
+    <div class="qrl-pre-bar-wrap">
+      <div class="qrl-pre-bar"></div>
     </div>
   </div>
 
   <app-root></app-root>
 
   <script>
-    // Llamado desde AppComponent.ngOnInit para salir con fade suave
+    // Tiempo mínimo de 2.5 s para que la animación sea visible
+    window.__qrlPreloaderStart = Date.now();
     window.__qrlHidePreloader = function() {
-      var el = document.getElementById('qrl-preloader');
-      if (el) {
-        el.classList.add('hide');
-        setTimeout(function() { el.remove(); }, 500);
-      }
+      var MIN = 2500;
+      var elapsed = Date.now() - window.__qrlPreloaderStart;
+      var wait = Math.max(0, MIN - elapsed);
+      setTimeout(function() {
+        var el = document.getElementById('qrl-preloader');
+        if (el) {
+          el.classList.add('hide');
+          setTimeout(function() { el.remove(); }, 650);
+        }
+      }, wait);
     };
   </script>
 </body>
