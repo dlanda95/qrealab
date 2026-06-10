@@ -2,33 +2,14 @@
 @use '../../../../styles/mixins'    as *;
 
 // ============================================================
-//  LEAF FRAME  —  MOLDE ÚNICO (single source of truth)
+//  LEAF FRAME
 //
-//  Este es el único archivo que controla el diseño de la hoja:
-//  tamaño, forma, curvas, glow, zoom al hover, blend de imagen.
-//
-//  ▸ Para cambiar el tamaño máximo      → edita max-width en .leaf-wrapper
-//  ▸ Para cambiar la forma de curva     → edita los tokens --leaf-curve*
-//                                         en styles/_variables.scss
-//  ▸ Para cambiar el glow verde         → edita .leaf-glow-border
-//  ▸ Para cambiar el blend de imagen    → edita .leaf-media::after
-//  ▸ Para cambiar la animación hover    → edita .leaf-wrapper:hover
-//
-//  Los componentes padres (split-section, our-values, etc.) solo
-//  deben proveer espacio en su grid — nunca deben re-declarar tamaño,
-//  curva ni efectos de la hoja.
-//
-//  Sistema de capas:
-//  ┌─ :host ──────────────────────────────────────────────┐
-//  │  display:flex · justify-content:center · width:100%  │
-//  │  └─ .leaf-wrapper  (max 440px, autocentrado)          │
-//  │       ├─ z:0  .leaf-glow-border  → aura verde difusa  │
-//  │       └─ z:1  .leaf-mask         → clip + gap interno  │
-//  │                 └─ .leaf-media   → img + blend color   │
-//  └──────────────────────────────────────────────────────┘
-//
-//  Hoja normal    (0px 96px 0px 96px): curvas en TR y BL
-//  Hoja invertida (96px 0px 96px 0px): curvas en TL y BR
+//  Capas (de abajo a arriba):
+//    0. .leaf-glow-border  — halo difuso detrás del borde
+//    1. .leaf-mask         — ventana con overflow:hidden + isolation
+//         1a. .leaf-parallax (z:1) — fondo que JS desliza verticalmente
+//               └── .leaf-media   — imagen como background-image
+//         1b. ::after (z:2)       — viñeta interna sobre la imagen
 // ============================================================
 
 :host {
@@ -38,9 +19,7 @@
   width: 100%;
 }
 
-// ============================================================
-//  WRAPPER
-// ============================================================
+// ── Wrapper ───────────────────────────────────────────────────
 
 .leaf-wrapper {
   position: relative;
@@ -50,194 +29,68 @@
   min-width: 260px;
   border-radius: var(--leaf-curve);
   margin: 0 auto;
+  transition: transform var(--t-slow), box-shadow var(--t-slow);
 
-  transition:
-    transform  var(--t-slow),
-    box-shadow var(--t-slow);
-
-  &:hover {
-    transform: translateY(-7px);
-  }
-
-  // Variante invertida
-  &.inverted {
-    border-radius: var(--leaf-curve-inv);
-
-    .leaf-glow-border { border-radius: var(--leaf-curve-inv); }
-    .leaf-mask        { border-radius: var(--leaf-curve-inv); }
-  }
+  &:hover { transform: translateY(-6px); }
+  &.inverted { border-radius: var(--leaf-curve-inv); }
 }
 
-// ============================================================
-//  CAPA 0 — BORDE LUMINOSO (trazo continuo que adelgaza hacia las puntas)
-//
-//  Concepto: trazo de pincel que recorre todo el perímetro.
-//
-//  La OPACIDAD controla el grosor aparente con blur activo:
-//    - opacidad 1.00 + blur → trazo ancho  (~10px visible)
-//    - opacidad 0.06 + blur → trazo fino   (~1px  visible)
-//
-//  Nunca llega a cero → el borde es continuo en todo el perímetro.
-//  La opacidad sube de forma no lineal (curva de aceleración):
-//    lenta al salir de la punta → rápida al acercarse a la curva.
-//  Resultado: el trazo "engrosa" de forma orgánica igual que en
-//  caligrafía o un trazo de pincel con presión variable.
-//
-//  Coordenadas (from 315deg → 0° = TL):
-//    0° / 360° = TL (punta aguda)   |   90°  = TR (curva, máximo)
-//    180°      = BR (punta aguda)   |   270° = BL (curva, máximo)
-// ============================================================
+// ── Capa 0: halo verde detrás del borde ──────────────────────
+// Radiales ubicados en las esquinas curvas de cada variante
 
 .leaf-glow-border {
   position: absolute;
-  inset: -3px;
+  inset: -5px;
   border-radius: inherit;
   z-index: 0;
   pointer-events: none;
 
-  border: 3px solid transparent;
-
-  // ── Hoja normal: curvas TR (90°) y BL (270°) ────────────────
-  background-image:
-    conic-gradient(
-      from 315deg at 50% 50%,
-
-      //  TL ──── top ────▶ TR (curva)
-      rgba(46, 198, 67, 0.06)   0deg,  // TL  — punta (trazo fino)
-      rgba(46, 198, 67, 0.12)  22deg,  //      lento al inicio
-      rgba(46, 198, 67, 0.28)  42deg,  //      comienza a engrosar
-      rgba(46, 198, 67, 0.55)  62deg,  //      engrosando
-      rgba(46, 198, 67, 0.82)  78deg,  //      casi máximo
-      var(--qrl-green)          90deg, // TR  — curva (trazo grueso)
-
-      //  TR (curva) ──── right ────▶ BR
-      rgba(46, 198, 67, 0.82) 102deg,
-      rgba(46, 198, 67, 0.55) 118deg,
-      rgba(46, 198, 67, 0.28) 138deg,
-      rgba(46, 198, 67, 0.12) 158deg,
-      rgba(46, 198, 67, 0.06) 180deg,  // BR  — punta (trazo fino)
-
-      //  BR ──── bottom ────▶ BL (curva)
-      rgba(46, 198, 67, 0.12) 202deg,
-      rgba(46, 198, 67, 0.28) 222deg,
-      rgba(46, 198, 67, 0.55) 242deg,
-      rgba(46, 198, 67, 0.82) 258deg,
-      var(--qrl-green)         270deg, // BL  — curva (trazo grueso)
-
-      //  BL (curva) ──── left ────▶ TL
-      rgba(46, 198, 67, 0.82) 282deg,
-      rgba(46, 198, 67, 0.55) 298deg,
-      rgba(46, 198, 67, 0.28) 318deg,
-      rgba(46, 198, 67, 0.12) 338deg,
-      rgba(46, 198, 67, 0.06) 360deg   // TL  — punta (trazo fino)
-    );
-  background-origin: border-box;
-
-  filter: blur(4px);
-  opacity: 0.95;
-
-  transition:
-    filter    var(--t-slow),
-    opacity   var(--t-slow),
-    transform var(--t-slow);
+  // Hoja normal: curvas en TR y BL
+  background:
+    radial-gradient(ellipse 60% 55% at 100%   0%, rgba(46,198,67,0.60) 0%, transparent 70%),
+    radial-gradient(ellipse 55% 50% at   0% 100%, rgba(46,198,67,0.40) 0%, transparent 65%);
+  filter: blur(8px);
+  opacity: 0.75;
+  transition: filter var(--t-slow), opacity var(--t-slow), transform var(--t-slow);
 }
 
-// ── Invertida: curvas TL (270°) y BR (90°) ───────────────────────────
-// Mismo patrón exacto — solo cambia el ángulo de arranque:
-// from 45deg → 0° = TR (punta), 90° = BR (curva), 270° = TL (curva)
-
+// Hoja invertida: curvas en TL y BR
 .leaf-wrapper.inverted .leaf-glow-border {
-  background-image:
-    conic-gradient(
-      from 45deg at 50% 50%,
-
-      rgba(46, 198, 67, 0.06)   0deg,  // TR  — punta
-      rgba(46, 198, 67, 0.12)  22deg,
-      rgba(46, 198, 67, 0.28)  42deg,
-      rgba(46, 198, 67, 0.55)  62deg,
-      rgba(46, 198, 67, 0.82)  78deg,
-      var(--qrl-green)          90deg, // BR  — curva
-      rgba(46, 198, 67, 0.82) 102deg,
-      rgba(46, 198, 67, 0.55) 118deg,
-      rgba(46, 198, 67, 0.28) 138deg,
-      rgba(46, 198, 67, 0.12) 158deg,
-      rgba(46, 198, 67, 0.06) 180deg,  // BL  — punta
-      rgba(46, 198, 67, 0.12) 202deg,
-      rgba(46, 198, 67, 0.28) 222deg,
-      rgba(46, 198, 67, 0.55) 242deg,
-      rgba(46, 198, 67, 0.82) 258deg,
-      var(--qrl-green)         270deg, // TL  — curva
-      rgba(46, 198, 67, 0.82) 282deg,
-      rgba(46, 198, 67, 0.55) 298deg,
-      rgba(46, 198, 67, 0.28) 318deg,
-      rgba(46, 198, 67, 0.12) 338deg,
-      rgba(46, 198, 67, 0.06) 360deg   // TR  — punta
-    );
+  background:
+    radial-gradient(ellipse 60% 55% at   0%   0%, rgba(46,198,67,0.60) 0%, transparent 70%),
+    radial-gradient(ellipse 55% 50% at 100% 100%, rgba(46,198,67,0.40) 0%, transparent 65%);
 }
 
 .leaf-wrapper:hover .leaf-glow-border {
-  filter: blur(5px) brightness(1.12);
-  opacity: 1.0;
-  transform: scale(1.04);
+  filter: blur(10px) brightness(1.1);
+  opacity: 1;
+  transform: scale(1.03);
 }
 
-// ============================================================
-//  CAPA 1 — MÁSCARA / CLIP
-//
-//  inset: 4px → deja un delgado espacio donde el glow se asoma,
-//  creando el "borde de luz" sin necesidad de border sólido.
-//  SIN mask-image → la imagen no se difumina de forma uniforme.
-// ============================================================
+// ── Capa 1: ventana recortada ─────────────────────────────────
+// isolation: isolate establece un stacking context local para que
+// el z-index de ::after y .leaf-parallax sea relativo a .leaf-mask
+// y no se mezcle con el stacking context del padre.
 
 .leaf-mask {
   position: absolute;
   inset: 4px;
-  background: transparent;
   border-radius: inherit;
   overflow: hidden;
+  isolation: isolate;   // stacking context propio → z-index confiables
   z-index: 1;
 }
 
-// ============================================================
-//  CAPA PARALLAX
-//
-//  .leaf-parallax = el "fondo" que el JS desliza verticalmente.
-//  .leaf-mask actúa como la "ventana" recortada: overflow:hidden
-//  garantiza que solo se vea la porción dentro de la forma de hoja.
-//
-//  inset: -55% 0 → extiende el contenedor 55% del alto de .leaf-mask
-//  por arriba y por abajo, dando margen suficiente para que la imagen
-//  nunca muestre bordes en blanco al desplazarse.
-//
-//  @ViewChild → la referencia al DOM es directa y confiable:
-//  el elemento siempre está en el DOM, aunque imageSrc llegue
-//  async desde Payload CMS.
-//
-//  Flujo:
-//    scroll → rAF → JS → leafParallaxRef.nativeElement.style.transform
-//                      → imagen se desliza dentro del frame (ventana)
-// ============================================================
+// ── Capa 1a: contenedor parallax (JS escribe translateY aquí) ─
 
 .leaf-parallax {
   position: absolute;
-  // Buffer: extiende 55% del alto del frame por arriba y por abajo.
-  // Con un frame de ~400px → 220px de buffer en cada dirección.
-  // El parallaxStrength máximo (220px) cabe justo en ese margen,
-  // garantizando que la imagen nunca muestre bordes en blanco.
+  // Buffer ±55% del alto del frame (~220px con frame de 400px).
+  // Garantiza que la imagen nunca muestre bordes en blanco al desplazarse.
   inset: -55% 0;
-  // JS escribe transform directamente via @ViewChild → sin CSS vars.
-  // GPU layer: el browser no hace repaint en cada frame.
   will-change: transform;
+  z-index: 1;           // dentro del isolation de .leaf-mask
 }
-
-// ============================================================
-//  IMAGEN + BLEND INTERNO DIRECCIONAL
-//
-//  .leaf-media llena .leaf-parallax (position:absolute inset:0).
-//  La imagen siempre cubre el área extendida con background-size:cover.
-//  El blend sigue los ángulos curvos de la hoja.
-//  mix-blend-mode: overlay → colorea sin destruir los detalles.
-// ============================================================
 
 .leaf-media {
   position: absolute;
@@ -245,40 +98,37 @@
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  // Sin transition de transform: el parallax JS usa rAF, no CSS transition
-
-  // Blend interno en los ángulos curvos (hoja normal: top-right y bottom-left)
-  &::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    z-index: 1;
-    pointer-events: none;
-
-    background:
-      radial-gradient(ellipse 58% 52% at 100%   0%, rgba(46, 198, 67, 0.32) 0%, transparent 68%),
-      radial-gradient(ellipse 50% 45% at   0% 100%, rgba(46, 198, 67, 0.18) 0%, transparent 65%),
-      linear-gradient(225deg, rgba(46, 198, 67, 0.06) 0%, transparent 55%);
-
-    mix-blend-mode: overlay;
-  }
+  transition: transform 0.9s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-// Blend para hoja invertida (curvas en top-left y bottom-right)
-.leaf-wrapper.inverted .leaf-media::after {
+// Zoom sutil en hover (independiente del parallax que actúa en .leaf-parallax)
+.leaf-wrapper:hover .leaf-media {
+  transform: scale(1.05);
+}
+
+// ── Capa 1b: viñeta interna sobre la imagen ───────────────────
+// z:2 > z:1 (.leaf-parallax) → siempre encima de la imagen.
+// overflow:hidden en .leaf-mask lo recorta a la forma de hoja.
+// pointer-events:none → no interfiere con el scroll/hover.
+
+.leaf-mask::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  // Viñeta radial + gradiente top/bottom para profundidad
   background:
-    radial-gradient(ellipse 58% 52% at   0%   0%, rgba(46, 198, 67, 0.32) 0%, transparent 68%),
-    radial-gradient(ellipse 50% 45% at 100% 100%, rgba(46, 198, 67, 0.18) 0%, transparent 65%),
-    linear-gradient(135deg, rgba(46, 198, 67, 0.06) 0%, transparent 55%);
+    radial-gradient(ellipse at 50% 50%, transparent 50%, rgba(4, 12, 35, 0.30) 100%),
+    linear-gradient(to bottom,
+      rgba(4, 12, 35, 0.10)  0%,
+      transparent            28%,
+      transparent            72%,
+      rgba(4, 12, 35, 0.18) 100%
+    );
 }
 
-// El hover zoom se eliminó de la imagen — la imagen tiene el
-// efecto parallax al hacer scroll. El frame sí se eleva al hover
-// (ver .leaf-wrapper:hover más abajo).
-
-// ============================================================
-//  SLOT GENÉRICO (sin imagen)
-// ============================================================
+// ── Slot genérico (sin imagen) ────────────────────────────────
 
 .leaf-content {
   height: 100%;
@@ -291,11 +141,10 @@
     rgba(46, 198, 67, 0.07) 0%,
     transparent 65%
   );
+  z-index: 1;
 }
 
-// ============================================================
-//  RESPONSIVE
-// ============================================================
+// ── Responsive ───────────────────────────────────────────────
 
 @include bp(sm) {
   .leaf-wrapper {
