@@ -18,6 +18,7 @@ export class App implements OnInit {
   ngOnInit(): void {
     if (isPlatformBrowser(this.platformId)) {
       AOS.init({ duration: 800, once: true, offset: 100, easing: 'ease-out-cubic' });
+      (window as any).__qrlHidePreloader?.();
     }
   }
 }
