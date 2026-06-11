@@ -25,6 +25,10 @@ export const UI: Record<Lang, Record<string, string>> = {
     'product.related':     'Productos relacionados',
     'product.notFound':    'Producto no encontrado.',
 
+    'vigilance.heroEyebrow':  'Farmacovigilancia',
+    'vigilance.heroTitle':    'Tu seguridad, nuestra responsabilidad',
+    'vigilance.heroSubtitle': 'Reporta cualquier efecto adverso de nuestros medicamentos y contribuye a la seguridad de todos los pacientes.',
+
     'vigilance.eyebrow': 'Información Importante',
     'vigilance.title':   '¿Qué necesitas saber?',
   },
@@ -51,6 +55,10 @@ export const UI: Record<Lang, Record<string, string>> = {
     'product.backToAll':   '← View all products',
     'product.related':     'Related products',
     'product.notFound':    'Product not found.',
+
+    'vigilance.heroEyebrow':  'Pharmacovigilance',
+    'vigilance.heroTitle':    'Your safety, our responsibility',
+    'vigilance.heroSubtitle': 'Report any adverse effects from our medications and contribute to the safety of all patients.',
 
     'vigilance.eyebrow': 'Important Information',
     'vigilance.title':   'What you need to know',
