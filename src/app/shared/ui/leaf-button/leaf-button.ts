@@ -3,7 +3,6 @@ import { NgClass } from '@angular/common';
 
 @Component({
   selector: 'app-leaf-button',
-  standalone: true,
   imports: [NgClass],
   templateUrl: './leaf-button.html',
   styleUrl:    './leaf-button.scss',

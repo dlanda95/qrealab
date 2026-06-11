@@ -1,9 +1,9 @@
 import { Component, Input, ElementRef, AfterViewInit, inject, PLATFORM_ID } from '@angular/core';
-import { CommonModule, isPlatformBrowser } from '@angular/common';
+import { NgClass, isPlatformBrowser } from '@angular/common';
 
 @Component({
   selector: 'app-section-wrapper',
-  imports: [CommonModule],
+  imports: [NgClass],
   templateUrl: './section-wrapper.html',
   styleUrl: './section-wrapper.scss',
 })

@@ -14,11 +14,11 @@ export class NavService {
 
   settings = signal<NavSettings>(DEFAULT_NAV_SETTINGS);
 
-  private loaded  = signal(false);
+  private loaded  = false;
   private shared$: Observable<NavSettings> | null = null;
 
   load(): Observable<NavSettings> {
-    if (this.loaded()) return of(this.settings());
+    if (this.loaded) return of(this.settings());
 
     if (!this.shared$) {
       const locale = this.lang.currentLang();
@@ -26,7 +26,7 @@ export class NavService {
         .get<any>(`${this.base}/api/globals/nav-settings?locale=${locale}&depth=0`)
         .pipe(
           map(data => this.mapResponse(data)),
-          tap(s => { this.settings.set(s); this.loaded.set(true); }),
+          tap(s => { this.settings.set(s); this.loaded = true; }),
           catchError(() => of(this.settings())),
           shareReplay(1),
         );

@@ -1,7 +1,7 @@
 import {
   Component, Input, ViewChild, ElementRef,
   AfterViewInit, OnChanges, OnDestroy, SimpleChanges,
-  PLATFORM_ID, Inject,
+  PLATFORM_ID, inject,
 } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 
@@ -59,12 +59,9 @@ export class LeafFrame implements AfterViewInit, OnChanges, OnDestroy {
   /** Referencia directa al contenedor parallax (siempre en DOM). */
   @ViewChild('leafParallax') private leafParallaxRef!: ElementRef<HTMLElement>;
 
+  private el         = inject<ElementRef<HTMLElement>>(ElementRef);
+  private platformId = inject(PLATFORM_ID);
   private rafId: number | null = null;
-
-  constructor(
-    private el: ElementRef<HTMLElement>,
-    @Inject(PLATFORM_ID) private platformId: Object,
-  ) {}
 
   // ── Lifecycle ────────────────────────────────────────────────
 

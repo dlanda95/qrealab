@@ -5,5 +5,7 @@
 </div>
 
 <app-footer></app-footer>
-<app-contact-modal></app-contact-modal>
 
+@defer (when modal.isOpen(); prefetch on idle) {
+  <app-contact-modal></app-contact-modal>
+}

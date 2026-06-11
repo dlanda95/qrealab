@@ -7,7 +7,6 @@ import { AlliesSection }         from './sections/allies-section/allies-section'
 
 @Component({
   selector: 'app-about',
-  standalone: true,
   imports: [AboutHeroSection, MissionVisionSection, TeamSection, AlliesSection],
   templateUrl: './about.html',
   styleUrl:    './about.scss',

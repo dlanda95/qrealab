@@ -1,8 +1,3 @@
-// ============================================================
-//  FOOTER — Service
-//  Consume la API de Payload CMS (colección: footer)
-// ============================================================
-
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { map, Observable } from 'rxjs';

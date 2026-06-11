@@ -4,7 +4,6 @@ import { AboutService }   from '../../services/about.service';
 
 @Component({
   selector: 'app-allies-section',
-  standalone: true,
   imports: [SectionWrapper],
   templateUrl: './allies-section.html',
   styleUrl:    './allies-section.scss',

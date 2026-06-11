@@ -1,12 +1,13 @@
 import { Component, OnInit, inject, signal } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
+import { switchMap, map, of } from 'rxjs';
 
-import { LeafFrame }     from '../../../shared/ui/leaf-frame/leaf-frame';
-import { PageHeader }    from '../../../shared/ui/page-header/page-header';
-import { ProductCard }   from '../../../shared/ui/product-card/product-card';
+import { LeafFrame }       from '../../../shared/ui/leaf-frame/leaf-frame';
+import { PageHeader }      from '../../../shared/ui/page-header/page-header';
+import { ProductCard }     from '../../../shared/ui/product-card/product-card';
 import { ProductsService } from '../services/products.service';
-import { Product } from '../../../shared/models/product.interface';
-import { TranslatePipe } from '../../../shared/pipes/translate.pipe';
+import { Product }         from '../../../shared/models/product.interface';
+import { TranslatePipe }   from '../../../shared/pipes/translate.pipe';
 import { LanguageService } from '../../../core/i18n/language.service';
 
 @Component({
@@ -29,18 +30,24 @@ export class ProductDetail implements OnInit {
   ngOnInit(): void {
     const slug = this.route.snapshot.paramMap.get('slug') ?? '';
 
-    this.svc.getProductBySlug(slug).subscribe({
-      next: product => {
-        if (!product) { this.notFound.set(true); this.loading.set(false); return; }
-        this.product.set(product);
+    this.svc.getProductBySlug(slug).pipe(
+      switchMap(product => {
+        if (!product) return of({ product: null, related: [] as Product[] });
+        return this.svc.getProducts().pipe(
+          map(all => ({
+            product,
+            related: all
+              .filter(p => p.category.slug === product.category.slug && p.id !== product.id)
+              .slice(0, 3),
+          }))
+        );
+      })
+    ).subscribe({
+      next: ({ product, related }) => {
         this.loading.set(false);
-
-        // Load related products from the same category
-        this.svc.getProducts().subscribe(all => {
-          this.related.set(
-            all.filter(p => p.category.slug === product.category.slug && p.id !== product.id).slice(0, 3)
-          );
-        });
+        if (!product) { this.notFound.set(true); return; }
+        this.product.set(product);
+        this.related.set(related);
       },
       error: () => { this.notFound.set(true); this.loading.set(false); },
     });

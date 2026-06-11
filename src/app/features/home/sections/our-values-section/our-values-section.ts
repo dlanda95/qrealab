@@ -8,7 +8,6 @@ import { OurValuesSection as OurValuesSectionData } from '../../models/our-value
 
 @Component({
   selector: 'app-our-values-section',
-  standalone: true,
   imports: [SectionWrapper, LucideAngularModule, LeafFrame],
   templateUrl: './our-values-section.html',
   styleUrl:    './our-values-section.scss',

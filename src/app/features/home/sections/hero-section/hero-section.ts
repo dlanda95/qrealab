@@ -1,13 +1,12 @@
 import { Component, OnInit, signal, inject } from '@angular/core';
 
-import { HeroCarouselComponent } from '../../../../shared/ui/hero-carousel/hero-carousel';
+import { HeroCarousel } from '../../../../shared/ui/hero-carousel/hero-carousel';
 import { HomeService }           from '../../services/home.service';
 import { HeroSlide }             from '../../../../shared/models/hero-slide.interface';
 
 @Component({
   selector: 'app-home-hero',
-  standalone: true,
-  imports: [HeroCarouselComponent],
+  imports: [HeroCarousel],
   templateUrl: './hero-section.html',
 })
 export class HeroSection implements OnInit {

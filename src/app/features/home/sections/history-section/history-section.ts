@@ -8,7 +8,6 @@ interface SectionData { title: string; description: string[]; image: string; }
 
 @Component({
   selector: 'app-history-section',
-  standalone: true,
   imports: [SectionWrapper, SplitSection],
   templateUrl: './history-section.html',
 })

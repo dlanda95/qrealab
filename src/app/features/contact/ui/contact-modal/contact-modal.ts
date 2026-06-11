@@ -17,7 +17,6 @@ type SubmitStatus = 'idle' | 'loading' | 'success' | 'error';
 
 @Component({
   selector: 'app-contact-modal',
-  standalone: true,
   imports: [CommonModule, ReactiveFormsModule, LucideAngularModule, LeafButton],
   templateUrl: './contact-modal.html',
   styleUrl:    './contact-modal.scss',

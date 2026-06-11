@@ -14,11 +14,11 @@ export class HomeService {
 
   settings = signal<HomeSettings>(DEFAULT_HOME_SETTINGS);
 
-  private loaded  = signal(false);
+  private loaded  = false;
   private shared$: Observable<HomeSettings> | null = null;
 
   load(): Observable<HomeSettings> {
-    if (this.loaded()) return of(this.settings());
+    if (this.loaded) return of(this.settings());
 
     if (!this.shared$) {
       const locale = this.lang.currentLang();
@@ -26,7 +26,7 @@ export class HomeService {
         .get<any>(`${this.base}/api/globals/home-settings?locale=${locale}&depth=2`)
         .pipe(
           map(data => this.mapResponse(data)),
-          tap(s => { this.settings.set(s); this.loaded.set(true); }),
+          tap(s => { this.settings.set(s); this.loaded = true; }),
           catchError(() => of(this.settings())),
           shareReplay(1),
         );
