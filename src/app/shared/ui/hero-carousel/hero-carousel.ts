@@ -8,13 +8,12 @@ register();
 
 @Component({
   selector: 'qrl-hero-carousel',
-  standalone: true,
   imports: [RouterLink],
   templateUrl: './hero-carousel.html',
   styleUrl: './hero-carousel.scss',
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
-export class HeroCarouselComponent implements AfterViewInit {
+export class HeroCarousel implements AfterViewInit {
   @Input() slides: HeroSlide[] = [];
   @ViewChild('swiper') swiperRef!: ElementRef;
 

@@ -1,5 +1,5 @@
 import { ApplicationConfig, provideBrowserGlobalErrorListeners, provideZonelessChangeDetection } from '@angular/core';
-import { provideRouter, withInMemoryScrolling } from '@angular/router';
+import { provideRouter, withInMemoryScrolling, withPreloading, PreloadAllModules } from '@angular/router';
 
 import { provideHttpClient, withFetch } from '@angular/common/http';
 
@@ -26,6 +26,7 @@ export const appConfig: ApplicationConfig = {
     provideZonelessChangeDetection(),
     provideRouter(
       routes,
+      withPreloading(PreloadAllModules),
       withInMemoryScrolling({
         scrollPositionRestoration: 'top',  // scroll al inicio en cada navegación
         anchorScrolling: 'enabled',        // permite #fragment links

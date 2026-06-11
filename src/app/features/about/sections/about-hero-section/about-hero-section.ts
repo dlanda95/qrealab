@@ -4,7 +4,6 @@ import { HeroSection } from '../../../../shared/ui/hero-section/hero-section';
 
 @Component({
   selector: 'app-about-hero-section',
-  standalone: true,
   imports: [HeroSection],
   templateUrl: './about-hero-section.html',
   styleUrl:    './about-hero-section.scss',

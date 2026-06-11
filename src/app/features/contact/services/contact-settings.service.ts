@@ -1,8 +1,6 @@
 import { Injectable, inject, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { tap } from 'rxjs/operators';
-import { Observable, of } from 'rxjs';
-import { catchError } from 'rxjs/operators';
+import { Observable, of, tap, catchError } from 'rxjs';
 
 import { environment }                             from '../../../../environments/environment';
 import { LanguageService }                         from '../../../core/i18n/language.service';

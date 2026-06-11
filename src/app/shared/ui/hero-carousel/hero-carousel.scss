@@ -9,12 +9,12 @@
 .hero-carousel-wrapper {
   position: relative;
   width: 100%;
+  background-color: var(--qrl-blue);
+  overflow: hidden;
 
-  // Altura fluida: 92% de la viewport en desktop, 100% en móvil
   height: 92vh;
   min-height: 560px;
 
-  // En móvil usamos svh (small viewport height) para evitar el salto del browser-chrome
   @supports (height: 100svh) {
     height: 92svh;
   }
@@ -27,9 +27,6 @@
       height: 100svh;
     }
   }
-
-  background-color: var(--qrl-blue);
-  overflow: hidden;
 }
 
 // --- Swiper web component ---

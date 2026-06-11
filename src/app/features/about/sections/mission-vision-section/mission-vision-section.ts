@@ -5,7 +5,6 @@ import { AboutService }   from '../../services/about.service';
 
 @Component({
   selector: 'app-mission-vision-section',
-  standalone: true,
   imports: [SectionWrapper, LucideAngularModule],
   templateUrl: './mission-vision-section.html',
   styleUrl:    './mission-vision-section.scss',

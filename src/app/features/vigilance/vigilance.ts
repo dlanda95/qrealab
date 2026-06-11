@@ -1,6 +1,6 @@
 import { Component, OnInit, inject, signal } from '@angular/core';
 
-import { HeroCarouselComponent } from '../../shared/ui/hero-carousel/hero-carousel';
+import { HeroCarousel } from '../../shared/ui/hero-carousel/hero-carousel';
 import { SectionWrapper }        from '../../shared/ui/section-wrapper/section-wrapper';
 import { InfoCarousel }          from '../../shared/ui/info-carousel/info-carousel';
 import { VigilanceService }      from './services/vigilance.service';
@@ -10,7 +10,7 @@ import { InfoBlock }             from './models/vigilance.interface';
 
 @Component({
   selector: 'app-vigilance',
-  imports: [HeroCarouselComponent, SectionWrapper, InfoCarousel],
+  imports: [HeroCarousel, SectionWrapper, InfoCarousel],
   templateUrl: './vigilance.html',
   styleUrl: './vigilance.scss',
 })

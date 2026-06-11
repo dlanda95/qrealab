@@ -2,7 +2,6 @@ import { Component, Input } from '@angular/core';
 
 @Component({
   selector: 'app-person-card',
-  standalone: true,
   imports: [],
   templateUrl: './person-card.html',
   styleUrl:    './person-card.scss',

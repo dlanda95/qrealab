@@ -5,7 +5,6 @@ import { AboutService }   from '../../services/about.service';
 
 @Component({
   selector: 'app-team-section',
-  standalone: true,
   imports: [SectionWrapper, PersonCard],
   templateUrl: './team-section.html',
   styleUrl:    './team-section.scss',

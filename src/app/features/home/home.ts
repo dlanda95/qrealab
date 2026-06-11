@@ -7,7 +7,6 @@ import { OurValuesSection } from './sections/our-values-section/our-values-secti
 
 @Component({
   selector: 'app-home',
-  standalone: true,
   imports: [HeroSection, HistorySection, WhoweareSection, OurValuesSection],
   templateUrl: './home.html',
 })

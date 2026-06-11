@@ -12,29 +12,46 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet">
 
   <style>
+    /* ── Contenedor ──────────────────────────────────────────── */
     #qrl-preloader {
       position: fixed;
       inset: 0;
       z-index: 9999;
+      pointer-events: none;
+    }
+
+    /* ── Cortinas (misma degradación que el hero → transición seamless) */
+    .qrl-curtain {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      width: 50%;
+      background: linear-gradient(160deg, #0f2460 0%, #1a3a8f 55%, #1e3f9e 100%);
+      pointer-events: all;
+    }
+    #qrl-c-left  { left: 0; }
+    #qrl-c-right { right: 0; }
+
+    /* Línea central sutil para separar visualmente las dos cortinas */
+    #qrl-c-left::after {
+      content: '';
+      position: absolute;
+      right: 0; top: 0; bottom: 0;
+      width: 1px;
+      background: rgba(255,255,255,0.08);
+    }
+
+    /* ── Centro: logo + anillo (posicionado sobre ambas cortinas) */
+    .qrl-pre-center {
+      position: absolute;
+      inset: 0;
+      z-index: 10;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      background: #f5f8ff;
-      transition: opacity 0.6s cubic-bezier(0.4,0,0.2,1),
-                  visibility 0.6s cubic-bezier(0.4,0,0.2,1);
-    }
-    #qrl-preloader.hide {
-      opacity: 0;
-      visibility: hidden;
-    }
-
-    /* ── Centro ─────────────────────────────────────────────── */
-    .qrl-pre-center {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 32px;
+      gap: 28px;
+      pointer-events: none;
     }
 
     /* ── Anillo + logo ───────────────────────────────────────── */
@@ -50,9 +67,17 @@
       width: 100%;
       height: 100%;
     }
-    .qrl-pre-track { opacity: 0.12; }
-    .qrl-pre-arc   { animation: qrl-spin 1.6s cubic-bezier(0.45,0.05,0.55,0.95) infinite; transform-origin: 68px 68px; }
-    .qrl-pre-glow  { animation: qrl-spin 1.6s cubic-bezier(0.45,0.05,0.55,0.95) infinite; transform-origin: 68px 68px; filter: blur(4px); opacity: 0.35; }
+    .qrl-pre-track { opacity: 0.15; }
+    .qrl-pre-arc  {
+      animation: qrl-spin 1.6s cubic-bezier(0.45,0.05,0.55,0.95) infinite;
+      transform-origin: 68px 68px;
+    }
+    .qrl-pre-glow {
+      animation: qrl-spin 1.6s cubic-bezier(0.45,0.05,0.55,0.95) infinite;
+      transform-origin: 68px 68px;
+      filter: blur(5px);
+      opacity: 0.4;
+    }
     .qrl-pre-logo {
       position: absolute;
       inset: 0;
@@ -63,13 +88,13 @@
       animation: qrl-logoin 0.5s 0.3s ease both;
     }
 
-    /* ── Nombre empresa ──────────────────────────────────────── */
+    /* ── Nombre ──────────────────────────────────────────────── */
     .qrl-pre-name {
       font-family: 'Plus Jakarta Sans', sans-serif;
-      font-size: 13px;
+      font-size: 12px;
       font-weight: 700;
-      letter-spacing: 0.28em;
-      color: #1a3a8f;
+      letter-spacing: 0.32em;
+      color: rgba(255,255,255,0.75);
       text-transform: uppercase;
       opacity: 0;
       animation: qrl-fadein 0.5s 0.5s ease forwards;
@@ -77,56 +102,53 @@
 
     /* ── Barra de progreso ───────────────────────────────────── */
     .qrl-pre-bar-wrap {
-      position: fixed;
+      position: absolute;
       bottom: 0;
       left: 0;
       right: 0;
+      z-index: 10;
       height: 3px;
-      background: rgba(26,58,143,0.08);
+      background: rgba(255,255,255,0.08);
     }
     .qrl-pre-bar {
       height: 100%;
       width: 0%;
-      background: linear-gradient(90deg, #1a3a8f 0%, #2060c8 60%, #2EC643 100%);
+      background: linear-gradient(90deg, #1a3a8f 0%, #2060c8 50%, #2EC643 100%);
       animation: qrl-progress 2.5s cubic-bezier(0.4,0,0.2,1) forwards;
       border-radius: 0 2px 2px 0;
     }
 
     /* ── Keyframes ───────────────────────────────────────────── */
     @keyframes qrl-scalein {
-      from { opacity: 0; transform: scale(0.7); }
+      from { opacity: 0; transform: scale(0.72); }
       to   { opacity: 1; transform: scale(1); }
     }
     @keyframes qrl-logoin {
-      from { opacity: 0; transform: scale(0.8); }
+      from { opacity: 0; transform: scale(0.82); }
       to   { opacity: 1; transform: scale(1); }
     }
-    @keyframes qrl-fadein {
-      to { opacity: 1; }
-    }
-    @keyframes qrl-spin {
-      to { transform: rotate(360deg); }
-    }
+    @keyframes qrl-fadein { to { opacity: 1; } }
+    @keyframes qrl-spin { to { transform: rotate(360deg); } }
     @keyframes qrl-progress {
       0%   { width: 0%; }
-      60%  { width: 75%; }
-      85%  { width: 88%; }
+      60%  { width: 76%; }
+      85%  { width: 89%; }
       100% { width: 98%; }
     }
   </style>
 </head>
 <body>
   <div id="qrl-preloader">
+    <div id="qrl-c-left"  class="qrl-curtain"></div>
+    <div id="qrl-c-right" class="qrl-curtain"></div>
+
     <div class="qrl-pre-center">
       <div class="qrl-pre-ring">
         <svg viewBox="0 0 136 136" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <!-- Track -->
           <circle class="qrl-pre-track" cx="68" cy="68" r="62" stroke="#1a3a8f" stroke-width="5"/>
-          <!-- Glow (duplicado desenfocado para el halo) -->
           <circle class="qrl-pre-glow" cx="68" cy="68" r="62"
             stroke="url(#qrl-g1)" stroke-width="5" stroke-linecap="round"
             stroke-dasharray="260 130"/>
-          <!-- Arco principal -->
           <circle class="qrl-pre-arc" cx="68" cy="68" r="62"
             stroke="url(#qrl-g1)" stroke-width="5" stroke-linecap="round"
             stroke-dasharray="260 130"/>
@@ -141,6 +163,7 @@
       </div>
       <div class="qrl-pre-name">QREALAB</div>
     </div>
+
     <div class="qrl-pre-bar-wrap">
       <div class="qrl-pre-bar"></div>
     </div>
@@ -149,20 +172,7 @@
   <app-root></app-root>
 
   <script>
-    // Tiempo mínimo de 2.5 s para que la animación sea visible
     window.__qrlPreloaderStart = Date.now();
-    window.__qrlHidePreloader = function() {
-      var MIN = 2500;
-      var elapsed = Date.now() - window.__qrlPreloaderStart;
-      var wait = Math.max(0, MIN - elapsed);
-      setTimeout(function() {
-        var el = document.getElementById('qrl-preloader');
-        if (el) {
-          el.classList.add('hide');
-          setTimeout(function() { el.remove(); }, 650);
-        }
-      }, wait);
-    };
   </script>
 </body>
 </html>

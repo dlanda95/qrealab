@@ -1,5 +1,5 @@
 import { Component, inject, signal, PLATFORM_ID, OnInit, OnDestroy } from '@angular/core';
-import { CommonModule, isPlatformBrowser } from '@angular/common';
+import { isPlatformBrowser } from '@angular/common';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { LucideAngularModule } from 'lucide-angular';
 import { LanguageService }      from '../../../core/i18n/language.service';
@@ -8,7 +8,7 @@ import { NavService }           from '../../../core/nav/nav.service';
 
 @Component({
   selector: 'app-navbar',
-  imports: [CommonModule, RouterLink, RouterLinkActive, LucideAngularModule],
+  imports: [RouterLink, RouterLinkActive, LucideAngularModule],
   templateUrl: './navbar.html',
   styleUrl: './navbar.scss',
 })

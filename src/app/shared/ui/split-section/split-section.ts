@@ -3,7 +3,7 @@ import { LeafFrame } from '../leaf-frame/leaf-frame';
 
 @Component({
   selector: 'app-split-section',
-  imports: [LeafFrame], // @if/@for son built-in en Angular 17+
+  imports: [LeafFrame],
   templateUrl: './split-section.html',
   styleUrl: './split-section.scss',
 })
