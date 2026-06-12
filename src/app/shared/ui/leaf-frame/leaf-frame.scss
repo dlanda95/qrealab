@@ -5,11 +5,19 @@
 //  LEAF FRAME
 //
 //  Capas (de abajo a arriba):
-//    0. .leaf-glow-border  — halo difuso detrás del borde
-//    1. .leaf-mask         — ventana con overflow:hidden + isolation
-//         1a. .leaf-parallax (z:1) — fondo que JS desliza verticalmente
-//               └── .leaf-media   — imagen como background-image
-//         1b. ::after (z:2)       — viñeta interna sobre la imagen
+//    0. .leaf-wrapper          — gradiente azul→verde (borde visible)
+//    1. .leaf-glow-border      — halo difuso en esquinas curvas
+//    2. .leaf-mask (inset:3px) — ventana recortada (muestra 3px del gradiente)
+//         2a. .leaf-parallax   — fondo deslizante por JS
+//               └── .leaf-media — imagen
+//         2b. ::after          — viñeta interna
+//
+//  Técnica del borde degradado:
+//  ─────────────────────────────
+//  El wrapper tiene un gradiente de fondo (azul → verde).
+//  La máscara se posiciona a 3px del borde, dejando ver ese
+//  gradiente como un anillo de 3px que sigue exactamente el
+//  border-radius de la hoja — sin SVG, sin pseudo-elementos extra.
 // ============================================================
 
 :host {
@@ -29,69 +37,80 @@
   min-width: 260px;
   border-radius: var(--leaf-curve);
   margin: 0 auto;
-  // box-shadow spread=0 traza el outline exacto del border-radius → borde completo de la hoja
-  box-shadow: 0 0 0 1.5px rgba(46, 198, 67, 0.65);
-  transition: transform var(--t-slow), box-shadow var(--t-slow);
+
+  // Gradiente del borde: azul profundo → verde brillante.
+  // La máscara a inset:3px deja visible 3px de este fondo
+  // como un borde con degradado que sigue la curva de la hoja.
+  background: var(--qrl-green);
+
+  // Sombra exterior: profundidad neutra + leve toque verde
+  box-shadow:
+    0 10px 40px rgba(10, 17, 69, 0.18),
+    0  3px 10px rgba(10, 17, 69, 0.10);
+
+  transition:
+    transform    var(--t-slow),
+    box-shadow   var(--t-slow);
 
   &:hover {
-    transform: translateY(-6px);
-    box-shadow: 0 0 0 2px rgba(46, 198, 67, 0.85);
+    transform: translateY(-7px);
+    box-shadow:
+      0 0  32px rgba(46, 198, 67, 0.28),
+      0 18px 52px rgba(10, 17, 69, 0.18),
+      0  4px 12px rgba(10, 17, 69, 0.10);
   }
+
   &.inverted { border-radius: var(--leaf-curve-inv); }
 }
 
-// ── Capa 0: halo verde detrás del borde ──────────────────────
-// Radiales ubicados en las esquinas curvas de cada variante
+// ── Capa 0: halo difuso en las esquinas curvas ────────────────
+// Refuerza visualmente la curvatura orgánica del borde.
 
 .leaf-glow-border {
   position: absolute;
-  inset: -8px;
+  inset: -10px;
   border-radius: inherit;
   z-index: 0;
   pointer-events: none;
-  // Halo difuso en las esquinas curvas (normal: TR y BL)
   background:
-    radial-gradient(ellipse 55% 50% at 100%   0%, rgba(46,198,67,0.45) 0%, transparent 70%),
-    radial-gradient(ellipse 50% 45% at   0% 100%, rgba(46,198,67,0.30) 0%, transparent 65%);
-  filter: blur(10px);
-  opacity: 0.7;
+    radial-gradient(ellipse 60% 55% at 100%   0%, rgba(46,198,67,0.55) 0%, transparent 65%),
+    radial-gradient(ellipse 55% 50% at   0% 100%, rgba(46,198,67,0.35) 0%, transparent 60%);
+  filter: blur(14px);
+  opacity: 0.75;
   transition: opacity var(--t-slow), filter var(--t-slow);
 }
 
 .leaf-wrapper.inverted .leaf-glow-border {
   background:
-    radial-gradient(ellipse 55% 50% at   0%   0%, rgba(46,198,67,0.45) 0%, transparent 70%),
-    radial-gradient(ellipse 50% 45% at 100% 100%, rgba(46,198,67,0.30) 0%, transparent 65%);
+    radial-gradient(ellipse 60% 55% at   0%   0%, rgba(46,198,67,0.55) 0%, transparent 65%),
+    radial-gradient(ellipse 55% 50% at 100% 100%, rgba(46,198,67,0.35) 0%, transparent 60%);
 }
 
 .leaf-wrapper:hover .leaf-glow-border {
   opacity: 1;
-  filter: blur(12px) brightness(1.1);
+  filter: blur(18px) brightness(1.15);
 }
 
 // ── Capa 1: ventana recortada ─────────────────────────────────
-// isolation: isolate establece un stacking context local para que
-// el z-index de ::after y .leaf-parallax sea relativo a .leaf-mask
-// y no se mezcle con el stacking context del padre.
+// inset: 3px → deja 3px del gradiente del wrapper visibles
+// como el borde de la hoja.
 
 .leaf-mask {
   position: absolute;
-  inset: 4px;
+  inset: 3px;
   border-radius: inherit;
   overflow: hidden;
-  isolation: isolate;   // stacking context propio → z-index confiables
+  isolation: isolate;
   z-index: 1;
 }
 
-// ── Capa 1a: contenedor parallax (JS escribe translateY aquí) ─
+// ── Capa 1a: contenedor parallax ─────────────────────────────
 
 .leaf-parallax {
   position: absolute;
-  // Buffer ±55% del alto del frame (~220px con frame de 400px).
-  // Garantiza que la imagen nunca muestre bordes en blanco al desplazarse.
   inset: -55% 0;
   will-change: transform;
-  z-index: 1;           // dentro del isolation de .leaf-mask
+  z-index: 1;
 }
 
 .leaf-media {
@@ -103,15 +122,11 @@
   transition: transform 0.9s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-// Zoom sutil en hover (independiente del parallax que actúa en .leaf-parallax)
 .leaf-wrapper:hover .leaf-media {
   transform: scale(1.05);
 }
 
 // ── Capa 1b: viñeta interna sobre la imagen ───────────────────
-// z:2 > z:1 (.leaf-parallax) → siempre encima de la imagen.
-// overflow:hidden en .leaf-mask lo recorta a la forma de hoja.
-// pointer-events:none → no interfiere con el scroll/hover.
 
 .leaf-mask::after {
   content: '';
@@ -119,14 +134,13 @@
   inset: 0;
   z-index: 2;
   pointer-events: none;
-  // Viñeta radial + gradiente top/bottom para profundidad
   background:
-    radial-gradient(ellipse at 50% 50%, transparent 50%, rgba(4, 12, 35, 0.30) 100%),
+    radial-gradient(ellipse at 50% 50%, transparent 50%, rgba(4, 12, 35, 0.28) 100%),
     linear-gradient(to bottom,
-      rgba(4, 12, 35, 0.10)  0%,
-      transparent            28%,
+      rgba(4, 12, 35, 0.08)  0%,
+      transparent            25%,
       transparent            72%,
-      rgba(4, 12, 35, 0.18) 100%
+      rgba(4, 12, 35, 0.16) 100%
     );
 }
 

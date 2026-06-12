@@ -3,50 +3,51 @@
 
 // ============================================================
 //  SPLIT SECTION
-//  Layout de dos columnas: texto + imagen de hoja
-//  Configurable via @Input: imagePosition ('left' | 'right'), leafInverted
+//  Dos columnas: texto (eyebrow + título + descripción + CTA)
+//  e imagen de hoja, invertibles vía @Input imagePosition.
 // ============================================================
 
 .split-layout {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  grid-template-areas: 'text image';   // Default: texto izq, imagen der
+  grid-template-areas: 'text image';
   gap: clamp(2.5rem, 6vw, 5rem);
   align-items: center;
 
-  // --- Imagen va a la derecha visualmente (reversed) ---
   &.reversed {
     grid-template-areas: 'image text';
   }
 
-  // --- Responsive: una columna en tablet / móvil ---
   @include bp(md) {
     grid-template-columns: 1fr;
-    gap: clamp(1.5rem, 5vw, 3rem);
-
-    // Siempre imagen arriba / texto abajo en móvil
-    // IMPORTANTE: necesitamos especificidad igual o mayor que &.reversed (0-2-0)
-    // por eso repetimos el override dentro del mismo bloque
-    grid-template-areas:
-      'image'
-      'text';
-
-    // Override explícito para .reversed en móvil
-    // (evita que la especificidad de .split-layout.reversed gane al media query)
-    &.reversed {
-      grid-template-areas:
-        'image'
-        'text';
-    }
+    gap: clamp(2rem, 5vw, 3rem);
+    grid-template-areas: 'image' 'text';
+    &.reversed { grid-template-areas: 'image' 'text'; }
   }
 }
 
-// Asignación de áreas a columnas
 .text-column  { grid-area: text; }
-.image-column { grid-area: image; }
+.image-column {
+  grid-area: image;
+  position: relative;
+
+  // Halo verde suave detrás de la hoja — da peso visual sin distraer
+  &::before {
+    content: '';
+    position: absolute;
+    inset: -12%;
+    background: radial-gradient(
+      circle,
+      rgba(46, 198, 67, 0.09) 0%,
+      transparent 68%
+    );
+    pointer-events: none;
+    z-index: 0;
+  }
+}
 
 // ============================================================
-//  COLUMNA DE TEXTO
+//  TEXTO
 // ============================================================
 
 .text-column {
@@ -60,28 +61,42 @@
   }
 }
 
+// Eyebrow pill — idéntico a ic-eyebrow / pv-eyebrow
+.section-eyebrow {
+  display: inline-block;
+  font-family: var(--font-body);
+  font-size: var(--text-xs);
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--qrl-green-dark);
+  background: var(--qrl-green-soft);
+  border: 1px solid rgba(46, 198, 67, 0.30);
+  padding: 5px 16px;
+  border-radius: 100px;
+  margin-bottom: var(--space-5);
+}
+
 .section-title {
   font-family: var(--font-heading);
-  font-size: var(--text-3xl);
+  font-size: clamp(1.85rem, 3.5vw, var(--text-4xl));
   font-weight: 800;
-  line-height: 1.15;
+  line-height: 1.1;
   letter-spacing: -0.03em;
   color: var(--qrl-text-main);
-  margin-bottom: var(--space-5);
+  margin-bottom: var(--space-3);
 
-  // Línea decorativa verde debajo del título
+  // Línea verde de anclaje bajo el título
   &::after {
     content: '';
     display: block;
-    width: 44px;
-    height: 4px;
+    width: 40px;
+    height: 3px;
     background: var(--qrl-green);
-    border-radius: 4px;
-    margin-top: var(--space-4);
+    border-radius: 3px;
+    margin-top: var(--space-5);
 
-    @include bp(md) {
-      margin-inline: auto; // Centrado en móvil
-    }
+    @include bp(md) { margin-inline: auto; }
   }
 }
 
@@ -91,45 +106,56 @@
   p {
     font-family: var(--font-body);
     font-size: var(--text-base);
-    line-height: 1.75;
+    line-height: 1.8;
     color: var(--qrl-text-body);
+
+    // Primera línea destaca ligeramente
+    &:first-child {
+      font-size: clamp(var(--text-base), 1.1vw + 0.7rem, var(--text-lg));
+      color: var(--qrl-text-main);
+      font-weight: 450;
+    }
 
     & + p { margin-top: var(--space-4); }
   }
 }
 
-// Botón de acción (opcional)
-.qrl-btn-link {
+// ============================================================
+//  CTA (opcional)
+// ============================================================
+
+.section-cta {
+  margin-top: var(--space-9);
+}
+
+.qrl-btn-pill {
   display: inline-flex;
   align-items: center;
   gap: var(--space-2);
-  margin-top: var(--space-8);
-  background: none;
+  padding: 13px 28px;
+  background: var(--qrl-blue);
+  color: #fff;
   border: none;
-  padding: 0;
-  cursor: pointer;
+  border-radius: 100px;
   font-family: var(--font-body);
   font-size: var(--text-sm);
   font-weight: 600;
-  color: var(--qrl-blue);
+  cursor: pointer;
   letter-spacing: 0.01em;
-  position: relative;
+  box-shadow: 0 4px 18px rgba(10, 17, 69, 0.22);
+  transition:
+    background    var(--t-base),
+    transform     var(--t-fast),
+    box-shadow    var(--t-base);
 
-  &::after {
-    content: '';
-    position: absolute;
-    bottom: -2px; left: 0;
-    width: 0; height: 2px;
-    background: var(--qrl-green);
-    border-radius: 2px;
-    transition: width var(--t-base);
-  }
+  svg { transition: transform var(--t-base); }
 
   &:hover {
-    color: var(--qrl-green-dark);
-    &::after { width: 100%; }
+    background: var(--qrl-green);
+    box-shadow: var(--shadow-green);
+    transform: translateY(-2px);
+    svg { transform: translateX(4px); }
   }
 
-  .arrow { transition: transform var(--t-base); }
-  &:hover .arrow { transform: translateX(4px); }
+  &:active { transform: translateY(0); }
 }
