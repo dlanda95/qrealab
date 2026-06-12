@@ -9,11 +9,12 @@ import { LeafFrame } from '../leaf-frame/leaf-frame';
 })
 export class SplitSection {
 
-  @Input() title: string = '';
-  @Input() description: string[] = [];
-  @Input() imageSrc: string = '';
-  @Input() ctaText?: string;
+  @Input() eyebrow:       string          = '';
+  @Input() title:         string          = '';
+  @Input() description:   string[]        = [];
+  @Input() imageSrc:      string          = '';
+  @Input() ctaText?:      string;
   @Input() imagePosition: 'left' | 'right' = 'right';
-  @Input() leafInverted: boolean = false;
+  @Input() leafInverted:  boolean         = false;
 
 }

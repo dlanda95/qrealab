@@ -2,13 +2,13 @@
   <app-section-wrapper backgroundColor="white">
     <div class="ov-section">
 
-      <!-- Header -->
-      <div class="ov-header">
+      <!-- ── Header centrado ─────────────────────────────────── -->
+      <header class="ov-header">
         <span class="ov-eyebrow">Lo que nos define</span>
         <h2 class="ov-title">{{ s.sectionTitle }}</h2>
-      </div>
+      </header>
 
-      <!-- Imagen + tarjetas -->
+      <!-- ── Imagen + tarjetas ─────────────────────────────────── -->
       <div class="ov-body">
 
         @if (s.image) {
@@ -25,18 +25,18 @@
                 <lucide-icon [name]="value.icon" class="ov-icon-svg"></lucide-icon>
               </div>
 
-              <h3 class="ov-card__title">{{ value.title }}</h3>
+              <div class="ov-card__body">
+                <h3 class="ov-card__title">{{ value.title }}</h3>
 
-              <ul class="ov-card__points">
-                @for (point of value.points; track $index) {
-                  <li>
-                    <strong>{{ point.label }}:</strong>
-                    <span>{{ point.description }}</span>
-                  </li>
-                }
-              </ul>
-
-              <div class="ov-card__line"></div>
+                <ul class="ov-card__points">
+                  @for (point of value.points; track $index) {
+                    <li>
+                      <strong>{{ point.label }}</strong>
+                      @if (point.description) {<span>: {{ point.description }}</span>}
+                    </li>
+                  }
+                </ul>
+              </div>
 
             </article>
           }

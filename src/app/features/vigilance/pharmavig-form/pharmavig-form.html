@@ -1,0 +1,201 @@
+<section class="pv-wrap">
+
+  <!-- Hoja decorativa — eco visual del hero ────────────────── -->
+  <div class="pv-leaf pv-leaf--tr" aria-hidden="true"></div>
+
+  <!-- ── Estado: cargando ──────────────────────────────────── -->
+  @if (status() === 'loading') {
+    <div class="pv-loading">
+      <div class="pv-spinner"></div>
+      <p>Cargando formulario…</p>
+    </div>
+  }
+
+  <!-- ── Estado: éxito ─────────────────────────────────────── -->
+  @if (status() === 'success') {
+    <div class="pv-inner" data-aos="fade-up">
+      <div class="pv-success">
+        <div class="pv-success-icon">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
+            <circle cx="12" cy="12" r="11" stroke="currentColor" stroke-width="1.5"/>
+            <path d="M7 12.5l3.5 3.5L17 8" stroke="currentColor" stroke-width="2"
+                  stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <h3>¡Reporte enviado!</h3>
+        <p>Nuestro equipo revisará su reporte y se comunicará si es necesario.</p>
+        <button class="pv-btn-ghost" (click)="reset()">Enviar otro reporte</button>
+      </div>
+    </div>
+  }
+
+  <!-- ── Formulario ────────────────────────────────────────── -->
+  @if (status() !== 'loading' && status() !== 'success' && config() && form()) {
+    <div class="pv-inner">
+
+      <!-- Encabezado de sección — mismo lenguaje visual que info-carousel -->
+      <header class="pv-section-head" data-aos="fade-up">
+        <span class="pv-eyebrow">{{ config()!.titulo }}</span>
+        <h2 class="pv-title">{{ config()!.subtitulo }}</h2>
+        @if (config()!.descripcion) {
+          <p class="pv-subtitle">{{ config()!.descripcion }}</p>
+        }
+      </header>
+
+      <!-- Card del formulario — limpio, sin header azul oscuro -->
+      <div class="pv-card" data-aos="fade-up" data-aos-delay="80">
+        <form [formGroup]="form()!" (ngSubmit)="submit()" novalidate>
+
+          @for (seccion of config()!.secciones; track seccion.titulo; let i = $index) {
+            @if (activeCampos(seccion).length > 0) {
+              <div class="pv-block" [ngClass]="{ 'pv-block--last': $last }">
+
+                <div class="pv-block-header">
+                  <span class="pv-block-badge">{{ i + 1 }}</span>
+                  <h3 class="pv-block-title">{{ seccion.titulo }}</h3>
+                </div>
+
+                <div class="pv-fields-grid">
+                  @for (campo of activeCampos(seccion); track campo.clave) {
+                    <div class="pv-field pv-field--{{ campo.ancho }}">
+
+                      <label class="pv-label" [for]="campo.clave">
+                        {{ campo.etiqueta }}
+                        @if (campo.requerido) { <span class="pv-required">*</span> }
+                      </label>
+
+                      @if (campo.tipo === 'text' || campo.tipo === 'email' || campo.tipo === 'number') {
+                        <input
+                          [id]="campo.clave" [type]="campo.tipo"
+                          [formControlName]="campo.clave"
+                          [placeholder]="campo.placeholder ?? ''"
+                          class="pv-input"
+                          [ngClass]="{ 'is-invalid': hasError(campo.clave) }">
+                      }
+
+                      @if (campo.tipo === 'date') {
+                        <input [id]="campo.clave" type="date"
+                          [formControlName]="campo.clave"
+                          class="pv-input pv-input--date"
+                          [ngClass]="{ 'is-invalid': hasError(campo.clave) }">
+                      }
+
+                      @if (campo.tipo === 'textarea') {
+                        <textarea [id]="campo.clave"
+                          [formControlName]="campo.clave"
+                          [placeholder]="campo.placeholder ?? ''"
+                          class="pv-textarea"
+                          [ngClass]="{ 'is-invalid': hasError(campo.clave) }"
+                          rows="3"></textarea>
+                      }
+
+                      @if (campo.tipo === 'select') {
+                        <select [id]="campo.clave" [formControlName]="campo.clave"
+                          class="pv-select"
+                          [ngClass]="{ 'is-invalid': hasError(campo.clave) }">
+                          <option value="">{{ campo.placeholder || 'Seleccione…' }}</option>
+                          @for (opt of campo.opciones; track opt.valor) {
+                            <option [value]="opt.valor">{{ opt.etiqueta }}</option>
+                          }
+                        </select>
+                      }
+
+                      @if (campo.tipo === 'radio') {
+                        <div class="pv-radio-group"
+                          [ngClass]="{ 'is-invalid': hasError(campo.clave) }">
+                          @for (opt of campo.opciones; track opt.valor) {
+                            <label class="pv-radio-pill"
+                              [ngClass]="{ 'is-selected': form()!.get(campo.clave)?.value === opt.valor }">
+                              <input type="radio" [name]="campo.clave"
+                                [value]="opt.valor" [formControlName]="campo.clave">
+                              {{ opt.etiqueta }}
+                            </label>
+                          }
+                        </div>
+                      }
+
+                      @if (hasError(campo.clave)) {
+                        <span class="pv-error">
+                          @if (campo.tipo === 'email') { Ingresa un correo válido. }
+                          @else { Este campo es requerido. }
+                        </span>
+                      }
+
+                    </div>
+                  }
+                </div>
+              </div>
+            }
+          }
+
+          <!-- Submit -->
+          <div class="pv-footer">
+            <p class="pv-legal">
+              Los datos serán tratados con estricta confidencialidad y usados
+              únicamente para fines de farmacovigilancia conforme a la normativa vigente.
+            </p>
+            <button type="submit" class="pv-btn-submit"
+              [disabled]="status() === 'submitting'">
+              @if (status() === 'submitting') {
+                <span class="pv-btn-spinner"></span>Enviando…
+              } @else {
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <path d="M22 2L11 13M22 2L15 22L11 13L2 9L22 2Z"
+                        stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                Enviar reporte
+              }
+            </button>
+          </div>
+
+          @if (status() === 'error' && errorMsg()) {
+            <p class="pv-error-banner">{{ errorMsg() }}</p>
+          }
+
+        </form>
+      </div><!-- /pv-card -->
+
+      <!-- Contacto al pie de la sección -->
+      @if (config()!.emailContacto || config()!.direccionContacto) {
+        <div class="pv-contact" data-aos="fade-up" data-aos-delay="120">
+          <span class="pv-contact-label">¿Dudas?</span>
+          <div class="pv-contact-items">
+            @if (config()!.emailContacto) {
+              <a [href]="'mailto:' + config()!.emailContacto" class="pv-contact-item">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"
+                        stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+                  <polyline points="22,6 12,13 2,6" stroke="currentColor"
+                            stroke-width="1.8" stroke-linejoin="round"/>
+                </svg>
+                {{ config()!.emailContacto }}
+              </a>
+            }
+            @if (config()!.telefonoContacto) {
+              <a [href]="'tel:' + config()!.telefonoContacto" class="pv-contact-item">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.4 10.83a19.79 19.79 0 01-3.07-8.67A2 2 0 012.31 0h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"
+                        stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+                </svg>
+                {{ config()!.telefonoContacto }}
+              </a>
+            }
+            @if (config()!.direccionContacto) {
+              <span class="pv-contact-item">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0118 0z"
+                        stroke="currentColor" stroke-width="1.8"/>
+                  <circle cx="12" cy="10" r="3" stroke="currentColor" stroke-width="1.8"/>
+                </svg>
+                {{ config()!.direccionContacto }}
+              </span>
+            }
+          </div>
+        </div>
+      }
+
+    </div><!-- /pv-inner -->
+  }
+
+</section>

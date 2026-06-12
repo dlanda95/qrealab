@@ -1,16 +1,3 @@
-// ============================================================
-//  VIGILANCE — Interfaces
-// ============================================================
-
-export interface VigilanceSlide {
-  tag?:      string;
-  title:     string;
-  subtitle?: string;
-  ctaText?:  string;
-  ctaLink?:  string;
-  image:     string;
-}
-
 export interface InfoBlockItem {
   text: string;
 }
@@ -22,6 +9,10 @@ export interface InfoBlock {
 }
 
 export interface VigilanceData {
-  slides:     VigilanceSlide[];
-  infoBlocks: InfoBlock[];
+  heroEyebrow:   string;
+  heroTitulo:    string;
+  heroSubtitulo: string;
+  infoEyebrow:   string;
+  infoTitulo:    string;
+  infoBlocks:    InfoBlock[];
 }

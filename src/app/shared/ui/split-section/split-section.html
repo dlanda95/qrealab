@@ -1,6 +1,12 @@
 <div class="split-layout" [class.reversed]="imagePosition === 'right'">
 
+  <!-- ── Columna de texto ─────────────────────────────────── -->
   <div class="text-column">
+
+    @if (eyebrow) {
+      <span class="section-eyebrow">{{ eyebrow }}</span>
+    }
+
     <h2 class="section-title">{{ title }}</h2>
 
     <div class="section-body">
@@ -10,13 +16,21 @@
     </div>
 
     @if (ctaText) {
-      <button class="qrl-btn-link">
-        {{ ctaText }}
-        <span class="arrow" aria-hidden="true">→</span>
-      </button>
+      <div class="section-cta">
+        <button class="qrl-btn-pill">
+          {{ ctaText }}
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M5 12h14M13 6l6 6-6 6"
+                  stroke="currentColor" stroke-width="2"
+                  stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+      </div>
     }
+
   </div>
 
+  <!-- ── Columna imagen ───────────────────────────────────── -->
   <div class="image-column">
     <app-leaf-frame
       [imageSrc]="imageSrc"

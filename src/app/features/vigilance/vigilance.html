@@ -1,15 +1,25 @@
-@if (heroSlides().length > 0) {
-  <qrl-hero-carousel [slides]="heroSlides()"></qrl-hero-carousel>
-}
+<app-hero-section
+  [eyebrow]="heroEyebrow()"
+  [title]="heroTitulo()"
+  [subtitle]="heroSubtitulo()">
+</app-hero-section>
 
 @if (infoBlocks().length > 0) {
-  <div id="informacion" class="vigilance-info-section">
-    <app-section-wrapper backgroundColor="white">
+  <div id="informacion">
+    <!-- --section-pad reducido: el wave del hero ya da la transición visual,
+         no hace falta tanto espacio en blanco antes del contenido. -->
+    <app-section-wrapper
+      backgroundColor="white"
+      style="--section-pad: clamp(2.5rem, 5vw, 4.5rem)">
       <app-info-carousel
-        [eyebrow]="lang.t('vigilance.eyebrow')"
-        [title]="lang.t('vigilance.title')"
+        [eyebrow]="infoEyebrow()"
+        [title]="infoTitulo()"
         [blocks]="infoBlocks()">
       </app-info-carousel>
     </app-section-wrapper>
   </div>
 }
+
+<div id="reporte">
+  <app-pharmavig-form></app-pharmavig-form>
+</div>
