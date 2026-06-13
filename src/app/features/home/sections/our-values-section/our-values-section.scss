@@ -54,48 +54,58 @@
   margin: 0;
 }
 
-// ── Body: hoja centrada arriba + tarjetas full-width abajo ──
+// ── Body: hoja izquierda + 2 columnas de tarjetas ───────────
 //
-//  En lugar de side-by-side (que apreta las tarjetas),
-//  la hoja actúa como acento visual centrado y las tarjetas
-//  tienen todo el ancho disponible → ~370px por tarjeta.
+//  Layout igual a historia/quiénes somos (side-by-side).
+//  Tarjetas en 2 columnas (~400px c/u) para que el texto
+//  respire. 3 cols quedaban ~260px — demasiado angosto.
 // ────────────────────────────────────────────────────────────
 .ov-body {
-  display: flex;
-  flex-direction: column;
-  gap: clamp(2rem, 4vw, 3rem);
+  display: grid;
+  grid-template-columns: minmax(260px, 380px) 1fr;
+  grid-template-areas: 'img cards';
+  gap: clamp(2rem, 5vw, 4rem);
+  align-items: start;
+
+  @include bp(lg) {
+    grid-template-columns: 1fr;
+    grid-template-areas: 'img' 'cards';
+  }
 }
 
-// ── Imagen — centrada, tamaño acento (no protagonista) ───────
+// ── Imagen ───────────────────────────────────────────────────
 .ov-image-col {
+  grid-area: img;
   position: relative;
-  max-width: 280px;
-  width: 100%;
-  margin-inline: auto;
 
   // Halo verde difuso detrás de la hoja
   &::before {
     content: '';
     position: absolute;
-    inset: -18%;
+    inset: -15%;
     background: radial-gradient(
       circle,
-      rgba(46, 198, 67, 0.10) 0%,
+      rgba(46, 198, 67, 0.09) 0%,
       transparent 65%
     );
     pointer-events: none;
     z-index: 0;
   }
+
+  @include bp(lg) {
+    max-width: 340px;
+    margin-inline: auto;
+    width: 100%;
+  }
 }
 
-// ── Grid de tarjetas — ancho completo ────────────────────────
+// ── Grid de tarjetas — 2 columnas (~400px c/u) ───────────────
 .ov-cards {
+  grid-area: cards;
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(2, 1fr);
   gap: clamp(1rem, 2vw, 1.5rem);
-  align-items: start;
 
-  @include bp(md) { grid-template-columns: repeat(2, 1fr); }
   @include bp(sm) { grid-template-columns: 1fr; }
 }
 
@@ -197,24 +207,34 @@
     display: flex;
     align-items: flex-start;
     gap: var(--space-2);
-    font-size: var(--text-sm);
-    line-height: 1.6;
-    color: var(--qrl-text-body);
 
-    // Punto decorativo verde
+    // Punto decorativo verde — flex-shrink:0 evita que se comprima
     &::before {
       content: '';
       width: 5px;
       height: 5px;
       min-width: 5px;
+      flex-shrink: 0;
       background: var(--qrl-green);
       border-radius: 50%;
-      margin-top: 6px;
+      margin-top: 7px;
     }
+  }
+}
 
-    strong {
-      font-weight: 600;
-      color: var(--qrl-text-main);
-    }
+// Wrapper único: strong + descripción forman un solo flex-child
+// → la segunda línea alinea con el inicio del texto, no con el dot
+.ov-point-text {
+  flex: 1;
+  margin: 0;
+  font-size: var(--text-sm);
+  line-height: 1.65;
+  color: var(--qrl-text-body);
+  text-align: justify;
+  hyphens: auto;
+
+  strong {
+    font-weight: 600;
+    color: var(--qrl-text-main);
   }
 }
