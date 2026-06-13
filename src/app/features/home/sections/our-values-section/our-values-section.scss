@@ -54,60 +54,49 @@
   margin: 0;
 }
 
-// ── Body: imagen + tarjetas ─────────────────────────────────
+// ── Body: hoja centrada arriba + tarjetas full-width abajo ──
+//
+//  En lugar de side-by-side (que apreta las tarjetas),
+//  la hoja actúa como acento visual centrado y las tarjetas
+//  tienen todo el ancho disponible → ~370px por tarjeta.
+// ────────────────────────────────────────────────────────────
 .ov-body {
-  display: grid;
-  grid-template-columns: minmax(240px, 420px) 1fr;
-  grid-template-areas: 'img cards';
-  gap: clamp(2rem, 5vw, 4.5rem);
-  align-items: start;
-
-  @include bp(lg) {
-    grid-template-columns: 1fr;
-    grid-template-areas: 'img' 'cards';
-  }
+  display: flex;
+  flex-direction: column;
+  gap: clamp(2rem, 4vw, 3rem);
 }
 
-// ── Columna imagen ───────────────────────────────────────────
+// ── Imagen — centrada, tamaño acento (no protagonista) ───────
 .ov-image-col {
-  grid-area: img;
   position: relative;
+  max-width: 280px;
+  width: 100%;
+  margin-inline: auto;
 
   // Halo verde difuso detrás de la hoja
   &::before {
     content: '';
     position: absolute;
-    inset: -15%;
+    inset: -18%;
     background: radial-gradient(
       circle,
-      rgba(46, 198, 67, 0.09) 0%,
+      rgba(46, 198, 67, 0.10) 0%,
       transparent 65%
     );
     pointer-events: none;
     z-index: 0;
   }
-
-  @include bp(lg) {
-    max-width: 360px;
-    margin-inline: auto;
-    width: 100%;
-  }
 }
 
-// ── Grid de tarjetas ─────────────────────────────────────────
+// ── Grid de tarjetas — ancho completo ────────────────────────
 .ov-cards {
-  grid-area: cards;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: clamp(0.9rem, 2vw, 1.25rem);
+  gap: clamp(1rem, 2vw, 1.5rem);
+  align-items: start;
 
   @include bp(md) { grid-template-columns: repeat(2, 1fr); }
   @include bp(sm) { grid-template-columns: 1fr; }
-
-  &.no-image {
-    @include bp(md) { grid-template-columns: repeat(2, 1fr); }
-    @include bp(sm) { grid-template-columns: 1fr; }
-  }
 }
 
 // ── Tarjeta ──────────────────────────────────────────────────
