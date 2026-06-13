@@ -31,8 +31,12 @@
                 <ul class="ov-card__points">
                   @for (point of value.points; track $index) {
                     <li>
-                      <strong>{{ point.label }}</strong>
-                      @if (point.description) {<span>: {{ point.description }}</span>}
+                      <!-- Wrapper único → strong + span son un solo flex-child,
+                           la segunda línea alinea bajo la primera letra del texto -->
+                      <p class="ov-point-text">
+                        <strong>{{ point.label }}</strong>
+                        @if (point.description) {<span>: {{ point.description }}</span>}
+                      </p>
                     </li>
                   }
                 </ul>
