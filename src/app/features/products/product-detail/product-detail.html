@@ -30,12 +30,15 @@
 
       <div class="pd-grid">
 
-        <!-- Left: image with leaf frame -->
+        <!-- Left: product image -->
         <div class="pd-image-col">
-          <app-leaf-frame
-            [imageSrc]="p.image ?? ''"
-            [parallaxStrength]="140">
-          </app-leaf-frame>
+          <div class="pd-image-wrap">
+            <img
+              [src]="p.image ?? ''"
+              [alt]="p.name"
+              class="pd-image"
+              loading="eager">
+          </div>
         </div>
 
         <!-- Right: info -->
