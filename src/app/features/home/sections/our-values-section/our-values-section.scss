@@ -81,8 +81,9 @@
   align-items: flex-start;
   gap: 0;
 
+  // Apilado: centra el bloque de header igual que split-section en móvil
   @include bp(lg) {
-    align-items: flex-start;
+    align-items: center;
   }
 }
 
@@ -121,6 +122,11 @@
     background: var(--qrl-green);
     border-radius: 3px;
     margin-top: var(--space-5);
+  }
+
+  @include bp(lg) {
+    text-align: center;
+    &::after { margin-inline: auto; }
   }
 }
 
