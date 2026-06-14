@@ -1,23 +1,24 @@
 @if (section(); as s) {
   <app-section-wrapper backgroundColor="white">
-    <div class="ov-section">
+    <div class="ov-layout" [class.ov-layout--no-img]="!s.image">
 
-      <!-- ── Header centrado ─────────────────────────────────── -->
-      <header class="ov-header">
-        <span class="ov-eyebrow">Lo que nos define</span>
-        <h2 class="ov-title">{{ s.sectionTitle }}</h2>
-      </header>
+      <!-- ── Columna izquierda: hoja (440px max — igual a split-section) ── -->
+      @if (s.image) {
+        <div class="ov-image-col" aria-hidden="true">
+          <app-leaf-frame [imageSrc]="s.image" [inverted]="false"></app-leaf-frame>
+        </div>
+      }
 
-      <!-- ── Imagen + tarjetas ─────────────────────────────────── -->
-      <div class="ov-body">
+      <!-- ── Columna derecha: eyebrow + título + tarjetas de valores ── -->
+      <div class="ov-content-col">
 
-        @if (s.image) {
-          <div class="ov-image-col" aria-hidden="true">
-            <app-leaf-frame [imageSrc]="s.image" [inverted]="false"></app-leaf-frame>
-          </div>
-        }
+        <header class="ov-header">
+          <span class="ov-eyebrow">Lo que nos define</span>
+          <h2 class="ov-title">{{ s.sectionTitle }}</h2>
+        </header>
 
-        <div class="ov-cards" [class.no-image]="!s.image">
+        <div class="ov-cards"
+             [class.ov-cards--even]="s.values.length === 4">
           @for (value of s.values; track $index) {
             <article class="ov-card">
 
@@ -31,8 +32,6 @@
                 <ul class="ov-card__points">
                   @for (point of value.points; track $index) {
                     <li>
-                      <!-- Wrapper único → strong + span son un solo flex-child,
-                           la segunda línea alinea bajo la primera letra del texto -->
                       <p class="ov-point-text">
                         <strong>{{ point.label }}</strong>
                         @if (point.description) {<span>: {{ point.description }}</span>}
@@ -46,7 +45,8 @@
           }
         </div>
 
-      </div>
-    </div>
+      </div><!-- /.ov-content-col -->
+
+    </div><!-- /.ov-layout -->
   </app-section-wrapper>
 }

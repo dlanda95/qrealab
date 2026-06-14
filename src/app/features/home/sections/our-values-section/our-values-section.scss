@@ -4,31 +4,89 @@
 // ============================================================
 //  OUR VALUES SECTION
 //
-//  Layout:
-//    ov-section
-//      ov-header  (centrado, eyebrow pill + título)
-//      ov-body
-//        ov-image-col  (leaf frame, ~40%)
-//        ov-cards      (grid 3 col, ~60%)
+//  Layout idéntico a split-section:
+//    LEFT:  hoja (max 440px — igual que historia/quiénes somos)
+//    RIGHT: eyebrow + título + grid de tarjetas de valores
+//
+//  Breakpoints:
+//    >1024px  : side-by-side (hoja | header+cards)
+//    ≤1024px  : apilado (hoja ↑, header+cards ↓)
+//    ≤768px   : cards en 2 columnas
+//    ≤576px   : cards en 1 columna
 // ============================================================
 
-// ── Sección raíz ────────────────────────────────────────────
-.ov-section {
-  display: flex;
-  flex-direction: column;
+// ── Layout principal ─────────────────────────────────────────
+.ov-layout {
+  display: grid;
+  grid-template-columns: minmax(220px, 440px) 1fr;
+  grid-template-areas: 'img content';
   gap: clamp(2.5rem, 5vw, 4rem);
+  align-items: center;
+
+  // Sin imagen: la columna de contenido ocupa todo
+  &.ov-layout--no-img {
+    grid-template-columns: 1fr;
+    grid-template-areas: 'content';
+  }
+
+  // Apilado en tablet y móvil
+  @include bp(lg) {
+    grid-template-columns: 1fr;
+    grid-template-areas: 'img' 'content';
+
+    &.ov-layout--no-img {
+      grid-template-areas: 'content';
+    }
+  }
 }
 
-// ── Header — centrado, igual al patrón ic-header ────────────
+// ── Columna imagen ────────────────────────────────────────────
+.ov-image-col {
+  grid-area: img;
+  position: relative;
+
+  // Halo verde difuso detrás de la hoja (igual que split-section)
+  &::before {
+    content: '';
+    position: absolute;
+    inset: -12%;
+    background: radial-gradient(
+      circle,
+      rgba(46, 198, 67, 0.09) 0%,
+      transparent 65%
+    );
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  // Apilado: centra y limita la hoja a su max-width natural (440px)
+  @include bp(lg) {
+    margin-inline: auto;
+    width: 100%;
+  }
+}
+
+// ── Columna de contenido: header + tarjetas ───────────────────
+.ov-content-col {
+  grid-area: content;
+  display: flex;
+  flex-direction: column;
+  gap: clamp(1.5rem, 3vw, 2.25rem);
+}
+
+// ── Header (eyebrow + título) — estilo idéntico a split-section ──
 .ov-header {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  text-align: center;
-  gap: var(--space-4);
+  align-items: flex-start;
+  gap: 0;
+
+  @include bp(lg) {
+    align-items: flex-start;
+  }
 }
 
-// Eyebrow pill — misma pieza que ic-eyebrow / pv-eyebrow
+// Eyebrow pill — misma pieza que section-eyebrow / ic-eyebrow
 .ov-eyebrow {
   display: inline-block;
   font-family: var(--font-body);
@@ -41,97 +99,82 @@
   border: 1px solid rgba(46, 198, 67, 0.30);
   padding: 5px 16px;
   border-radius: 100px;
+  margin-bottom: var(--space-5);
 }
 
+// Título — mismo estilo que section-title en split-section
 .ov-title {
   font-family: var(--font-heading);
-  font-size: clamp(1.75rem, 3.5vw, var(--text-4xl));
+  font-size: clamp(1.85rem, 3.5vw, var(--text-4xl));
   font-weight: 800;
   line-height: 1.1;
   letter-spacing: -0.03em;
   color: var(--qrl-text-main);
-  max-width: 640px;
-  margin: 0;
-}
+  margin: 0 0 var(--space-3) 0;
 
-// ── Body: hoja izquierda + 2 columnas de tarjetas ───────────
-//
-//  Layout igual a historia/quiénes somos (side-by-side).
-//  Tarjetas en 2 columnas (~400px c/u) para que el texto
-//  respire. 3 cols quedaban ~260px — demasiado angosto.
-// ────────────────────────────────────────────────────────────
-.ov-body {
-  display: grid;
-  grid-template-columns: minmax(260px, 380px) 1fr;
-  grid-template-areas: 'img cards';
-  gap: clamp(2rem, 5vw, 4rem);
-  align-items: start;
-
-  @include bp(lg) {
-    grid-template-columns: 1fr;
-    grid-template-areas: 'img' 'cards';
-  }
-}
-
-// ── Imagen ───────────────────────────────────────────────────
-.ov-image-col {
-  grid-area: img;
-  position: relative;
-
-  // Halo verde difuso detrás de la hoja
-  &::before {
+  // Línea verde de anclaje bajo el título (igual a split-section)
+  &::after {
     content: '';
-    position: absolute;
-    inset: -15%;
-    background: radial-gradient(
-      circle,
-      rgba(46, 198, 67, 0.09) 0%,
-      transparent 65%
-    );
-    pointer-events: none;
-    z-index: 0;
-  }
-
-  @include bp(lg) {
-    max-width: 340px;
-    margin-inline: auto;
-    width: 100%;
+    display: block;
+    width: 40px;
+    height: 3px;
+    background: var(--qrl-green);
+    border-radius: 3px;
+    margin-top: var(--space-5);
   }
 }
 
-// ── Grid de tarjetas — 2 columnas (~400px c/u) ───────────────
+// ── Grid de tarjetas ─────────────────────────────────────────
+//
+//  Defecto: 3 columnas compactas (~230px c/u en la col derecha).
+//  .ov-cards--even: 2 columnas (para 4 valores → 2+2 grid).
+// ────────────────────────────────────────────────────────────
 .ov-cards {
-  grid-area: cards;
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: clamp(1rem, 2vw, 1.5rem);
+  grid-template-columns: repeat(3, 1fr);
+  gap: clamp(0.75rem, 1.5vw, 1rem);
 
-  @include bp(sm) { grid-template-columns: 1fr; }
+  // 4 valores → 2 columnas (más espacio por tarjeta)
+  &.ov-cards--even {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  // Tablet vertical y móvil amplio: 2 columnas
+  @include bp(md) {
+    grid-template-columns: repeat(2, 1fr);
+    &.ov-cards--even { grid-template-columns: repeat(2, 1fr); }
+  }
+
+  // Móvil: 1 columna
+  @include bp(sm) {
+    grid-template-columns: 1fr;
+    &.ov-cards--even { grid-template-columns: 1fr; }
+  }
 }
 
-// ── Tarjeta ──────────────────────────────────────────────────
+// ── Tarjeta — compacta para caber 3 en col ~720px ────────────
 .ov-card {
   display: flex;
   flex-direction: column;
-  gap: var(--space-4);
-  padding: clamp(1.25rem, 2.5vw, 1.75rem);
+  gap: var(--space-3);
+  padding: clamp(0.875rem, 1.5vw, 1.125rem);
   background: var(--qrl-surface);
   border: 1px solid rgba(10, 17, 69, 0.07);
-  border-radius: 18px;
+  border-radius: 16px;
   position: relative;
   overflow: hidden;
   box-shadow:
     0 1px 3px rgba(10, 17, 69, 0.05),
     0 4px 14px rgba(10, 17, 69, 0.05);
 
-  // Barra verde en la parte superior que se expande en hover
+  // Barra verde superior que se expande en hover
   &::before {
     content: '';
     position: absolute;
     top: 0; left: 0; right: 0;
     height: 3px;
     background: var(--qrl-green);
-    border-radius: 18px 18px 0 0;
+    border-radius: 16px 16px 0 0;
     transform: scaleX(0.35);
     transform-origin: left center;
     transition: transform var(--t-base);
@@ -162,18 +205,18 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 48px;
-  height: 48px;
+  width: 40px;
+  height: 40px;
   background: var(--qrl-blue-light);
   color: var(--qrl-blue);
-  border-radius: 13px;
+  border-radius: 11px;
   flex-shrink: 0;
   transition: background var(--t-base), color var(--t-base);
 }
 
 .ov-icon-svg {
-  width: 24px;
-  height: 24px;
+  width: 20px;
+  height: 20px;
   stroke-width: 1.75;
 }
 
@@ -181,13 +224,13 @@
 .ov-card__body {
   display: flex;
   flex-direction: column;
-  gap: var(--space-3);
+  gap: var(--space-2);
   flex: 1;
 }
 
 .ov-card__title {
   font-family: var(--font-heading);
-  font-size: var(--text-base);
+  font-size: var(--text-sm);
   font-weight: 700;
   color: var(--qrl-text-main);
   line-height: 1.25;
@@ -201,14 +244,14 @@
   margin: 0;
   display: flex;
   flex-direction: column;
-  gap: var(--space-2);
+  gap: var(--space-1);
 
   li {
     display: flex;
     align-items: flex-start;
     gap: var(--space-2);
 
-    // Punto decorativo verde — flex-shrink:0 evita que se comprima
+    // Punto decorativo verde
     &::before {
       content: '';
       width: 5px;
@@ -217,18 +260,17 @@
       flex-shrink: 0;
       background: var(--qrl-green);
       border-radius: 50%;
-      margin-top: 7px;
+      margin-top: 6px;
     }
   }
 }
 
 // Wrapper único: strong + descripción forman un solo flex-child
-// → la segunda línea alinea con el inicio del texto, no con el dot
 .ov-point-text {
   flex: 1;
   margin: 0;
-  font-size: var(--text-sm);
-  line-height: 1.65;
+  font-size: 0.8rem;
+  line-height: 1.55;
   color: var(--qrl-text-body);
   text-align: justify;
   hyphens: auto;
