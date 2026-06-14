@@ -40,22 +40,29 @@
   padding-bottom: var(--space-10);
 }
 
-// --- Grid de columnas ---
+// --- Columnas del footer ---
 //
-//  auto-fit + minmax: crea exactamente N columnas iguales según
-//  los ítems renderizados (1-5 columnas, siempre simétrico).
-//  No hay columnas vacías ni desplazamiento lateral.
+//  Flexbox con flex: 1 1 0 → cada hijo toma exactamente
+//  la misma fracción del espacio disponible, sin importar
+//  cuántas columnas haya (1-5). Siempre simétrico.
 // ────────────────────────────────────────────────────────────
 .footer-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(200px, 100%), 1fr));
-  gap: clamp(var(--space-6), 5vw, var(--space-12));
+  display: flex;
+  flex-wrap: wrap;
+  gap: clamp(2rem, 4vw, 3rem);
   margin-bottom: var(--space-16);
 
+  > * {
+    flex: 1 1 0;
+    min-width: 160px;
+  }
+
   @include bp(sm) {
-    grid-template-columns: 1fr;
+    flex-direction: column;
     text-align: center;
     gap: var(--space-8);
+
+    > * { min-width: 0; }
   }
 }
 
