@@ -4,198 +4,74 @@
 // ============================================================
 //  OUR VALUES SECTION
 //
-//  Layout idéntico a split-section:
-//    LEFT:  hoja (max 440px — igual que historia/quiénes somos)
-//    RIGHT: eyebrow + título + grid de tarjetas de valores
-//
-//  Breakpoints:
-//    >1024px  : side-by-side (hoja | header+cards)
-//    ≤1024px  : apilado (hoja ↑, header+cards ↓)
-//    ≤768px   : cards en 2 columnas
-//    ≤576px   : cards en 1 columna
+//  Layout: delegado a app-split-section (mismo grid 1fr 1fr
+//  que Historia / Quiénes Somos → alineación idéntica).
+//  Este archivo solo define los estilos de las tarjetas de
+//  valores que se proyectan via ng-content.
 // ============================================================
-
-// ── Layout principal ─────────────────────────────────────────
-.ov-layout {
-  display: grid;
-  grid-template-columns: minmax(220px, 440px) 1fr;
-  grid-template-areas: 'img content';
-  gap: clamp(2.5rem, 5vw, 4rem);
-  align-items: center;
-
-  // Sin imagen: la columna de contenido ocupa todo
-  &.ov-layout--no-img {
-    grid-template-columns: 1fr;
-    grid-template-areas: 'content';
-  }
-
-  // Apilado en tablet y móvil
-  @include bp(lg) {
-    grid-template-columns: 1fr;
-    grid-template-areas: 'img' 'content';
-
-    &.ov-layout--no-img {
-      grid-template-areas: 'content';
-    }
-  }
-}
-
-// ── Columna imagen ────────────────────────────────────────────
-.ov-image-col {
-  grid-area: img;
-  position: relative;
-
-  // Halo verde difuso detrás de la hoja (igual que split-section)
-  &::before {
-    content: '';
-    position: absolute;
-    inset: -12%;
-    background: radial-gradient(
-      circle,
-      rgba(46, 198, 67, 0.09) 0%,
-      transparent 65%
-    );
-    pointer-events: none;
-    z-index: 0;
-  }
-
-  // Apilado: centra y limita la hoja a su max-width natural (440px)
-  @include bp(lg) {
-    margin-inline: auto;
-    width: 100%;
-  }
-}
-
-// ── Columna de contenido: header + tarjetas ───────────────────
-.ov-content-col {
-  grid-area: content;
-  display: flex;
-  flex-direction: column;
-  gap: clamp(1.5rem, 3vw, 2.25rem);
-}
-
-// ── Header (eyebrow + título) — estilo idéntico a split-section ──
-.ov-header {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 0;
-
-  // Apilado: centra el bloque de header igual que split-section en móvil
-  @include bp(lg) {
-    align-items: center;
-  }
-}
-
-// Eyebrow pill — misma pieza que section-eyebrow / ic-eyebrow
-.ov-eyebrow {
-  display: inline-block;
-  font-family: var(--font-body);
-  font-size: var(--text-xs);
-  font-weight: 600;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--qrl-green-dark);
-  background: var(--qrl-green-soft);
-  border: 1px solid rgba(46, 198, 67, 0.30);
-  padding: 5px 16px;
-  border-radius: 100px;
-  margin-bottom: var(--space-5);
-}
-
-// Título — mismo estilo que section-title en split-section
-.ov-title {
-  font-family: var(--font-heading);
-  font-size: clamp(1.85rem, 3.5vw, var(--text-4xl));
-  font-weight: 800;
-  line-height: 1.1;
-  letter-spacing: -0.03em;
-  color: var(--qrl-text-main);
-  margin: 0 0 var(--space-3) 0;
-
-  // Línea verde de anclaje bajo el título (igual a split-section)
-  &::after {
-    content: '';
-    display: block;
-    width: 40px;
-    height: 3px;
-    background: var(--qrl-green);
-    border-radius: 3px;
-    margin-top: var(--space-5);
-  }
-
-  @include bp(lg) {
-    text-align: center;
-    &::after { margin-inline: auto; }
-  }
-}
 
 // ── Grid de tarjetas ─────────────────────────────────────────
 //
-//  Defecto: 3 columnas compactas (~230px c/u en la col derecha).
-//  .ov-cards--even: 2 columnas (para 4 valores → 2+2 grid).
+//  3 columnas por defecto; 2 columnas cuando hay 4 valores.
+//  Las tarjetas viven en la columna de texto del split-section
+//  (~580px en desktop), lo que da ~180px por card con 3 cols.
 // ────────────────────────────────────────────────────────────
 .ov-cards {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: clamp(0.75rem, 1.5vw, 1rem);
+  gap: clamp(0.625rem, 1.2vw, 0.875rem);
+  margin-top: var(--space-6);
 
-  // 4 valores → 2 columnas (más espacio por tarjeta)
   &.ov-cards--even {
     grid-template-columns: repeat(2, 1fr);
   }
 
-  // Tablet vertical y móvil amplio: 2 columnas
   @include bp(md) {
     grid-template-columns: repeat(2, 1fr);
     &.ov-cards--even { grid-template-columns: repeat(2, 1fr); }
   }
 
-  // Móvil: 1 columna
   @include bp(sm) {
     grid-template-columns: 1fr;
     &.ov-cards--even { grid-template-columns: 1fr; }
   }
 }
 
-// ── Tarjeta — compacta para caber 3 en col ~720px ────────────
+// ── Tarjeta ──────────────────────────────────────────────────
 .ov-card {
   display: flex;
   flex-direction: column;
-  gap: var(--space-3);
-  padding: clamp(0.875rem, 1.5vw, 1.125rem);
+  gap: var(--space-2);
+  padding: clamp(0.75rem, 1.2vw, 1rem);
   background: var(--qrl-surface);
   border: 1px solid rgba(10, 17, 69, 0.07);
-  border-radius: 16px;
+  border-radius: 14px;
   position: relative;
   overflow: hidden;
   box-shadow:
     0 1px 3px rgba(10, 17, 69, 0.05),
-    0 4px 14px rgba(10, 17, 69, 0.05);
+    0 4px 14px rgba(10, 17, 69, 0.04);
 
-  // Barra verde superior que se expande en hover
   &::before {
     content: '';
     position: absolute;
     top: 0; left: 0; right: 0;
     height: 3px;
     background: var(--qrl-green);
-    border-radius: 16px 16px 0 0;
-    transform: scaleX(0.35);
+    border-radius: 14px 14px 0 0;
+    transform: scaleX(0.3);
     transform-origin: left center;
     transition: transform var(--t-base);
   }
 
-  transition:
-    transform    var(--t-base),
-    box-shadow   var(--t-base);
+  transition: transform var(--t-base), box-shadow var(--t-base);
 
   &:hover {
-    transform: translateY(-5px);
+    transform: translateY(-4px);
     box-shadow:
       0 2px 6px  rgba(10, 17, 69, 0.06),
-      0 14px 44px rgba(10, 17, 69, 0.10),
-      0 6px  20px rgba(46, 198, 67, 0.07);
+      0 12px 36px rgba(10, 17, 69, 0.10),
+      0 4px  16px rgba(46, 198, 67, 0.07);
 
     &::before { transform: scaleX(1); }
 
@@ -211,18 +87,18 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 40px;
-  height: 40px;
+  width: 36px;
+  height: 36px;
   background: var(--qrl-blue-light);
   color: var(--qrl-blue);
-  border-radius: 11px;
+  border-radius: 10px;
   flex-shrink: 0;
   transition: background var(--t-base), color var(--t-base);
 }
 
 .ov-icon-svg {
-  width: 20px;
-  height: 20px;
+  width: 18px;
+  height: 18px;
   stroke-width: 1.75;
 }
 
@@ -230,16 +106,16 @@
 .ov-card__body {
   display: flex;
   flex-direction: column;
-  gap: var(--space-2);
+  gap: var(--space-1);
   flex: 1;
 }
 
 .ov-card__title {
   font-family: var(--font-heading);
-  font-size: var(--text-sm);
+  font-size: 0.8rem;
   font-weight: 700;
   color: var(--qrl-text-main);
-  line-height: 1.25;
+  line-height: 1.2;
   margin: 0;
 }
 
@@ -250,33 +126,31 @@
   margin: 0;
   display: flex;
   flex-direction: column;
-  gap: var(--space-1);
+  gap: 0.2rem;
 
   li {
     display: flex;
     align-items: flex-start;
-    gap: var(--space-2);
+    gap: var(--space-1);
 
-    // Punto decorativo verde
     &::before {
       content: '';
-      width: 5px;
-      height: 5px;
-      min-width: 5px;
+      width: 4px;
+      height: 4px;
+      min-width: 4px;
       flex-shrink: 0;
       background: var(--qrl-green);
       border-radius: 50%;
-      margin-top: 6px;
+      margin-top: 5px;
     }
   }
 }
 
-// Wrapper único: strong + descripción forman un solo flex-child
 .ov-point-text {
   flex: 1;
   margin: 0;
-  font-size: 0.8rem;
-  line-height: 1.55;
+  font-size: 0.72rem;
+  line-height: 1.5;
   color: var(--qrl-text-body);
   text-align: justify;
   hyphens: auto;

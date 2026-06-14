@@ -9,11 +9,16 @@
 
     <h2 class="section-title">{{ title }}</h2>
 
-    <div class="section-body">
-      @for (para of description; track $index) {
-        <p>{{ para }}</p>
-      }
-    </div>
+    @if (description.length > 0) {
+      <div class="section-body">
+        @for (para of description; track $index) {
+          <p>{{ para }}</p>
+        }
+      </div>
+    }
+
+    <!-- Slot para contenido personalizado (ej: grid de valores) -->
+    <ng-content></ng-content>
 
     @if (ctaText) {
       <div class="section-cta">

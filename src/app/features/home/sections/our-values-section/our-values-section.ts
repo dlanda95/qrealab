@@ -2,13 +2,13 @@ import { Component, OnInit, signal, inject } from '@angular/core';
 import { LucideAngularModule } from 'lucide-angular';
 
 import { SectionWrapper }  from '../../../../shared/ui/section-wrapper/section-wrapper';
-import { LeafFrame }       from '../../../../shared/ui/leaf-frame/leaf-frame';
+import { SplitSection }    from '../../../../shared/ui/split-section/split-section';
 import { HomeService }     from '../../services/home.service';
 import { OurValuesSection as OurValuesSectionData } from '../../models/our-values.interface';
 
 @Component({
   selector: 'app-our-values-section',
-  imports: [SectionWrapper, LucideAngularModule, LeafFrame],
+  imports: [SectionWrapper, SplitSection, LucideAngularModule],
   templateUrl: './our-values-section.html',
   styleUrl:    './our-values-section.scss',
 })
