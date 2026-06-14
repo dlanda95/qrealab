@@ -2,7 +2,6 @@ import { Component, OnInit, inject, signal } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { switchMap, map, of } from 'rxjs';
 
-import { LeafFrame }       from '../../../shared/ui/leaf-frame/leaf-frame';
 import { PageHeader }      from '../../../shared/ui/page-header/page-header';
 import { ProductCard }     from '../../../shared/ui/product-card/product-card';
 import { ProductsService } from '../services/products.service';
@@ -12,7 +11,7 @@ import { LanguageService } from '../../../core/i18n/language.service';
 
 @Component({
   selector: 'app-product-detail',
-  imports: [RouterLink, LeafFrame, PageHeader, ProductCard, TranslatePipe],
+  imports: [RouterLink, PageHeader, ProductCard, TranslatePipe],
   templateUrl: './product-detail.html',
   styleUrl: './product-detail.scss',
 })
