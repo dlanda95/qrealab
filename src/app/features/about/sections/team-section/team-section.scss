@@ -95,12 +95,20 @@
 }
 
 // ── Grid de PersonCards ───────────────────────────────────────
+//
+//  auto-fit + tamaño fijo (no 1fr): cada columna mide entre
+//  180px y 260px. Con N tarjetas → N columnas simétricas,
+//  centradas gracias a justify-content.
+//  Funciona con 1, 2, 3, 4, 5, 6, 7… miembros sin romperse.
+// ────────────────────────────────────────────────────────────
 .ts-grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(auto-fit, minmax(min(200px, 100%), 260px));
+  justify-content: center;
   gap: clamp(1.5rem, 3vw, 2.5rem);
 
-  @include bp(xl) { grid-template-columns: repeat(3, 1fr); }
-  @include bp(md) { grid-template-columns: repeat(2, 1fr); }
-  @include bp(sm) { grid-template-columns: repeat(2, 1fr); gap: var(--space-6); }
+  @include bp(sm) {
+    grid-template-columns: repeat(auto-fit, minmax(min(150px, 100%), 200px));
+    gap: var(--space-6);
+  }
 }
