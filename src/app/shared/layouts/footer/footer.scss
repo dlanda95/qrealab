@@ -41,16 +41,16 @@
 }
 
 // --- Grid de columnas ---
+//
+//  auto-fit + minmax: crea exactamente N columnas iguales según
+//  los ítems renderizados (1-5 columnas, siempre simétrico).
+//  No hay columnas vacías ni desplazamiento lateral.
+// ────────────────────────────────────────────────────────────
 .footer-grid {
   display: grid;
-  grid-template-columns: 1.6fr 1fr 1fr 1fr;
-  gap: var(--space-10);
+  grid-template-columns: repeat(auto-fit, minmax(min(200px, 100%), 1fr));
+  gap: clamp(var(--space-6), 5vw, var(--space-12));
   margin-bottom: var(--space-16);
-
-  @include bp(lg) {
-    grid-template-columns: 1fr 1fr;
-    gap: var(--space-8);
-  }
 
   @include bp(sm) {
     grid-template-columns: 1fr;
@@ -76,9 +76,6 @@
     color: rgba(255, 255, 255, 0.60);
     line-height: 1.70;
     margin-bottom: var(--space-6);
-    max-width: 280px;
-
-    @include bp(sm) { max-width: 100%; }
   }
 }
 
