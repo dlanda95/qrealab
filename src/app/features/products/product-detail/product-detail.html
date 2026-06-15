@@ -33,11 +33,14 @@
         <!-- Left: product image -->
         <div class="pd-image-col" data-aos="fade-right" data-aos-duration="700">
           <div class="pd-image-wrap">
-            <img
-              [src]="p.image ?? ''"
-              [alt]="p.name"
-              class="pd-image"
-              loading="eager">
+            <div class="pd-image-glow" aria-hidden="true"></div>
+            <div class="pd-image-inner">
+              <img
+                [src]="p.image ?? ''"
+                [alt]="p.name"
+                class="pd-image"
+                loading="eager">
+            </div>
           </div>
         </div>
 
@@ -73,9 +76,9 @@
 
           <!-- CTA -->
           <div class="pd-cta-group">
-            <a routerLink="/contact" class="pd-cta-primary">
+            <button (click)="modal.open()" class="pd-cta-primary">
               {{ 'product.requestInfo' | t }}
-            </a>
+            </button>
             <a routerLink="/products" class="pd-cta-secondary">
               {{ 'product.backToAll' | t }}
             </a>
