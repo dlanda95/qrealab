@@ -36,8 +36,22 @@
   padding-block: var(--section-pad);
   transition: background-color var(--t-base);
 
-  &.white { background-color: var(--qrl-surface); }
-  &.gray  { background-color: var(--qrl-background); }
+  // Secciones blancas: sutil tinte verde en esquina inferior-derecha
+  &.white {
+    background-color: var(--qrl-surface);
+    background-image:
+      radial-gradient(ellipse 70% 55% at 105% 108%, rgba(46,198,67,0.06) 0%, transparent 60%),
+      radial-gradient(ellipse 40% 30% at -5%  -5%,  rgba(10,17,69,0.025) 0%, transparent 50%);
+  }
+
+  // Secciones grises: tinte verde en esquina inferior-izquierda
+  &.gray {
+    background-color: var(--qrl-background);
+    background-image:
+      radial-gradient(ellipse 70% 55% at -5%  108%, rgba(46,198,67,0.07) 0%, transparent 60%),
+      radial-gradient(ellipse 40% 30% at 105% -5%,  rgba(10,17,69,0.03)  0%, transparent 50%);
+  }
+
   &.dark  {
     background-color: var(--qrl-blue);
     color: white;
