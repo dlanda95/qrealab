@@ -1,12 +1,6 @@
 @if (section(); as s) {
   <app-section-wrapper backgroundColor="white">
 
-    <!--
-      Usa app-split-section como base → mismo grid 1fr 1fr,
-      mismo gap, misma posición que Nuestra Historia / Quiénes Somos.
-      imagePosition="right" → hoja izquierda, contenido derecha (zigzag).
-      Las tarjetas se proyectan via ng-content dentro del text-column.
-    -->
     <app-split-section
       eyebrow="Lo que nos define"
       [title]="s.sectionTitle"
@@ -18,7 +12,10 @@
       <div class="ov-cards"
            [class.ov-cards--even]="s.values.length === 4">
         @for (value of s.values; track $index) {
-          <article class="ov-card">
+          <article class="ov-card"
+                   data-aos="fade-up"
+                   [attr.data-aos-delay]="$index * 60"
+                   data-aos-duration="500">
 
             <div class="ov-card__icon">
               <lucide-icon [name]="value.icon" class="ov-icon-svg"></lucide-icon>

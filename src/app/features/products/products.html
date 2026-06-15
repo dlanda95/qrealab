@@ -9,7 +9,8 @@
 <section class="filter-section">
   <div class="filter-container container">
 
-    <div class="filter-tabs" role="tablist" aria-label="Filtrar por categoría">
+    <div class="filter-tabs" role="tablist" aria-label="Filtrar por categoría"
+         data-aos="fade-up" data-aos-duration="500">
 
       <button
         class="filter-tab"
@@ -62,7 +63,12 @@
     } @else {
       <div class="products-grid">
         @for (product of filtered(); track product.id) {
-          <app-product-card [product]="product"></app-product-card>
+          <app-product-card
+            [product]="product"
+            data-aos="fade-up"
+            [attr.data-aos-delay]="($index % 3) * 80"
+            data-aos-duration="600">
+          </app-product-card>
         }
       </div>
     }

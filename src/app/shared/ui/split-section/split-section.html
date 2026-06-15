@@ -1,7 +1,7 @@
 <div class="split-layout" [class.reversed]="imagePosition === 'right'">
 
   <!-- ── Columna de texto ─────────────────────────────────── -->
-  <div class="text-column">
+  <div class="text-column" data-aos="fade-up" data-aos-duration="700">
 
     @if (eyebrow) {
       <span class="section-eyebrow">{{ eyebrow }}</span>
@@ -36,7 +36,7 @@
   </div>
 
   <!-- ── Columna imagen ───────────────────────────────────── -->
-  <div class="image-column">
+  <div class="image-column" data-aos="fade-up" data-aos-delay="160" data-aos-duration="700">
     <app-leaf-frame
       [imageSrc]="imageSrc"
       [inverted]="leafInverted">
