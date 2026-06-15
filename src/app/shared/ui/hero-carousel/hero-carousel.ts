@@ -24,9 +24,9 @@ export class HeroCarousel implements AfterViewInit {
     loop: true,
     effect: 'fade',
     fadeEffect: { crossFade: true },
-    speed: 1400,
+    speed: 700,
     autoplay: {
-      delay: 5500,
+      delay: 3800,
       disableOnInteraction: false,
       pauseOnMouseEnter: true,
     },

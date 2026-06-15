@@ -1,6 +1,6 @@
 <!-- ── Cabecera de sección ──────────────────────────────────── -->
 @if (eyebrow || title || subtitle) {
-  <header class="ic-header">
+  <header class="ic-header" data-aos="fade-up" data-aos-duration="600">
     @if (eyebrow) {
       <span class="ic-eyebrow">{{ eyebrow }}</span>
     }
@@ -14,7 +14,7 @@
 }
 
 <!-- ── Barra de navegación ──────────────────────────────────── -->
-<div class="ic-nav-row">
+<div class="ic-nav-row" data-aos="fade-up" data-aos-delay="80" data-aos-duration="500">
   <p class="ic-nav-info">
     {{ currentPage() + 1 }} / {{ totalPages }}
   </p>
@@ -48,7 +48,8 @@
 <div class="ic-slide" [class.ic-slide--fading]="fading()">
 
   @for (block of currentBlocks; track block.title; let pos = $index) {
-    <article class="ic-block" [style.animation-delay]="pos * 80 + 'ms'">
+    <article class="ic-block" [style.animation-delay]="pos * 80 + 'ms'"
+             data-aos="fade-up" [attr.data-aos-delay]="120 + pos * 80" data-aos-duration="550">
 
       <!-- Número decorativo -->
       <div class="ic-block-number" aria-hidden="true">{{ globalIndex(pos) }}</div>

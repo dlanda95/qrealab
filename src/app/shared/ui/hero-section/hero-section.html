@@ -8,17 +8,21 @@
     <div class="hs-layout">
 
       @if (eyebrow) {
-        <span class="hs-eyebrow">{{ eyebrow }}</span>
+        <span class="hs-eyebrow"
+              data-aos="fade-down" data-aos-duration="500">{{ eyebrow }}</span>
       }
 
-      <h1 class="hs-title">{{ title }}</h1>
+      <h1 class="hs-title"
+          data-aos="fade-down" data-aos-delay="80" data-aos-duration="600">{{ title }}</h1>
 
       @if (subtitle) {
-        <p class="hs-subtitle">{{ subtitle }}</p>
+        <p class="hs-subtitle"
+           data-aos="fade-up" data-aos-delay="180" data-aos-duration="600">{{ subtitle }}</p>
       }
 
       @if (description) {
-        <p class="hs-description">{{ description }}</p>
+        <p class="hs-description"
+           data-aos="fade-up" data-aos-delay="260" data-aos-duration="600">{{ description }}</p>
       }
 
     </div>
