@@ -10,7 +10,8 @@
 
     <!-- Breadcrumbs -->
     @if (breadcrumbs.length) {
-      <nav class="ph-breadcrumb" aria-label="Breadcrumb">
+      <nav class="ph-breadcrumb" aria-label="Breadcrumb"
+           data-aos="fade-down" data-aos-duration="500">
         @for (crumb of breadcrumbs; track crumb.label; let last = $last) {
           @if (crumb.link && !last) {
             <a [routerLink]="crumb.link" class="ph-crumb ph-crumb--link">{{ crumb.label }}</a>
@@ -24,15 +25,15 @@
 
     <!-- Eyebrow -->
     @if (eyebrow) {
-      <span class="ph-eyebrow">{{ eyebrow }}</span>
+      <span class="ph-eyebrow" data-aos="fade-down" data-aos-delay="60" data-aos-duration="500">{{ eyebrow }}</span>
     }
 
     <!-- Title -->
-    <h1 class="ph-title">{{ title }}</h1>
+    <h1 class="ph-title" data-aos="fade-down" data-aos-delay="120" data-aos-duration="600">{{ title }}</h1>
 
     <!-- Subtitle -->
     @if (subtitle) {
-      <p class="ph-subtitle">{{ subtitle }}</p>
+      <p class="ph-subtitle" data-aos="fade-up" data-aos-delay="200" data-aos-duration="600">{{ subtitle }}</p>
     }
 
   </div>

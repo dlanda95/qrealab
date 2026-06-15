@@ -31,7 +31,7 @@
       <div class="pd-grid">
 
         <!-- Left: product image -->
-        <div class="pd-image-col">
+        <div class="pd-image-col" data-aos="fade-right" data-aos-duration="700">
           <div class="pd-image-wrap">
             <img
               [src]="p.image ?? ''"
@@ -42,7 +42,7 @@
         </div>
 
         <!-- Right: info -->
-        <div class="pd-info-col">
+        <div class="pd-info-col" data-aos="fade-left" data-aos-delay="100" data-aos-duration="700">
 
           <span class="pd-category">{{ p.category.name }}</span>
           <h1 class="pd-name">{{ p.name }}</h1>
@@ -90,10 +90,15 @@
   @if (related().length > 0) {
     <section class="pd-related">
       <div class="container">
-        <h2 class="pd-related-title">{{ 'product.related' | t }}</h2>
+        <h2 class="pd-related-title" data-aos="fade-up" data-aos-duration="600">{{ 'product.related' | t }}</h2>
         <div class="pd-related-grid">
           @for (rel of related(); track rel.id) {
-            <app-product-card [product]="rel"></app-product-card>
+            <app-product-card
+              [product]="rel"
+              data-aos="fade-up"
+              [attr.data-aos-delay]="$index * 80"
+              data-aos-duration="600">
+            </app-product-card>
           }
         </div>
       </div>

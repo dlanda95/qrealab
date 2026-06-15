@@ -26,7 +26,14 @@ export class App implements OnInit {
       import('gsap').then(m => m.gsap),
       import('aos'),
     ]).then(([gsap, AosModule]) => {
-      AosModule.default.init({ duration: 800, once: true, offset: 100, easing: 'ease-out-cubic' });
+      AosModule.default.init({
+        duration: 650,
+        once: true,
+        offset: 80,
+        easing: 'ease-out-quart',
+        delay: 0,
+        anchorPlacement: 'top-bottom',
+      });
       this.runCurtainReveal(gsap);
     });
   }

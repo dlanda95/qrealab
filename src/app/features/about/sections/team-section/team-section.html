@@ -1,14 +1,14 @@
 <app-section-wrapper backgroundColor="gray" waveBottom="to-white">
 
   <!-- Header -->
-  <div class="ts-header">
+  <div class="ts-header" data-aos="fade-up" data-aos-duration="600">
     <span class="ts-eyebrow">{{ cfg().equipoEyebrow }}</span>
     <h2 class="ts-title">{{ cfg().equipoTitulo }}</h2>
   </div>
 
   <!-- Pestañas de grupos -->
   @if (cfg().equipoGrupos.length > 1) {
-    <div class="ts-tabs" role="tablist">
+    <div class="ts-tabs" role="tablist" data-aos="fade-up" data-aos-delay="80" data-aos-duration="500">
       @for (group of cfg().equipoGrupos; track $index) {
         <button
           class="ts-tab"
@@ -31,7 +31,10 @@
           [cargo]="member.cargo"
           [foto]="member.foto ?? ''"
           [linkedin]="member.linkedin ?? ''"
-          [inverted]="$index % 2 === 1">
+          [inverted]="$index % 2 === 1"
+          data-aos="fade-up"
+          [attr.data-aos-delay]="$index * 80"
+          data-aos-duration="600">
         </app-person-card>
       }
     </div>
