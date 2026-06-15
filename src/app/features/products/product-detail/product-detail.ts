@@ -2,12 +2,13 @@ import { Component, OnInit, inject, signal } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { switchMap, map, of } from 'rxjs';
 
-import { PageHeader }      from '../../../shared/ui/page-header/page-header';
-import { ProductCard }     from '../../../shared/ui/product-card/product-card';
-import { ProductsService } from '../services/products.service';
-import { Product }         from '../../../shared/models/product.interface';
-import { TranslatePipe }   from '../../../shared/pipes/translate.pipe';
-import { LanguageService } from '../../../core/i18n/language.service';
+import { PageHeader }          from '../../../shared/ui/page-header/page-header';
+import { ProductCard }         from '../../../shared/ui/product-card/product-card';
+import { ProductsService }     from '../services/products.service';
+import { Product }             from '../../../shared/models/product.interface';
+import { TranslatePipe }       from '../../../shared/pipes/translate.pipe';
+import { LanguageService }     from '../../../core/i18n/language.service';
+import { ContactModalService } from '../../contact/services/contact-modal.service';
 
 @Component({
   selector: 'app-product-detail',
@@ -19,7 +20,8 @@ export class ProductDetail implements OnInit {
 
   private route = inject(ActivatedRoute);
   private svc   = inject(ProductsService);
-  lang = inject(LanguageService);
+  lang  = inject(LanguageService);
+  modal = inject(ContactModalService);
 
   product  = signal<Product | null>(null);
   related  = signal<Product[]>([]);
