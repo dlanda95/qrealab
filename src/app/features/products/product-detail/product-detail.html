@@ -76,9 +76,11 @@
 
           <!-- CTA -->
           <div class="pd-cta-group">
-            <button (click)="modal.open()" class="pd-cta-primary">
-              {{ 'product.requestInfo' | t }}
-            </button>
+            @if (siteSettings().mostrarBtnContacto) {
+              <button (click)="modal.open()" class="pd-cta-primary">
+                {{ 'product.requestInfo' | t }}
+              </button>
+            }
             <a routerLink="/products" class="pd-cta-secondary">
               {{ 'product.backToAll' | t }}
             </a>
