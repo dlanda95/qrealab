@@ -52,7 +52,11 @@
         <div class="footer-contact">
           <h3>{{ fd.contactTitle }}</h3>
           @for (line of fd.address; track line) { <p>{{ line }}</p> }
-          @if (fd.contactEmail) {
+          @if (fd.contactEmails.length > 0) {
+            @for (email of fd.contactEmails; track email) {
+              <p class="contact-email">{{ email }}</p>
+            }
+          } @else if (fd.contactEmail) {
             <p class="contact-email">{{ fd.contactEmail }}</p>
           }
         </div>

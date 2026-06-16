@@ -1,32 +1,34 @@
-<app-section-wrapper backgroundColor="white">
+@if (cfg().aliadosMostrar) {
+  <app-section-wrapper backgroundColor="white">
 
-  <!-- Header -->
-  <div class="al-header" data-aos="fade-up" data-aos-duration="600">
-    <span class="al-eyebrow">{{ cfg().aliadosEyebrow }}</span>
-    <h2 class="al-title">{{ cfg().aliadosTitulo }}</h2>
-    @if (cfg().aliadosSubtitulo) {
-      <p class="al-subtitle">{{ cfg().aliadosSubtitulo }}</p>
-    }
-  </div>
+    <!-- Header -->
+    <div class="al-header" data-aos="fade-up" data-aos-duration="600">
+      <span class="al-eyebrow">{{ cfg().aliadosEyebrow }}</span>
+      <h2 class="al-title">{{ cfg().aliadosTitulo }}</h2>
+      @if (cfg().aliadosSubtitulo) {
+        <p class="al-subtitle">{{ cfg().aliadosSubtitulo }}</p>
+      }
+    </div>
 
-  <!-- Grid de aliados -->
-  <div class="al-grid">
-    @for (ally of cfg().aliados; track $index) {
-      <div class="al-card" [class.al-card--link]="ally.url"
-           [attr.role]="ally.url ? 'link' : null"
-           (click)="ally.url && openAlly(ally.url)"
-           data-aos="zoom-in"
-           [attr.data-aos-delay]="$index * 60"
-           data-aos-duration="500">
+    <!-- Grid de aliados -->
+    <div class="al-grid">
+      @for (ally of cfg().aliados; track $index) {
+        <div class="al-card" [class.al-card--link]="ally.url"
+             [attr.role]="ally.url ? 'link' : null"
+             (click)="ally.url && openAlly(ally.url)"
+             data-aos="zoom-in"
+             [attr.data-aos-delay]="$index * 60"
+             data-aos-duration="500">
 
-        @if (ally.logo) {
-          <img [src]="ally.logo" [alt]="ally.nombre" class="al-card__logo">
-        } @else {
-          <span class="al-card__name">{{ ally.nombre }}</span>
-        }
+          @if (ally.logo) {
+            <img [src]="ally.logo" [alt]="ally.nombre" class="al-card__logo">
+          } @else {
+            <span class="al-card__name">{{ ally.nombre }}</span>
+          }
 
-      </div>
-    }
-  </div>
+        </div>
+      }
+    </div>
 
-</app-section-wrapper>
+  </app-section-wrapper>
+}

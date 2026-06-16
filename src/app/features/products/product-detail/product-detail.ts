@@ -8,7 +8,8 @@ import { ProductsService }     from '../services/products.service';
 import { Product }             from '../../../shared/models/product.interface';
 import { TranslatePipe }       from '../../../shared/pipes/translate.pipe';
 import { LanguageService }     from '../../../core/i18n/language.service';
-import { ContactModalService } from '../../contact/services/contact-modal.service';
+import { ContactModalService }  from '../../contact/services/contact-modal.service';
+import { SiteSettingsService }  from '../../../core/services/site-settings.service';
 
 @Component({
   selector: 'app-product-detail',
@@ -18,10 +19,12 @@ import { ContactModalService } from '../../contact/services/contact-modal.servic
 })
 export class ProductDetail implements OnInit {
 
-  private route = inject(ActivatedRoute);
-  private svc   = inject(ProductsService);
-  lang  = inject(LanguageService);
-  modal = inject(ContactModalService);
+  private route            = inject(ActivatedRoute);
+  private svc              = inject(ProductsService);
+  private siteSettingsSvc  = inject(SiteSettingsService);
+  lang         = inject(LanguageService);
+  modal        = inject(ContactModalService);
+  siteSettings = this.siteSettingsSvc.settings;
 
   product  = signal<Product | null>(null);
   related  = signal<Product[]>([]);
@@ -29,6 +32,7 @@ export class ProductDetail implements OnInit {
   notFound = signal(false);
 
   ngOnInit(): void {
+    this.siteSettingsSvc.load().subscribe();
     const slug = this.route.snapshot.paramMap.get('slug') ?? '';
 
     this.svc.getProductBySlug(slug).pipe(

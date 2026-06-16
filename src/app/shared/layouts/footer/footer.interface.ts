@@ -23,6 +23,7 @@ export interface FooterData {
   linkColumns:      FooterLinkColumn[];
   contactTitle:     string;
   address:          string[];   // líneas separadas por \n en el CMS
-  contactEmail:     string;
+  contactEmails:    string[];   // múltiples emails (nuevo)
+  contactEmail:     string;     // legado — usar contactEmails cuando esté disponible
   copyrightText:    string;
 }

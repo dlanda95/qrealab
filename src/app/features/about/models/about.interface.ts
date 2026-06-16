@@ -40,6 +40,7 @@ export interface AboutSettings {
   equipoEyebrow: string;
   equipoTitulo: string;
   equipoGrupos: AboutGroup[];
+  aliadosMostrar: boolean;
   aliadosEyebrow: string;
   aliadosTitulo: string;
   aliadosSubtitulo: string;
@@ -84,6 +85,7 @@ export const DEFAULT_ABOUT_SETTINGS: AboutSettings = {
       ],
     },
   ],
+  aliadosMostrar: true,
   aliadosEyebrow: 'Aliados Estratégicos',
   aliadosTitulo: 'Trabajamos con los mejores',
   aliadosSubtitulo: 'Nuestros socios estratégicos comparten nuestra visión de calidad, ética y compromiso con la salud.',

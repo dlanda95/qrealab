@@ -47,6 +47,7 @@ export class AboutService {
           foto: m.foto?.url ?? undefined,
         })),
       })),
+      aliadosMostrar: data.aliadosMostrar ?? true,
       aliados: (data.aliados ?? []).map((a: any) => ({
         ...a,
         logo: a.logo?.url ?? undefined,

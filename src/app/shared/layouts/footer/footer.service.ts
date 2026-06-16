@@ -31,6 +31,7 @@ export class FooterService {
           })),
           contactTitle:  doc.contactTitle  ?? 'Contacto',
           address:       (doc.address ?? '').split('\n').filter((l: string) => l.trim()),
+          contactEmails: (doc.contactEmails ?? []).map((e: any) => e.email).filter(Boolean),
           contactEmail:  doc.contactEmail  ?? '',
           copyrightText: doc.copyrightText ?? '',
         };
