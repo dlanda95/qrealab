@@ -17,6 +17,7 @@ export interface Product {
   activeIngredient?: string;
   description?:     string;
   image?:           string;
+  inserto?:         string;
   presentations:    ProductPresentation[];
   featured:         boolean;
   status:           'active' | 'inactive';
