@@ -30,7 +30,8 @@ export class ProductsService {
   }
 
   private mapProduct(d: any): Product {
-    const imgUrl = d.image?.url;
+    const imgUrl     = d.image?.url;
+    const insertoUrl = d.inserto?.url;
     return {
       id:               d.id,
       name:             d.name,
@@ -39,7 +40,8 @@ export class ProductsService {
       tagline:          d.tagline,
       activeIngredient: d.activeIngredient,
       description:      d.description,
-      image:            imgUrl ? (imgUrl.startsWith('http') ? imgUrl : `${this.base}${imgUrl}`) : undefined,
+      image:            imgUrl     ? (imgUrl.startsWith('http')     ? imgUrl     : `${this.base}${imgUrl}`)     : undefined,
+      inserto:          insertoUrl ? (insertoUrl.startsWith('http') ? insertoUrl : `${this.base}${insertoUrl}`) : undefined,
       presentations:    (d.presentations ?? []).map((p: any) => ({ label: p.label })),
       featured:         d.featured ?? false,
       status:           d.status ?? 'active',
