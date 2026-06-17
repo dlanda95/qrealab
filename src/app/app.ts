@@ -2,6 +2,10 @@ import { Component, OnInit, inject, PLATFORM_ID } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { isPlatformBrowser } from '@angular/common';
 
+declare global {
+  interface Window { __qrlPreloaderStart?: number }
+}
+
 import { Navbar }        from './shared/layouts/navbar/navbar';
 import { Footer }        from './shared/layouts/footer/footer';
 import { ContactModal }  from './features/contact/ui/contact-modal/contact-modal';
@@ -38,13 +42,13 @@ export class App implements OnInit {
     });
   }
 
-  private runCurtainReveal(gsap: any): void {
+  private runCurtainReveal(gsap: typeof import('gsap')['gsap']): void {
     const preloader = document.getElementById('qrl-preloader');
     if (!preloader) return;
 
     gsap.set('app-root', { scale: 1.04, y: 10 });
 
-    const elapsed = Date.now() - ((window as any).__qrlPreloaderStart ?? Date.now());
+    const elapsed = Date.now() - (window.__qrlPreloaderStart ?? Date.now());
     const wait    = Math.max(0, PRELOADER_MIN_MS - elapsed);
 
     setTimeout(() => {

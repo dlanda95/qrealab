@@ -25,7 +25,7 @@ export class ProductsService {
 
   getProductBySlug(slug: string): Observable<Product | null> {
     return this.http
-      .get<any>(`${this.base}/api/products?depth=1&where[slug][equals]=${slug}&limit=1&locale=${this.lang.currentLang()}`)
+      .get<any>(`${this.base}/api/products?depth=1&where[slug][equals]=${encodeURIComponent(slug)}&limit=1&locale=${this.lang.currentLang()}`)
       .pipe(map(res => (res.docs[0] ? this.mapProduct(res.docs[0]) : null)));
   }
 
