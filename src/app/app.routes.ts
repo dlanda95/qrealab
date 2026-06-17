@@ -30,5 +30,8 @@ export const routes: Routes = [
     loadComponent: () =>
       import('./features/vigilance/vigilance').then(m => m.Vigilance),
   },
-  { path: '**', redirectTo: '' },
+  {
+    path: '**',
+    loadComponent: () => import('./shared/ui/not-found/not-found').then(m => m.NotFound),
+  },
 ];

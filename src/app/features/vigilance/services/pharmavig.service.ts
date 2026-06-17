@@ -1,6 +1,6 @@
 import { Injectable, inject } from '@angular/core'
 import { HttpClient } from '@angular/common/http'
-import { Observable, map, shareReplay } from 'rxjs'
+import { Observable, map, shareReplay, catchError, of } from 'rxjs'
 
 import { environment } from '../../../../environments/environment'
 import { PharmavigilanceConfig, FormField } from '../models/pharmavig.interface'
@@ -13,12 +13,19 @@ export class PharmavigilanceService {
 
   private config$: Observable<PharmavigilanceConfig> | null = null
 
+  private readonly defaultConfig: PharmavigilanceConfig = {
+    titulo: 'Formulario de reporte',
+    subtitulo: 'Efectos o reacciones adversas al medicamento',
+    secciones: [],
+  }
+
   getConfig(): Observable<PharmavigilanceConfig> {
     if (!this.config$) {
       this.config$ = this.http
         .get<any>(`${this.base}/api/globals/pharmavigilance-settings`)
         .pipe(
           map(res => this.mapConfig(res)),
+          catchError(() => of(this.defaultConfig)),
           shareReplay(1),
         )
     }
