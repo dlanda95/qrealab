@@ -1,0 +1,45 @@
+@if (cfg().equipoNarrativaMostrar) {
+
+  <app-section-wrapper backgroundColor="white">
+    <div class="tn-grid">
+
+      <!-- ── Columna izquierda: texto editorial ── -->
+      <div class="tn-text" data-aos="fade-right" data-aos-duration="700">
+
+        <span class="tn-eyebrow">{{ cfg().equipoNarrativaEyebrow }}</span>
+
+        <h2 class="tn-title">{{ cfg().equipoNarrativaTitulo }}</h2>
+
+        @if (cfg().equipoNarrativaTexto) {
+          <p class="tn-body">{{ cfg().equipoNarrativaTexto }}</p>
+        }
+
+      </div>
+
+      <!-- ── Columna derecha: estadísticas ── -->
+      <div class="tn-stats"
+           data-aos="fade-left"
+           data-aos-delay="80"
+           data-aos-duration="700">
+
+        @for (stat of cfg().equipoNarrativaStats; track $index) {
+          <div class="tn-stat"
+               [class.tn-stat--featured]="$index === 0"
+               data-aos="fade-up"
+               [attr.data-aos-delay]="160 + $index * 90"
+               data-aos-duration="600">
+
+            <span class="tn-stat-value">{{ stat.valor }}</span>
+            <span class="tn-stat-label">{{ stat.etiqueta }}</span>
+
+            <!-- Decorative leaf accent -->
+            <div class="tn-stat-leaf" aria-hidden="true"></div>
+          </div>
+        }
+
+      </div>
+
+    </div>
+  </app-section-wrapper>
+
+}

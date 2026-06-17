@@ -37,9 +37,18 @@ export interface AboutSettings {
   visionTitulo: string;
   visionTexto: string;
   visionIcono: string;
+  // Equipo — tarjetas
+  equipoMostrar: boolean;
   equipoEyebrow: string;
   equipoTitulo: string;
   equipoGrupos: AboutGroup[];
+  // Equipo — narrativa
+  equipoNarrativaMostrar: boolean;
+  equipoNarrativaEyebrow: string;
+  equipoNarrativaTitulo: string;
+  equipoNarrativaTexto: string;
+  equipoNarrativaStats: AboutStat[];
+  // Aliados
   aliadosMostrar: boolean;
   aliadosEyebrow: string;
   aliadosTitulo: string;
@@ -84,6 +93,17 @@ export const DEFAULT_ABOUT_SETTINGS: AboutSettings = {
         { nombre: 'Roberto Lara',  cargo: 'Analista de Regulación' },
       ],
     },
+  ],
+  equipoMostrar: true,
+  equipoNarrativaMostrar: false,
+  equipoNarrativaEyebrow: 'Nuestro Equipo',
+  equipoNarrativaTitulo: 'Las personas detrás de Qrealab tienen más de 25 años de experiencia',
+  equipoNarrativaTexto: 'Nuestro equipo de líderes ha recorrido todos los eslabones de la industria farmacéutica: distribución, regulación sanitaria, gestión de cadena de suministro y atención especializada a clientes en todo el país. Esa trayectoria es la garantía detrás de cada producto que ponemos en tus manos.',
+  equipoNarrativaStats: [
+    { valor: '25+',  etiqueta: 'Años de experiencia combinada' },
+    { valor: '2',    etiqueta: 'Líderes especializados' },
+    { valor: '100%', etiqueta: 'Compromiso con la calidad' },
+    { valor: '15+',  etiqueta: 'Años en el mercado' },
   ],
   aliadosMostrar: true,
   aliadosEyebrow: 'Aliados Estratégicos',

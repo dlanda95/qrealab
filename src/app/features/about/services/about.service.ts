@@ -47,6 +47,14 @@ export class AboutService {
           foto: m.foto?.url ?? undefined,
         })),
       })),
+      equipoMostrar:           data.equipoMostrar           ?? true,
+      equipoNarrativaMostrar:  data.equipoNarrativaMostrar  ?? false,
+      equipoNarrativaEyebrow:  data.equipoNarrativaEyebrow  ?? DEFAULT_ABOUT_SETTINGS.equipoNarrativaEyebrow,
+      equipoNarrativaTitulo:   data.equipoNarrativaTitulo   ?? DEFAULT_ABOUT_SETTINGS.equipoNarrativaTitulo,
+      equipoNarrativaTexto:    data.equipoNarrativaTexto    ?? DEFAULT_ABOUT_SETTINGS.equipoNarrativaTexto,
+      equipoNarrativaStats:    (data.equipoNarrativaStats ?? []).length
+                               ? data.equipoNarrativaStats
+                               : DEFAULT_ABOUT_SETTINGS.equipoNarrativaStats,
       aliadosMostrar: data.aliadosMostrar ?? true,
       aliados: (data.aliados ?? []).map((a: any) => ({
         ...a,
