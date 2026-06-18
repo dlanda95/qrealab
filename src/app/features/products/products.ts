@@ -7,6 +7,7 @@ import { ProductsService } from './services/products.service';
 import { Product, ProductCategory } from '../../shared/models/product.interface';
 import { TranslatePipe } from '../../shared/pipes/translate.pipe';
 import { LanguageService } from '../../core/i18n/language.service';
+import { SeoService }      from '../../core/services/seo.service';
 
 @Component({
   selector: 'app-products',
@@ -17,6 +18,7 @@ import { LanguageService } from '../../core/i18n/language.service';
 export class Products implements OnInit {
 
   private svc = inject(ProductsService);
+  private seo = inject(SeoService);
   lang = inject(LanguageService);
 
   loading     = signal(true);
@@ -31,6 +33,12 @@ export class Products implements OnInit {
   });
 
   ngOnInit(): void {
+    this.seo.set({
+      title:       'Productos farmacéuticos | Qrealab',
+      description: 'Catálogo completo de productos farmacéuticos Qrealab. Medicamentos y soluciones de alta calidad para profesionales y pacientes en Perú.',
+      path:        '/products',
+    });
+
     forkJoin({
       products:   this.svc.getProducts(),
       categories: this.svc.getCategories(),

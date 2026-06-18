@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
+import { SeoService } from '../../../core/services/seo.service';
 
 @Component({
   selector: 'app-not-found',
@@ -48,4 +49,14 @@ import { RouterLink } from '@angular/router';
     }
   `],
 })
-export class NotFound {}
+export class NotFound implements OnInit {
+  private seo = inject(SeoService);
+
+  ngOnInit(): void {
+    this.seo.set({
+      title:       'Página no encontrada | Qrealab',
+      description: 'La página que buscas no existe.',
+      noindex:     true,
+    });
+  }
+}

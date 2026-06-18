@@ -10,6 +10,7 @@ import { TranslatePipe }       from '../../../shared/pipes/translate.pipe';
 import { LanguageService }     from '../../../core/i18n/language.service';
 import { ContactModalService }  from '../../contact/services/contact-modal.service';
 import { SiteSettingsService }  from '../../../core/services/site-settings.service';
+import { SeoService }           from '../../../core/services/seo.service';
 
 @Component({
   selector: 'app-product-detail',
@@ -22,6 +23,7 @@ export class ProductDetail implements OnInit {
   private route            = inject(ActivatedRoute);
   private svc              = inject(ProductsService);
   private siteSettingsSvc  = inject(SiteSettingsService);
+  private seo              = inject(SeoService);
   lang         = inject(LanguageService);
   modal        = inject(ContactModalService);
   siteSettings = this.siteSettingsSvc.settings;
@@ -53,6 +55,12 @@ export class ProductDetail implements OnInit {
         if (!product) { this.notFound.set(true); return; }
         this.product.set(product);
         this.related.set(related);
+        this.seo.set({
+          title:       `${product.name} | Qrealab`,
+          description: product.tagline || product.description || `Conoce ${product.name}, producto farmacéutico de Qrealab S.A.C.`,
+          path:        `/products/${product.slug}`,
+          image:       product.image,
+        });
       },
       error: () => { this.notFound.set(true); this.loading.set(false); },
     });

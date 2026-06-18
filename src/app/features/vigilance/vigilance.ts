@@ -7,6 +7,7 @@ import { InfoCarousel }        from '../../shared/ui/info-carousel/info-carousel
 import { PharmavigilanceForm } from './pharmavig-form/pharmavig-form';
 import { VigilanceService }    from './services/vigilance.service';
 import { LanguageService }     from '../../core/i18n/language.service';
+import { SeoService }          from '../../core/services/seo.service';
 import { InfoBlock }           from './models/vigilance.interface';
 
 @Component({
@@ -19,6 +20,7 @@ export class Vigilance implements OnInit {
   private platformId = inject(PLATFORM_ID);
   private svc        = inject(VigilanceService);
   private lang       = inject(LanguageService);
+  private seo        = inject(SeoService);
 
   heroEyebrow   = signal('');
   heroTitulo    = signal('');
@@ -28,6 +30,12 @@ export class Vigilance implements OnInit {
   infoBlocks    = signal<InfoBlock[]>([]);
 
   ngOnInit(): void {
+    this.seo.set({
+      title:       'Farmacovigilancia | Qrealab',
+      description: 'Reporta efectos adversos y reacciones a medicamentos. Sistema de farmacovigilancia de Qrealab S.A.C. — tu seguridad es nuestra prioridad.',
+      path:        '/vigilance',
+    });
+
     // Valores i18n inmediatos para que el hero nunca quede vacío
     this.heroEyebrow.set(this.lang.t('vigilance.heroEyebrow'));
     this.heroTitulo.set(this.lang.t('vigilance.heroTitle'));
