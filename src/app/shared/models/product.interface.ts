@@ -18,6 +18,7 @@ export interface Product {
   description?:     string;
   image?:           string;
   inserto?:         string;
+  prescripcion?:    'con-receta' | 'sin-receta';
   presentations:    ProductPresentation[];
   featured:         boolean;
   status:           'active' | 'inactive';

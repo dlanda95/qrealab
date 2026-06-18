@@ -42,6 +42,7 @@ export class ProductsService {
       description:      d.description,
       image:            imgUrl     ? (imgUrl.startsWith('http')     ? imgUrl     : `${this.base}${imgUrl}`)     : undefined,
       inserto:          insertoUrl ? (insertoUrl.startsWith('http') ? insertoUrl : `${this.base}${insertoUrl}`) : undefined,
+      prescripcion:     d.prescripcion ?? undefined,
       presentations:    (d.presentations ?? []).map((p: any) => ({ label: p.label })),
       featured:         d.featured ?? false,
       status:           d.status ?? 'active',

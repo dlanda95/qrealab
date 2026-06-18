@@ -24,6 +24,8 @@ export const UI: Record<Lang, Record<string, string>> = {
     'product.backToAll':   '← Ver todos los productos',
     'product.related':     'Productos relacionados',
     'product.notFound':    'Producto no encontrado.',
+    'product.rx.con-receta': 'Venta con receta médica',
+    'product.rx.sin-receta': 'Venta sin receta médica',
 
     'vigilance.heroEyebrow':  'Farmacovigilancia',
     'vigilance.heroTitle':    'Tu seguridad, nuestra responsabilidad',
@@ -55,6 +57,8 @@ export const UI: Record<Lang, Record<string, string>> = {
     'product.backToAll':   '← View all products',
     'product.related':     'Related products',
     'product.notFound':    'Product not found.',
+    'product.rx.con-receta': 'Prescription only',
+    'product.rx.sin-receta': 'Over the counter',
 
     'vigilance.heroEyebrow':  'Pharmacovigilance',
     'vigilance.heroTitle':    'Your safety, our responsibility',
