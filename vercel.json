@@ -2,13 +2,5 @@
   "framework": "angular",
   "buildCommand": "ng build --configuration=production",
   "outputDirectory": "dist/qrealab/browser",
-  "installCommand": "npm install",
-  "redirects": [
-    {
-      "source": "/:path*",
-      "has": [{ "type": "host", "value": "www.qrealab.com" }],
-      "destination": "https://qrealab.com/:path*",
-      "permanent": true
-    }
-  ]
+  "installCommand": "npm install"
 }
